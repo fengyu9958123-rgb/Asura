@@ -1,0 +1,194 @@
+/**
+ * 工作台（Dashboard）样式
+ * 根据 UI_REDESIGN_PLAN_A.md 设计文档实现
+ */
+
+.dashboard-container {
+    padding: 0;
+}
+
+/* ========== 统计卡片 ========== */
+.stats-row {
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    cursor: default;
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.stat-icon {
+    font-size: 36px;
+    opacity: 0.9;
+}
+
+.stat-info {
+    flex: 1;
+}
+
+.stat-label {
+    margin: 0;
+    font-size: 14px;
+    color: #909399;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+    color: #303133;
+}
+
+/* ========== 快速入口卡片 ========== */
+.quick-actions-row {
+    margin-bottom: 20px;
+}
+
+.action-card {
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+}
+
+.action-card:hover {
+    border-color: #00D4AA;
+    box-shadow: 0 4px 12px rgba(0, 212, 170, 0.2);
+    transform: translateY(-3px);
+}
+
+.action-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 0;
+}
+
+.action-icon {
+    font-size: 48px;
+    opacity: 0.9;
+}
+
+.action-info {
+    flex: 1;
+}
+
+.action-info h3 {
+    margin: 0 0 5px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #303133;
+}
+
+.action-info p {
+    margin: 0;
+    font-size: 14px;
+    color: #909399;
+}
+
+.action-content > .el-icon-arrow-right {
+    font-size: 20px;
+    color: #C0C4CC;
+}
+
+/* ========== 最近任务卡片 ========== */
+.recent-tasks-card {
+    margin-bottom: 20px;
+}
+
+.recent-tasks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    border-radius: 4px;
+    border: 1px solid #EBEEF5;
+    background: #FAFAFA;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.task-item:hover {
+    background: #F0F9FF;
+    border-color: #409EFF;
+    box-shadow: 0 2px 8px rgba(64, 158, 255, 0.1);
+}
+
+.task-info {
+    flex: 1;
+}
+
+.task-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.task-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: #303133;
+}
+
+.task-meta {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.task-time {
+    font-size: 13px;
+    color: #909399;
+}
+
+.task-item > .el-icon-arrow-right {
+    font-size: 18px;
+    color: #C0C4CC;
+}
+
+/* ========== 响应式设计 ========== */
+@media (max-width: 1200px) {
+    .stats-row .el-col {
+        margin-bottom: 15px;
+    }
+    
+    .quick-actions-row .el-col {
+        margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .stat-value {
+        font-size: 24px;
+    }
+    
+    .action-icon {
+        font-size: 36px;
+    }
+    
+    .action-info h3 {
+        font-size: 16px;
+    }
+    
+    .task-name {
+        font-size: 14px;
+    }
+}
+

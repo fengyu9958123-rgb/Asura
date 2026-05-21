@@ -1,0 +1,79 @@
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Python cache/build output
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDE/editor
+.vscode/
+.idea/
+.claude/
+.cursor/
+.cursorrules
+*.swp
+*.swo
+*~
+
+# Runtime data
+*.log
+logs/
+data/
+outputs/
+uploads/
+runtime/
+tmp/
+temp/
+*.db
+*.sqlite
+*.sqlite3
+
+# Local secrets/config
+.env
+.env.*
+!.env.example
+config/OAI_CONFIG_LIST
+config/OAI_CONFIG_LIST.*
+!config/OAI_CONFIG_LIST.example
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Test/cache
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Frontend deps
+node_modules/
+npm-debug.log*

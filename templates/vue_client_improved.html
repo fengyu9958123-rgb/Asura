@@ -1,0 +1,3098 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spec2Case - AI 需求转测试用例生成工具</title>
+
+    <!-- 系统配置注入（后端渲染） -->
+    <script>
+        // 全局配置：是否显示AI协作模块（由后端模板渲染）
+        window.APP_CONFIG = {
+            showAICollaboration: {{ show_ai_collaboration|lower }}
+        };
+    </script>
+
+    <link rel="stylesheet" href="/static/libs/element-ui.css">
+    <link rel="stylesheet" href="/static/vue_client_improved.css">
+    <link rel="stylesheet" href="/static/modern-element-theme.css">
+    <link rel="stylesheet" href="/static/requirement_module.css">
+    <link rel="stylesheet" href="/static/text_prd_manager.css">
+    <!-- Phase 1-3: 统一任务管理样式 -->
+    <link rel="stylesheet" href="/static/dashboard.css">
+    <link rel="stylesheet" href="/static/task_manager.css">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        /* 全局背景优化 */
+        body {
+            background: #eef3f6;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        /* 主容器美化 */
+        .main-container {
+            background: #f6f8fb;
+            border-radius: 0;
+            margin: 0;
+            min-height: 100vh;
+            box-shadow: none;
+            overflow: hidden;
+        }
+
+        .main-container > .el-header {
+            height: 64px !important;
+            padding: 0 !important;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        /* 顶部导航栏 */
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 28px;
+            height: 100%;
+            background: #ffffff;
+            color: #1f2937;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0;
+        }
+
+        .logo:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .logo-mark {
+            width: 38px;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: #e8fbf6;
+            color: #00B894;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 0;
+            border: 1px solid #c8f3e8;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #101828;
+            text-shadow: none;
+        }
+
+        .logo-subtitle {
+            font-size: 11px;
+            color: #667085;
+            margin-top: 2px;
+            letter-spacing: 0;
+        }
+
+
+
+        /* 任务详情容器优化 */
+        .task-detail-container {
+            margin-top: -10px;  /* 向上移动，充分利用空间 */
+            padding-top: 10px;   /* 保持适当的顶部间距 */
+        }
+
+        /* 人工确认区域突出显示 */
+        .confirmation-highlight {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 6px solid #00B894;
+            box-shadow: 0 4px 12px rgba(230, 162, 60, 0.2);
+        }
+
+        .confirmation-title {
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #00B894;
+            margin-bottom: 15px;
+        }
+
+        .confirmation-title::before {
+            content: "⚠️";
+            margin-right: 8px;
+            font-size: 20px;
+        }
+
+        /* 任务卡片美化 */
+        .task-card {
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 新建任务页面卡片hover效果 */
+        .task-type-card {
+            cursor: pointer;
+        }
+
+        .task-type-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(16, 24, 40, 0.08) !important;
+        }
+
+        .task-type-card.image-card:hover {
+            box-shadow: 0 10px 24px rgba(0, 184, 148, 0.12) !important;
+            border-color: #00B894 !important;
+        }
+
+        .task-type-card.text-card:hover {
+            box-shadow: 0 10px 24px rgba(45, 184, 168, 0.12) !important;
+            border-color: #2DB8A8 !important;
+        }
+
+        /* 按钮hover效果 */
+        .task-type-card .el-button:hover {
+            transform: none;
+            box-shadow: none !important;
+        }
+
+        .feature-tag {
+            font-size: 12px;
+            line-height: 1;
+            padding: 6px 10px;
+            background: #f2f4f7;
+            color: #475467;
+            border-radius: 999px;
+            border: 1px solid #eaecf0;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        /* 结果展示优化 */
+        .results-preview {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .download-actions {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        /* 加载动画优化 */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #00D4AA;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 状态指示器美化 */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-running {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            color: white;
+        }
+
+        .status-completed {
+            background: linear-gradient(45deg, #43e97b, #38f9d7);
+            color: white;
+        }
+
+        .status-waiting {
+            background: linear-gradient(45deg, #fa709a, #fee140);
+            color: white;
+        }
+
+        /* 主要功能Tab样式优化 */
+        .main-tabs-container {
+            background: #ffffff;
+            padding: 0 28px;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .main-tabs-container::before {
+            display: none;
+        }
+
+        .main-tabs {
+            background: transparent !important;
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-tabs .el-tabs__header {
+            margin: 0 !important;
+            background: transparent !important;
+            padding: 0;
+            border: none !important;
+        }
+
+        .main-tabs .el-tabs__nav-wrap {
+            background: transparent !important;
+        }
+
+        .main-tabs .el-tabs__nav {
+            border: none !important;
+            background: transparent !important;
+        }
+
+        .main-tabs .el-tabs__item {
+            border: none !important;
+            background: transparent !important;
+            color: #667085 !important;
+            margin-right: 0;
+            border-radius: 0;
+            transition: all 0.2s ease;
+            padding: 0;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            height: 42px;
+            line-height: 42px;
+        }
+
+        .main-tabs .el-tabs__item:hover {
+            background: transparent !important;
+            color: #00B894 !important;
+            transform: none;
+        }
+
+        .main-tabs .el-tabs__item.is-active {
+            background: transparent !important;
+            color: #00B894 !important;
+            box-shadow: none;
+        }
+
+        .main-tabs .el-tabs__item.is-disabled {
+            background: rgba(255, 255, 255, 0.05) !important;
+            color: rgba(255, 255, 255, 0.4) !important;
+            cursor: not-allowed;
+        }
+
+        .tab-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+
+        .tab-icon {
+            display: none;
+        }
+
+        .tab-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-content::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00B894;
+            display: inline-block;
+        }
+
+        .main-tabs .el-tabs__item:hover .tab-icon {
+            transform: none;
+        }
+
+        .tab-text {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .coming-soon {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* 功能占位页面样式 */
+        .feature-placeholder {
+            min-height: calc(100vh - 200px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-placeholder::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23ffffff" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="%23ffffff" opacity="0.1"/><circle cx="25" cy="75" r="1" fill="%23ffffff" opacity="0.05"/><circle cx="75" cy="25" r="1" fill="%23ffffff" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+        }
+
+        .placeholder-content {
+            text-align: center;
+            max-width: 500px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .placeholder-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .placeholder-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #00D4AA, #00B894);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .placeholder-description {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .feature-highlights {
+            display: block;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #888;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #00D4AA;
+        }
+
+        .coming-soon-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(45deg, #00D4AA, #00B894);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            }
+            to {
+                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+            }
+        }
+
+        /* 炫酷按钮微光动画 */
+        .btn-glow {
+            animation: pulseGlow 1.8s ease-in-out infinite;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.25); opacity: 1; }
+        }
+
+        /* 与大背景一致的主行动按钮样式（绿色渐变） */
+        .collab-cta-btn {
+            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%) !important;
+            border: none !important;
+            font-weight: 900 !important;
+            border-radius: 26px !important;
+            padding: 12px 22px !important;
+            box-shadow: 0 10px 24px rgba(0, 184, 148, 0.35), 0 6px 12px rgba(0, 212, 170, 0.25) !important;
+            letter-spacing: 0.5px !important;
+            color: #fff !important;
+        }
+        .collab-cta-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 14px 30px rgba(0, 184, 148, 0.45), 0 8px 16px rgba(0, 212, 170, 0.35) !important;
+            transition: all 0.2s ease;
+        }
+
+        /* 侧边栏样式优化 */
+        .sidebar-container {
+            background: #ffffff;
+            border-right: 1px solid #e5e7eb;
+            position: relative;
+        }
+
+        .sidebar-container::before {
+            display: none;
+        }
+
+        .sidebar-menu {
+            border: none !important;
+            background: transparent !important;
+            padding: 18px 14px;
+        }
+
+        .sidebar-menu .el-menu-item {
+            margin: 4px 0;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            background: transparent;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            height: 44px;
+            line-height: 44px;
+            color: #475467;
+            font-weight: 600;
+        }
+
+        .sidebar-menu .el-menu-item::before {
+            display: none;
+        }
+
+        .sidebar-menu .el-menu-item:hover::before {
+            left: 100%;
+        }
+
+        .sidebar-menu .el-menu-item:hover {
+            background: #f2f7f6;
+            color: #00B894;
+            transform: none;
+        }
+
+        .sidebar-menu .el-menu-item.is-active {
+            background: #e8fbf6;
+            color: #008f73;
+            box-shadow: none;
+        }
+
+        .sidebar-menu .el-menu-item.is-active::before {
+            display: none;
+        }
+
+        .sidebar-menu .el-menu-item i {
+            margin-right: 10px;
+            transition: none;
+            color: inherit;
+        }
+
+        .sidebar-menu .el-menu-item:hover i {
+            transform: none;
+        }
+
+        /* 炫酷聊天界面样式 - 统一绿色主题 */
+        .ai-chat-bubbles {
+            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 212, 170, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .ai-chat-bubbles::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.08) 0%, transparent 40%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="hexagon" width="20" height="20" patternUnits="userSpaceOnUse"><polygon points="10,2 18,7 18,13 10,18 2,13 2,7" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23hexagon)"/></svg>');
+            pointer-events: none;
+        }
+
+        .chat-header-enhanced {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .chat-title-enhanced {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .chat-subtitle-enhanced {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .chat-messages-enhanced {
+            max-height: 550px;
+            overflow-y: auto;
+            padding: 25px;
+            background: rgba(255,255,255,0.97);
+            border-radius: 18px;
+            backdrop-filter: blur(15px);
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(0, 212, 170, 0.1);
+            box-shadow: inset 0 1px 3px rgba(0, 212, 170, 0.05);
+        }
+
+        .chat-messages-enhanced::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages-enhanced::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+            border-radius: 4px;
+        }
+
+        .chat-messages-enhanced::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #00D4AA, #00B894);
+            border-radius: 4px;
+        }
+
+        .message-wrapper-enhanced {
+            display: flex;
+            margin-bottom: 25px;
+            align-items: flex-end;
+            animation: messageSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-wrapper-enhanced.left {
+            justify-content: flex-start;
+        }
+
+        .message-wrapper-enhanced.right {
+            justify-content: flex-end;
+            flex-direction: row-reverse;
+            width: 100%;
+        }
+
+        /* 头像区域样式 */
+        .avatar-section-enhanced {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 10px;
+        }
+
+        .message-wrapper-enhanced.right .avatar-section-enhanced {
+            margin-left: 10px;
+            margin-right: 0;
+        }
+
+        .role-name-above-avatar {
+            font-size: 13px;
+            font-weight: 600;
+            color: #00B894;
+            margin-bottom: 8px;
+            text-align: center;
+            min-width: 80px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            box-shadow: 0 3px 10px rgba(0, 212, 170, 0.2);
+            border: 1px solid rgba(0, 212, 170, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .avatar-enhanced {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background-size: cover;
+            background-position: center;
+            border: 3px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .avatar-enhanced::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, rgba(0, 212, 170, 0.3), transparent);
+            animation: avatarSpin 4s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes avatarSpin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .avatar-enhanced.product-manager {
+            background-image: url('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face');
+            background-color: #E6A23C;
+        }
+
+        .avatar-enhanced.test-architect {
+            background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face');
+            background-color: #F56C6C;
+        }
+
+        .avatar-enhanced.test-writer {
+            background-image: url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&crop=face');
+            background-color: #9C27B0;
+        }
+
+        .avatar-enhanced.user {
+            background-image: url('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop&crop=face');
+            background-color: #409EFF;
+        }
+
+        .avatar-enhanced.ai-thinking {
+            background: linear-gradient(45deg, #00D4AA, #00B894);
+        }
+
+        /* 头像内的文字（备用方案） */
+        .avatar-enhanced span {
+            position: relative;
+            z-index: 2;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .message-bubble-enhanced {
+            max-width: 75%;
+            padding: 18px 22px;
+            border-radius: 22px;
+            position: relative;
+            box-shadow: 0 6px 20px rgba(0, 212, 170, 0.12);
+            backdrop-filter: blur(12px);
+            animation: bubblePop 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes bubblePop {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .message-bubble-enhanced.left {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
+            border-bottom-left-radius: 5px;
+            color: #333;
+            border: 1px solid rgba(0, 212, 170, 0.1);
+        }
+
+        .message-bubble-enhanced.left::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            bottom: 10px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-right-color: #ffffff;
+        }
+
+        .message-bubble-enhanced.right {
+            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
+            border-bottom-right-radius: 5px;
+            color: white;
+            margin-left: auto;
+            box-shadow: 0 4px 15px rgba(0, 212, 170, 0.2);
+        }
+
+        .message-bubble-enhanced.right::before {
+            content: '';
+            position: absolute;
+            right: -10px;
+            bottom: 10px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-left-color: #00D4AA;
+        }
+
+        .role-name-enhanced {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            opacity: 0.8;
+        }
+
+        .message-content-enhanced {
+            line-height: 1.6;
+            margin-bottom: 8px;
+            word-wrap: break-word;
+        }
+
+        .preview-text {
+            margin: 0;
+            padding: 12px 15px;
+            background: rgba(0, 212, 170, 0.08);
+            border-radius: 10px;
+            border-left: 4px solid #00D4AA;
+            line-height: 1.6;
+            font-size: 14px;
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+
+        .expand-btn-container, .collapse-btn-container {
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .expand-btn, .collapse-btn {
+            color: #00D4AA !important;
+            font-size: 12px !important;
+            font-weight: 500 !important;
+            transition: all 0.2s ease !important;
+            padding: 4px 8px !important;
+            border-radius: 6px !important;
+        }
+
+        .expand-btn:hover, .collapse-btn:hover {
+            background: rgba(0, 212, 170, 0.1) !important;
+            transform: translateY(-1px) !important;
+        }
+
+        .full-content {
+            padding: 15px 18px;
+            background: rgba(0, 212, 170, 0.08);
+            border-radius: 12px;
+            border-left: 4px solid #00D4AA;
+            line-height: 1.6;
+            font-size: 14px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(0, 212, 170, 0.1);
+        }
+
+        .timestamp-enhanced {
+            font-size: 11px;
+            opacity: 0.6;
+            text-align: right;
+        }
+
+        .role-description-enhanced {
+            font-size: 12px;
+            margin-top: 4px;
+            text-align: right;
+            font-style: italic;
+            opacity: 0.9;
+            padding: 4px 8px;
+            border-radius: 6px;
+            backdrop-filter: blur(5px);
+        }
+
+        /* 左侧气泡的角色描述（AI角色，白色背景） */
+        .message-bubble-enhanced.left .role-description-enhanced {
+            color: rgba(51, 51, 51, 0.7);
+            background: rgba(0, 212, 170, 0.1);
+        }
+
+        /* 右侧气泡的角色描述（用户，绿色背景） */
+        .message-bubble-enhanced.right .role-description-enhanced {
+            color: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .typing-indicator-enhanced {
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 20px;
+            animation: messageSlideIn 0.5s ease-out;
+        }
+
+        .typing-bubble-enhanced {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 15px 20px;
+            border-radius: 20px;
+            border-bottom-left-radius: 5px;
+            margin-left: 10px;
+            position: relative;
+        }
+
+        .typing-bubble-enhanced::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            bottom: 10px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-right-color: #f8f9fa;
+        }
+
+        .typing-dots-enhanced {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dots-enhanced span {
+            width: 8px;
+            height: 8px;
+            background: #00D4AA;
+            border-radius: 50%;
+            animation: typingDot 1.4s infinite ease-in-out;
+        }
+
+        .typing-dots-enhanced span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dots-enhanced span:nth-child(2) { animation-delay: -0.16s; }
+        .typing-dots-enhanced span:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes typingDot {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        .collaboration-status-enhanced {
+            position: sticky;
+            bottom: 0;
+            background: linear-gradient(45deg, #00D4AA 0%, #00B894 100%);
+            color: white;
+            padding: 18px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 25px;
+            box-shadow: 0 6px 20px rgba(0, 212, 170, 0.4);
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .status-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .status-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .message-wrapper-enhanced:hover .avatar-enhanced {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 10px 30px rgba(0, 212, 170, 0.4);
+        }
+
+        .message-wrapper-enhanced:hover .message-bubble-enhanced {
+            box-shadow: 0 10px 30px rgba(0, 212, 170, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .message-wrapper-enhanced:hover .role-name-above-avatar {
+            background: rgba(0, 212, 170, 0.1);
+            color: #00B894;
+            transform: translateY(-1px);
+        }
+
+        /* 新增现代化效果 */
+        .chat-messages-enhanced::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(0, 212, 170, 0.03) 0%, transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(0, 184, 148, 0.03) 0%, transparent 30%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .message-bubble-enhanced::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, transparent, rgba(0, 212, 170, 0.1), transparent);
+            border-radius: 24px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .message-wrapper-enhanced:hover .message-bubble-enhanced::after {
+            opacity: 1;
+        }
+
+        /* 打字指示器增强 */
+        .typing-indicator-enhanced {
+            animation: messageSlideIn 0.6s ease-out, breathe 2s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        /* 协作状态增强动画 */
+        .collaboration-status-enhanced::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            border-radius: 12px;
+            animation: shimmerStatus 3s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes shimmerStatus {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(200%) rotate(45deg); }
+        }
+
+        /* 协作抽屉填充样式 */
+        .collab-drawer .el-drawer__body {
+            padding: 0 !important;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .collab-drawer .agent-chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0; /* 允许子元素正确滚动 */
+        }
+        .collab-drawer .ai-chat-bubbles {
+            flex: 1;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .collab-drawer .chat-header-enhanced {
+            margin: 0;
+            padding: 12px 16px;
+        }
+        .collab-drawer .chat-messages-enhanced {
+            flex: 1;
+            max-height: none;
+            height: auto;
+            overflow-y: auto;
+            padding: 0 16px 16px;
+        }
+        .collab-drawer .collaboration-status-enhanced {
+            position: static;
+            margin: 0;
+            border-radius: 0;
+            padding: 12px 16px;
+        }
+        /* 🌟 现代化发光圆点进度条 */
+        .detail-flow {
+            margin: 16px 0;
+            padding: 20px 24px;
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+            border-radius: 16px;
+            border: 1px solid #e1e8ed;
+            position: relative;
+            overflow: visible;
+            box-shadow:
+                0 2px 12px rgba(0, 0, 0, 0.06),
+                0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        /* 📊 商务专业流程容器 */
+        .flow-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            padding: 20px 16px; /* 减少padding提高空间利用率 */
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px; /* 减少圆角 */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        /* ➖ 简洁连接线 */
+        .flow-steps::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 80px;
+            right: 80px;
+            height: 2px;
+            background: #e5e7eb;
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        /* 🏢 商务风步骤 */
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px; /* 减少间距 */
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            flex: 1;
+            max-width: 140px;
+        }
+
+        /* ⭕ 简洁圆形指示器 */
+        .step-circle {
+            width: 36px; /* 减少尺寸节省空间 */
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px; /* 减少字体大小 */
+            font-weight: 600;
+            transition: all 0.2s ease;
+            position: relative;
+            z-index: 10;
+            border: 2px solid #d1d5db;
+            box-sizing: border-box;
+            background: #ffffff;
+            color: #6b7280;
+        }
+
+        /* ⚫ 默认状态 - 未激活 */
+        .flow-step .step-circle {
+            background: #ffffff;
+            color: #9ca3af;
+            border: 2px solid #d1d5db;
+        }
+
+        /* ✅ 完成状态 - 绿色简洁 */
+        .flow-step.completed .step-circle {
+            background: #10b981;
+            color: white;
+            border: 2px solid #10b981;
+        }
+
+        /* 🔵 激活状态 - 蓝色专业（优先级更高） */
+        .flow-step.active .step-circle {
+            background: #3b82f6 !important;
+            color: white !important;
+            border: 2px solid #3b82f6 !important;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
+        }
+
+        /* 🏷️ 简洁标签 */
+        .step-label {
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            color: #6b7280;
+            transition: all 0.2s ease;
+            line-height: 1.4;
+            max-width: 120px;
+        }
+
+        /* ✅ 完成状态标签 */
+        .flow-step.completed .step-label {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        /* 🔵 激活状态标签（优先级更高） */
+        .flow-step.active .step-label {
+            color: #3b82f6 !important;
+            font-weight: 600;
+        }
+
+        /* 🖱️ 简洁悬停效果 */
+        .flow-step:hover .step-circle {
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .flow-step:hover .step-label {
+            color: #374151;
+        }
+
+        /* 移除勾选图标，保持数字显示 */
+
+        /* ➖ 简洁进度连接线 */
+        .flow-step.completed + .flow-step::before,
+        .flow-step.completed::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -50%;
+            width: 100%;
+            height: 2px;
+            background: #10b981;
+            z-index: 2;
+            transform: translateY(-50%);
+        }
+
+        /* PRD智能分析报告样式优化 */
+        .analysis-report.markdown-body h1,
+        .analysis-report.markdown-body h2,
+        .analysis-report.markdown-body h3,
+        .analysis-report.markdown-body h4 {
+            color: #00D4AA !important;
+            font-weight: 600 !important;
+            margin-top: 24px !important;
+            margin-bottom: 16px !important;
+            padding-bottom: 8px !important;
+            border-bottom: 2px solid #e8f7f3 !important;
+        }
+
+        .analysis-report.markdown-body ul,
+        .analysis-report.markdown-body ol {
+            margin: 16px 0 !important;
+            padding-left: 24px !important;
+        }
+
+        .analysis-report.markdown-body li {
+            margin-bottom: 8px !important;
+            line-height: 1.7 !important;
+            color: #4a5568 !important;
+        }
+
+        .analysis-report.markdown-body li strong {
+            color: #2d3748 !important;
+            font-weight: 600 !important;
+        }
+
+        .analysis-report.markdown-body p {
+            margin: 12px 0 !important;
+            color: #4a5568 !important;
+            line-height: 1.8 !important;
+        }
+
+        .analysis-report.markdown-body code {
+            background: rgba(0, 212, 170, 0.1) !important;
+            color: #00D4AA !important;
+            padding: 2px 6px !important;
+            border-radius: 4px !important;
+            font-size: 13px !important;
+        }
+
+        .analysis-report.markdown-body pre {
+            background: #f7fffe !important;
+            border: 1px solid #e8f7f3 !important;
+            border-radius: 8px !important;
+            padding: 16px !important;
+            margin: 16px 0 !important;
+            overflow-x: auto !important;
+        }
+
+        .analysis-report.markdown-body blockquote {
+            border-left: 4px solid #00D4AA !important;
+            background: rgba(0, 212, 170, 0.05) !important;
+            padding: 12px 16px !important;
+            margin: 16px 0 !important;
+            border-radius: 0 8px 8px 0 !important;
+        }
+
+        /* 响应式优化 */
+        @media (max-width: 768px) {
+            .detail-flow {
+                padding: 16px 12px;
+                margin: 12px 0;
+            }
+
+            .flow-steps::before {
+                left: 32px;
+                right: 32px;
+                top: 18px;
+                height: 2px;
+            }
+
+            .step-circle {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+
+            .step-label {
+                font-size: 11px;
+                max-width: 65px;
+            }
+
+            .flow-step {
+                gap: 8px;
+                max-width: 85px;
+            }
+        }
+
+        /* 📑 新的详细内容区域样式 */
+        .detail-content-area {
+            margin-top: 8px; /* 减少margin，让流程条更靠近详细内容 */
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            overflow: visible;
+            height: calc(100vh - 200px); /* 减少顶部空间占用，给详细信息更多展示空间 */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-section {
+            animation: fadeInUp 0.5s ease-out;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden; /* 父容器隐藏溢出，让子元素处理滚动 */
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-header {
+            padding: 16px 24px 12px;
+            border-bottom: 1px solid #f0f0f0;
+            background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
+        }
+
+        .section-header h3 {
+            margin: 0 0 4px 0;
+            font-size: 18px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .section-desc {
+            margin: 0;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .ai-discussion-section.langgraph-panel {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 18px 24px 80px 24px;
+            background: #f8fafc;
+        }
+
+        .langgraph-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .langgraph-stat {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px 14px;
+            min-height: 68px;
+        }
+
+        .langgraph-stat .stat-label {
+            display: block;
+            color: #64748b;
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .langgraph-stat strong {
+            color: #111827;
+            font-size: 18px;
+            line-height: 1.2;
+        }
+
+        .langgraph-flow-block,
+        .langgraph-records {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .langgraph-flow-header,
+        .langgraph-records-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 16px;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .langgraph-flow-header span,
+        .langgraph-records-head h4 {
+            margin: 0;
+            color: #1f2937;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .langgraph-flow-header small,
+        .langgraph-records-head small {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .langgraph-timeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+            gap: 0;
+            padding: 14px 16px 18px;
+        }
+
+        .langgraph-step {
+            position: relative;
+            display: flex;
+            gap: 10px;
+            min-height: 94px;
+            padding: 4px 12px 4px 0;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .langgraph-step:hover .step-body {
+            background: #f8fafc;
+        }
+
+        .langgraph-step::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 12px;
+            right: 0;
+            height: 2px;
+            background: #dbe5ee;
+        }
+
+        .langgraph-step:last-child::before {
+            right: calc(100% - 24px);
+        }
+
+        .langgraph-step .step-dot {
+            position: relative;
+            z-index: 1;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            background: #94a3b8;
+            box-shadow: 0 0 0 1px #cbd5e1;
+            flex: 0 0 24px;
+        }
+
+        .langgraph-step.status-success .step-dot,
+        .langgraph-step.status-completed .step-dot {
+            background: #10b981;
+            box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.35);
+        }
+
+        .langgraph-step.status-running .step-dot,
+        .langgraph-step.status-waiting_confirmation .step-dot {
+            background: #f59e0b;
+            box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.35);
+        }
+
+        .langgraph-step.status-failed .step-dot {
+            background: #ef4444;
+            box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.35);
+        }
+
+        .langgraph-step.selected .step-dot {
+            box-shadow: 0 0 0 4px rgba(0, 212, 170, 0.16), 0 0 0 1px rgba(0, 184, 148, 0.45);
+        }
+
+        .langgraph-step .step-body {
+            position: relative;
+            z-index: 1;
+            padding-top: 32px;
+            min-width: 0;
+            border-radius: 8px;
+            padding-left: 4px;
+            padding-right: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .langgraph-step.selected .step-body {
+            background: #ecfdf5;
+        }
+
+        .langgraph-step .step-topline {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .langgraph-step .step-topline strong {
+            color: #1f2937;
+            font-size: 14px;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .langgraph-step .step-meta {
+            margin-top: 6px;
+            color: #64748b;
+            font-size: 12px;
+            line-height: 1.4;
+            word-break: break-all;
+        }
+
+        .langgraph-step .step-error {
+            margin-top: 6px;
+            color: #ef4444;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .langgraph-node-detail {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .node-detail-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 16px;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .node-detail-head h4 {
+            margin: 0 0 4px 0;
+            color: #1f2937;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .node-detail-head small {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .node-io-tabs {
+            padding: 0 16px 16px;
+        }
+
+        .node-io-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .node-io-item {
+            border: 1px solid #eef2f7;
+            border-radius: 8px;
+            padding: 12px;
+            background: #ffffff;
+        }
+
+        .node-io-title {
+            color: #1f2937;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .node-io-empty {
+            color: #94a3b8;
+            font-size: 13px;
+            padding: 18px 4px;
+        }
+
+        .langgraph-record-list {
+            border: 0;
+            padding: 0 16px 14px;
+        }
+
+        .langgraph-record-list .el-collapse-item__header {
+            min-height: 44px;
+            height: auto;
+            line-height: 1.4;
+            padding: 8px 0;
+        }
+
+        .record-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .record-title span {
+            color: #1f2937;
+            font-size: 13px;
+            font-weight: 600;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .record-title small {
+            margin-left: auto;
+            color: #94a3b8;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .record-preview {
+            color: #64748b;
+            background: #f8fafc;
+            border: 1px solid #eef2f7;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 12px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .record-content {
+            max-height: 520px;
+            overflow: auto;
+            color: #1f2937;
+            background: #ffffff;
+            border: 1px solid #eef2f7;
+            border-radius: 6px;
+            padding: 12px 14px;
+            font-size: 13px;
+            line-height: 1.65;
+        }
+
+        .record-content pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: #f8fafc;
+            border-radius: 6px;
+            padding: 10px;
+        }
+
+        @media (max-width: 900px) {
+            .langgraph-overview {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .langgraph-timeline {
+                grid-template-columns: 1fr;
+            }
+
+            .langgraph-step::before {
+                top: 12px;
+                bottom: 0;
+                left: 12px;
+                width: 2px;
+                height: auto;
+                right: auto;
+            }
+
+            .langgraph-step:last-child::before {
+                bottom: calc(100% - 24px);
+                right: auto;
+            }
+        }
+
+        .content-section .prd-preview,
+        .content-section .confirmation-section,
+        .content-section .final-prd-section,
+        .content-section .test-analysis-section,
+        .content-section .results-section {
+            padding: 20px 24px 80px 24px; /* 进一步增加底部padding到80px */
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            min-height: 300px;
+            /* 移除max-height限制，让它自动适应父容器 */
+            scroll-behavior: smooth;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 32px;
+            color: #94a3b8;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: #cbd5e1;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            margin: 0 0 8px 0;
+            font-weight: 600;
+        }
+
+        .empty-state small {
+            font-size: 14px;
+            color: #94a3b8;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        /* 优化结果区域样式 */
+
+        .download-btn {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #00E5BC 100%);
+            border: none;
+            padding: 8px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 212, 170, 0.25);
+            transition: all 0.3s ease;
+            border-radius: 6px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.4);
+        }
+
+        .table-container {
+            margin-top: 20px;
+            margin-bottom: 60px; /* 进一步增加底部空间到60px */
+            border-radius: 8px;
+            overflow: visible;
+            border: 1px solid #e2e8f0;
+            width: 100%;
+        }
+
+        /* 确保表格内容能够完整显示 */
+        .table-container table {
+            width: 100%;
+            margin-bottom: 40px; /* 表格底部增加更多空间到40px */
+        }
+
+        /* 确保表格最后一行完全可见 */
+        .table-container table tbody tr:last-child {
+            margin-bottom: 20px;
+        }
+
+        .table-container table tbody tr:last-child td {
+            padding-bottom: 16px; /* 最后一行单元格增加底部padding */
+        }
+
+        /* 美化滚动条 */
+        .content-section .prd-preview::-webkit-scrollbar,
+        .content-section .confirmation-section::-webkit-scrollbar,
+        .content-section .final-prd-section::-webkit-scrollbar,
+        .content-section .test-analysis-section::-webkit-scrollbar,
+        .content-section .results-section::-webkit-scrollbar,
+        .table-container::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .content-section .prd-preview::-webkit-scrollbar-track,
+        .content-section .confirmation-section::-webkit-scrollbar-track,
+        .content-section .final-prd-section::-webkit-scrollbar-track,
+        .content-section .test-analysis-section::-webkit-scrollbar-track,
+        .content-section .results-section::-webkit-scrollbar-track,
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        .content-section .prd-preview::-webkit-scrollbar-thumb,
+        .content-section .confirmation-section::-webkit-scrollbar-thumb,
+        .content-section .final-prd-section::-webkit-scrollbar-thumb,
+        .content-section .test-analysis-section::-webkit-scrollbar-thumb,
+        .content-section .results-section::-webkit-scrollbar-thumb,
+        .table-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .content-section .prd-preview::-webkit-scrollbar-thumb:hover,
+        .content-section .confirmation-section::-webkit-scrollbar-thumb:hover,
+        .content-section .final-prd-section::-webkit-scrollbar-thumb:hover,
+        .content-section .test-analysis-section::-webkit-scrollbar-thumb:hover,
+        .content-section .results-section::-webkit-scrollbar-thumb:hover,
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* 移动端滚动优化 */
+        @media (max-width: 768px) {
+            .detail-content-area {
+                height: calc(100vh - 140px); /* 减少顶部空间，给更多展示空间 */
+            }
+
+            .content-section .prd-preview,
+            .content-section .confirmation-section,
+            .content-section .final-prd-section,
+            .content-section .test-analysis-section,
+            .content-section .results-section {
+                padding: 16px 18px 70px 18px; /* 进一步增加移动端底部padding到70px */
+                min-height: 250px;
+                /* 移除max-height限制 */
+            }
+
+            .section-header {
+                padding: 12px 18px 8px;
+            }
+
+            .section-header h3 {
+                font-size: 16px;
+                margin: 0 0 3px 0;
+            }
+
+            .section-desc {
+                font-size: 12px;
+            }
+
+
+        }
+
+        @media (max-width: 768px) {
+            .ai-chat-bubbles {
+                margin: 15px;
+                padding: 20px;
+                border-radius: 16px;
+            }
+
+            .chat-messages-enhanced {
+                max-height: 400px;
+                padding: 20px;
+            }
+
+            .message-bubble-enhanced {
+                max-width: 88%;
+                padding: 14px 18px;
+            }
+
+            .avatar-enhanced {
+                width: 50px;
+                height: 50px;
+                font-size: 22px;
+            }
+
+            .role-name-above-avatar {
+                font-size: 12px;
+                padding: 4px 8px;
+                min-width: 60px;
+            }
+        }
+
+        /* ✨ 3D卡片样式 - 测试分析专用 */
+        .analysis-3d-cards-container {
+            padding: 20px 0;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin: 0;
+            width: 100%;
+        }
+
+        .analysis-3d-card {
+            background: linear-gradient(135deg, #ffffff 0%, #fafbfc 50%, #f8f9fa 100%);
+            border-radius: 12px;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.08),
+                0 4px 16px rgba(0, 0, 0, 0.04),
+                0 1px 4px rgba(0, 0, 0, 0.02),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            backdrop-filter: blur(20px);
+        }
+
+        .analysis-3d-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #1f2937, #374151, #4b5563);
+            opacity: 0.8;
+        }
+
+        .analysis-3d-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow:
+                0 20px 48px rgba(0, 0, 0, 0.12),
+                0 8px 24px rgba(0, 0, 0, 0.08),
+                0 2px 8px rgba(0, 0, 0, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 1);
+            border-color: #d1d5db;
+        }
+
+        .analysis-3d-card:hover::before {
+            background: linear-gradient(90deg, #00D4AA, #00B894, #00E5BC);
+            opacity: 1;
+        }
+
+        .card-header-3d {
+            padding: 24px 28px 20px;
+            text-align: left;
+            position: relative;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .card-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+            margin-right: 12px;
+            display: inline-block;
+            vertical-align: middle;
+            color: #374151;
+            filter: none;
+        }
+
+        .card-header-3d h4 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            letter-spacing: -0.025em;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 400;
+            margin: 8px 0 0 0;
+            opacity: 0.9;
+            letter-spacing: 0.01em;
+        }
+
+        .card-content-3d {
+            padding: 0 28px 28px;
+        }
+
+        .analysis-text-content {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #f3f4f6;
+            position: relative;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .analysis-text-content::before {
+            display: none;
+        }
+
+        /* 美化滚动条 */
+        .analysis-text-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .analysis-text-content::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+
+        .analysis-text-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .analysis-text-content::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* 文案美化样式 */
+        .analysis-text-content p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #374151;
+            margin: 0 0 14px 0;
+            font-weight: 400;
+            text-align: left;
+        }
+
+        .analysis-text-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .analysis-text-content strong {
+            color: #1f2937;
+            font-weight: 600;
+        }
+
+        .analysis-text-content ul, .analysis-text-content ol {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+
+        .analysis-text-content li {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #4b5563;
+            margin-bottom: 8px;
+        }
+
+        .analysis-text-content h5, .analysis-text-content h6 {
+            color: #1f2937;
+            font-weight: 600;
+            margin: 20px 0 12px 0;
+            font-size: 16px;
+        }
+
+        /* 动画效果 */
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 1200px) {
+            .cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                gap: 20px;
+            }
+
+            .analysis-text-content {
+                max-height: 350px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 18px;
+            }
+
+            .analysis-text-content {
+                max-height: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .analysis-3d-card {
+                border-radius: 16px;
+            }
+
+            .card-header-3d, .card-content-3d {
+                padding: 20px;
+            }
+
+            .card-icon {
+                font-size: 40px;
+            }
+
+            .card-header-3d h4 {
+                font-size: 18px;
+            }
+
+            .analysis-text-content {
+                padding: 16px;
+                max-height: 250px;
+            }
+
+            .analysis-text-content p {
+                font-size: 15px;
+                line-height: 1.7;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <!-- 加载层 -->
+        <div class="loading-overlay" v-if="isLoading">
+            <div class="loading-spinner"></div>
+            <p style="margin-top: 20px; font-size: 16px; color: #666;">正在分析需求并生成测试用例...</p>
+        </div>
+
+        <div class="main-container">
+            <!-- 顶部导航 -->
+            <el-header height="80px">
+                <div class="header-content">
+                    <div class="logo">
+                        <span class="logo-mark">S2C</span>
+                        <div>
+                            <div class="logo-text">Spec2Case</div>
+                            <div class="logo-subtitle">AI 需求转测试用例生成工具</div>
+                        </div>
+                    </div>
+                    <div class="header-right">
+                        <el-button size="small" icon="el-icon-refresh" @click="refreshData" style="background: #ffffff; border: 1px solid #d0d5dd; color: #344054; font-weight: 600; border-radius: 6px; box-shadow: none;">
+                            刷新
+                        </el-button>
+                    </div>
+                </div>
+            </el-header>
+
+
+
+            <!-- 主要功能Tab导航 -->
+            <div class="main-tabs-container">
+                <el-tabs v-model="mainTab" type="card" class="main-tabs" style="margin: 0;">
+                    <el-tab-pane name="testcase" class="tab-with-icon">
+                        <span slot="label" class="tab-label">
+                            <div class="tab-content">
+                                <i class="tab-icon">🧪</i>
+                                <span class="tab-text">Spec 转测试用例</span>
+                            </div>
+                        </span>
+                    </el-tab-pane>
+                </el-tabs>
+            </div>
+
+            <el-container v-show="mainTab === 'testcase'">
+                <el-aside width="220px" class="sidebar-container">
+                    <div style="height: 100%; display: flex; flex-direction: column;">
+                        <!-- 主要功能菜单 -->
+                        <el-menu default-active="newTask" class="el-menu-vertical sidebar-menu" style="flex: 1; border-right: none;">
+                            <el-menu-item index="newTask" @click="activeTab = 'newTask'">
+                                <i class="el-icon-plus"></i>
+                                <span slot="title">新建任务</span>
+                            </el-menu-item>
+                            <el-menu-item index="unifiedTaskList" @click="activeTab = 'unifiedTaskList'">
+                                <i class="el-icon-document-copy"></i>
+                                <span slot="title">任务管理</span>
+                                <el-badge :value="waitingCount" v-if="waitingCount > 0" class="item"></el-badge>
+                            </el-menu-item>
+                            <el-menu-item index="modelSettings" @click="openModelSettings">
+                                <i class="el-icon-setting"></i>
+                                <span slot="title">模型配置</span>
+                            </el-menu-item>
+                        </el-menu>
+
+                    </div>
+                </el-aside>
+
+                <el-main style="background: #f6f8fb; padding: 24px;">
+                    <!-- 统一任务管理 (Phase 3) -->
+                    <div v-if="activeTab === 'unifiedTaskList'">
+                        <task-manager-component
+                            @view-image-task="viewImageTaskDetail"
+                            @view-text-task="viewTextTaskDetail"
+                            @edit-image-task="editImageTask"
+                            @edit-text-task="editTextTask"
+                            @view-task-detail="viewTaskRunningDetail"
+                        ></task-manager-component>
+                    </div>
+
+                    <!-- 模型配置 -->
+                    <div v-if="activeTab === 'modelSettings'" class="model-settings-page">
+                        <div class="page-header" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 18px; gap: 20px;">
+                            <div>
+                                <h2 style="font-size: 24px; color: #101828; margin: 0 0 8px 0; font-weight: 700;">
+                                    模型配置
+                                </h2>
+                                <p style="color: #667085; font-size: 14px; margin: 0;">按阶段配置模型，保存后新启动任务生效。</p>
+                            </div>
+                            <div style="display:flex; gap: 8px; flex-shrink: 0;">
+                                <el-button icon="el-icon-refresh" @click="fetchModelSettings" :loading="modelSettingsLoading">刷新</el-button>
+                                <el-button type="primary" icon="el-icon-check" @click="saveModelSettings" :loading="modelSettingsSaving">保存配置</el-button>
+                            </div>
+                        </div>
+
+                        <div style="display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px;">
+                            <div v-for="guide in modelStageGuides" :key="guide.type"
+                                 :class="'model-stage-guide model-stage-guide-' + guide.type"
+                                 style="background:#fff; border:1px solid #E4E7ED; border-radius:8px; padding:14px 16px; min-height:96px; box-shadow:none;">
+                                <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:8px;">
+                                    <div>
+                                        <div style="font-size:15px; font-weight:700; color:#303133;">{%raw%}{{ guide.label }}{%endraw%}</div>
+                                    </div>
+                                    <el-tag size="mini" :type="guide.type === 'split' ? 'danger' : (guide.type === 'vision' ? 'success' : 'info')" effect="plain">
+                                        {%raw%}{{ guide.level }}{%endraw%}
+                                    </el-tag>
+                                </div>
+                                <p style="margin:0; color:#606266; font-size:13px; line-height:1.55;">{%raw%}{{ guide.description }}{%endraw%}</p>
+                            </div>
+                        </div>
+
+                        <el-card shadow="never" style="border-radius: 8px; border:1px solid #E4E7ED;">
+                            <div slot="header" style="display:flex; justify-content:space-between; align-items:center;">
+                                <span style="font-weight: 600;">模型配置</span>
+                                <el-button size="mini" icon="el-icon-plus" @click="addModelConfig">新增模型</el-button>
+                            </div>
+                            <div v-loading="modelSettingsLoading">
+                                <el-empty v-if="!modelSettings.models || modelSettings.models.length === 0" description="暂无模型配置">
+                                    <el-button type="primary" icon="el-icon-plus" @click="addModelConfig">新增模型</el-button>
+                                </el-empty>
+
+                                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap:14px;">
+                                    <div v-for="(model, index) in modelSettings.models" :key="model.id || index"
+                                         style="border:1px solid #EBEEF5; border-radius:8px; padding:16px; background:#ffffff;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid #EBEEF5;">
+                                            <div style="display:flex; align-items:center; gap:10px; min-width:0;">
+                                                <el-tag size="small" :type="model.model_type === 'split' ? 'danger' : (model.model_type === 'vision' ? 'success' : 'info')" effect="plain">
+                                                    {%raw%}{{ getModelTypeLabel(model.model_type) }}{%endraw%}
+                                                </el-tag>
+                                                <el-tag :type="model.enabled ? 'success' : 'info'" size="mini">
+                                                    {%raw%}{{ model.enabled ? '启用' : '停用' }}{%endraw%}
+                                                </el-tag>
+                                            </div>
+                                            <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+                                                <el-switch v-model="model.enabled"></el-switch>
+                                                <el-button size="mini" icon="el-icon-connection" @click="testModelConfig(model)" :loading="model.testing">测试</el-button>
+                                                <el-button size="mini" type="text" style="color:#F56C6C;" @click="removeModelConfig(index)">删除</el-button>
+                                            </div>
+                                        </div>
+
+                                        <div style="display:grid; grid-template-columns: 1fr 180px; gap:12px; margin-bottom:12px;">
+                                            <div>
+                                                <div style="font-size:12px; color:#909399; margin-bottom:6px;">模型 ID</div>
+                                                <el-input v-model="model.model" size="small" placeholder="例如：gpt-5.5"></el-input>
+                                            </div>
+                                            <div>
+                                                <div style="font-size:12px; color:#909399; margin-bottom:6px;">API 类型</div>
+                                                <el-select v-model="model.api" size="small" clearable placeholder="Chat Completions" style="width:100%;">
+                                                    <el-option label="Chat Completions" value=""></el-option>
+                                                    <el-option label="OpenAI Responses" value="openai-responses"></el-option>
+                                                </el-select>
+                                            </div>
+                                        </div>
+
+                                        <div style="margin-bottom:12px;">
+                                            <div style="font-size:12px; color:#909399; margin-bottom:6px;">Base URL</div>
+                                            <el-input v-model="model.base_url" size="small" placeholder="https://example.com/v1"></el-input>
+                                        </div>
+
+                                        <div>
+                                            <div style="font-size:12px; color:#909399; margin-bottom:6px;">API Key</div>
+                                            <el-input
+                                                v-model="model.api_key"
+                                                size="small"
+                                                show-password
+                                                :placeholder="model.api_key_masked || '请输入 API Key'">
+                                            </el-input>
+                                        </div>
+
+                                        <div style="margin-top:14px; padding-top:14px; border-top:1px dashed #D0D5DD;">
+                                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                                                <div style="font-size:13px; color:#344054; font-weight:600;">计费参考（可选）</div>
+                                                <el-tag size="mini" effect="plain">每百万 Token</el-tag>
+                                            </div>
+                                            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr 96px; gap:10px; margin-bottom:10px;">
+                                                <div>
+                                                    <div style="font-size:12px; color:#909399; margin-bottom:6px;">输入单价</div>
+                                                    <el-input-number
+                                                        v-model="model.input_price_per_million"
+                                                        size="small"
+                                                        :min="0"
+                                                        :precision="4"
+                                                        :controls="false"
+                                                        placeholder="可不填"
+                                                        style="width:100%;">
+                                                    </el-input-number>
+                                                </div>
+                                                <div>
+                                                    <div style="font-size:12px; color:#909399; margin-bottom:6px;">缓存输入价</div>
+                                                    <el-input-number
+                                                        v-model="model.cached_input_price_per_million"
+                                                        size="small"
+                                                        :min="0"
+                                                        :precision="4"
+                                                        :controls="false"
+                                                        placeholder="默认同输入"
+                                                        style="width:100%;">
+                                                    </el-input-number>
+                                                </div>
+                                                <div>
+                                                    <div style="font-size:12px; color:#909399; margin-bottom:6px;">输出单价</div>
+                                                    <el-input-number
+                                                        v-model="model.output_price_per_million"
+                                                        size="small"
+                                                        :min="0"
+                                                        :precision="4"
+                                                        :controls="false"
+                                                        placeholder="可不填"
+                                                        style="width:100%;">
+                                                    </el-input-number>
+                                                </div>
+                                                <div>
+                                                    <div style="font-size:12px; color:#909399; margin-bottom:6px;">货币</div>
+                                                    <el-select v-model="model.currency" size="small" style="width:100%;">
+                                                        <el-option label="CNY" value="CNY"></el-option>
+                                                        <el-option label="USD" value="USD"></el-option>
+                                                    </el-select>
+                                                </div>
+                                            </div>
+                                            <el-input
+                                                v-model="model.pricing_note"
+                                                size="small"
+                                                placeholder="计费备注：如是否包含图片、缓存、reasoning token">
+                                            </el-input>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </el-card>
+                    </div>
+
+                    <!-- 新建任务页面 - 选择上传方式 -->
+                    <div v-if="activeTab === 'newTask'" class="new-task-page">
+                        <div class="page-header" style="margin-bottom: 22px;">
+                            <h2 style="font-size: 24px; color: #101828; margin: 0 0 8px 0; font-weight: 700;">
+                                创建测试用例生成任务
+                            </h2>
+                            <p style="color: #667085; font-size: 14px; margin: 0;">导入产品规格、PRD 或 UI 截图，生成结构化可执行测试用例。</p>
+                        </div>
+
+                        <!-- 左右分栏：每边一种上传类型 + 详细说明 -->
+                        <el-row :gutter="18" style="margin-top: 0;">
+                            <!-- 左侧：图片需求上传 -->
+                            <el-col :span="12">
+                                <div style="height: 100%; display: flex; flex-direction: column;">
+                                    <!-- 图片需求卡片 - 主功能卡片 -->
+                                    <el-card shadow="never" :body-style="{ padding: '24px' }"
+                                        class="task-type-card image-card"
+                                        style="margin-bottom: 12px; border: 1px solid #b7eadf; background: #ffffff; border-radius: 8px; transition: all 0.2s ease;">
+                                        <div style="display:flex; align-items:flex-start; gap:16px; margin-bottom: 18px;">
+                                        <div class="method-icon" style="width: 48px; height: 48px; border-radius: 8px; background:#e8fbf6; display:flex; align-items:center; justify-content:center; font-size: 24px; flex-shrink:0;">
+                                            <i class="el-icon-picture-outline" style="color: #00D4AA;"></i>
+                                        </div>
+                                        <div style="min-width:0;">
+                                            <h3 style="font-size: 20px; font-weight: 700; color: #101828; margin: 0 0 8px;">
+                                                图片/原型需求
+                                            </h3>
+                                            <p style="color: #667085; font-size: 14px; line-height: 1.6; margin: 0;">
+                                                上传原型图、设计稿或带标注截图，适合图文结合、UI 流程类需求。
+                                            </p>
+                                        </div>
+                                        </div>
+                                        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+                                            <span class="feature-tag">多图片</span>
+                                            <span class="feature-tag">备注补充</span>
+                                            <span class="feature-tag">结果可编辑</span>
+                                        </div>
+                                        <el-button type="success" icon="el-icon-plus" size="large"
+                                            @click="activeTab = 'createImageRequirement'"
+                                            style="width: 100%; margin-bottom: 8px; font-size: 15px; padding: 12px 18px; border-radius: 6px; background: #00B894; border: none; box-shadow: none; font-weight: 600;">
+                                            新建图片需求
+                                        </el-button>
+                                        <el-button type="text"
+                                            @click="activeTab = 'imageRequirementList'"
+                                            style="width: 100%; font-size: 14px;">
+                                            查看历史记录 <i class="el-icon-arrow-right"></i>
+                                        </el-button>
+                                    </el-card>
+
+                                    <!-- 图片需求说明 - 紧凑版 -->
+                                    <el-card shadow="never" :body-style="{ padding: '14px 16px' }" style="border: 1px solid #e5e7eb; background: #ffffff; border-radius: 8px;">
+                                        <div style="line-height: 1.6; font-size: 13px;">
+                                            <p style="margin: 0 0 8px; color: #008f73; font-size: 14px; font-weight: 600;">
+                                                <i class="el-icon-picture-outline"></i> 适用：图片/原型类需求
+                                            </p>
+                                            <ul style="margin: 0; padding-left: 18px; color: #606266; font-size: 13px;">
+                                                <li>墨刀、Axure、Figma 截图</li>
+                                                <li>UI 设计稿、带标注截图</li>
+                                                <li>每个模块建议最多 5 张图</li>
+                                            </ul>
+                                        </div>
+                                    </el-card>
+                                </div>
+                            </el-col>
+
+                            <!-- 右侧：文本PRD上传 -->
+                            <el-col :span="12">
+                                <div style="height: 100%; display: flex; flex-direction: column;">
+                                    <!-- 文本PRD卡片 - 主功能卡片 -->
+                                    <el-card shadow="never" :body-style="{ padding: '24px' }"
+                                        class="task-type-card text-card"
+                                        style="margin-bottom: 12px; border: 1px solid #c7d7fe; background: #ffffff; border-radius: 8px; transition: all 0.2s ease;">
+                                        <div style="display:flex; align-items:flex-start; gap:16px; margin-bottom: 18px;">
+                                        <div class="method-icon" style="width: 48px; height: 48px; border-radius: 8px; background:#eef4ff; display:flex; align-items:center; justify-content:center; font-size: 24px; flex-shrink:0;">
+                                            <i class="el-icon-document" style="color: #55D4C8;"></i>
+                                        </div>
+                                        <div style="min-width:0;">
+                                            <h3 style="font-size: 20px; font-weight: 700; color: #101828; margin: 0 0 8px;">
+                                                文本需求
+                                            </h3>
+                                            <p style="color: #667085; font-size: 14px; line-height: 1.6; margin: 0;">
+                                                上传或粘贴纯文本需求文档，适合规则、流程、接口和功能说明。
+                                            </p>
+                                        </div>
+                                        </div>
+                                        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
+                                            <span class="feature-tag">Markdown/TXT</span>
+                                            <span class="feature-tag">可粘贴</span>
+                                            <span class="feature-tag">快速导入</span>
+                                        </div>
+                                        <el-button type="success" icon="el-icon-plus" size="large"
+                                            @click="activeTab = 'createTextPRD'"
+                                            style="width: 100%; margin-bottom: 8px; font-size: 15px; padding: 12px 18px; border-radius: 6px; background: #2DB8A8; border: none; box-shadow: none; font-weight: 600;">
+                                            新建文本需求
+                                        </el-button>
+                                        <el-button type="text"
+                                            @click="activeTab = 'textPRDList'"
+                                            style="width: 100%; font-size: 14px;">
+                                            查看历史记录 <i class="el-icon-arrow-right"></i>
+                                        </el-button>
+                                    </el-card>
+
+                                    <!-- 文本PRD说明 - 紧凑版 -->
+                                    <el-card shadow="never" :body-style="{ padding: '14px 16px' }" style="border: 1px solid #e5e7eb; background: #ffffff; border-radius: 8px;">
+                                        <div style="line-height: 1.6; font-size: 13px;">
+                                            <p style="margin: 0 0 8px; color: #409EFF; font-size: 14px; font-weight: 600;">
+                                                <i class="el-icon-document"></i> 适用：文本规格/PRD
+                                            </p>
+                                            <ul style="margin: 0; padding-left: 18px; color: #606266; font-size: 13px;">
+                                                <li>Markdown、TXT 或复制文本</li>
+                                                <li>业务规则、状态流转、异常处理</li>
+                                                <li>接口说明、功能优化说明</li>
+                                            </ul>
+                                        </div>
+                                    </el-card>
+                                </div>
+                            </el-col>
+                        </el-row>
+
+                        <!-- 底部快速选择提示 - 紧凑版 -->
+                        <div style="margin-top: 18px;">
+                            <el-alert type="info" :closable="false" style="padding: 10px 12px; border-radius: 8px;">
+                                <div style="display: flex; gap: 15px; align-items: center; justify-content: center; flex-wrap: wrap; font-size: 13px;">
+                                    <span style="color: #00D4AA; font-weight: 600;">
+                                        <i class="el-icon-picture"></i> 有图→图片模式
+                                    </span>
+                                    <span style="color: #909399;">|</span>
+                                    <span style="color: #409EFF; font-weight: 600;">
+                                        <i class="el-icon-document"></i> 纯文字→文本模式
+                                    </span>
+                                    <span style="color: #909399;">|</span>
+                                    <span style="color: #E6A23C;">
+                                        混合场景优先选<strong>图片模式</strong>
+                                    </span>
+                                </div>
+                            </el-alert>
+                        </div>
+                    </div>
+
+                    <!-- 图片需求 - 新建 -->
+                    <div v-if="activeTab === 'createImageRequirement'">
+                        <requirement-module-component initial-view="create"></requirement-module-component>
+                    </div>
+
+                    <!-- 图片需求 - 列表 -->
+                    <div v-if="activeTab === 'imageRequirementList'">
+                        <requirement-module-component ref="imageModuleComponent" initial-view="list" @back-to-parent="handleBackToParent"></requirement-module-component>
+                    </div>
+
+                    <!-- 文本PRD - 新建 -->
+                    <div v-if="activeTab === 'createTextPRD'">
+                        <text-prd-manager initial-view="create"></text-prd-manager>
+                    </div>
+
+                    <!-- 文本PRD - 列表 -->
+                    <div v-if="activeTab === 'textPRDList'">
+                        <text-prd-manager ref="textPRDManager" initial-view="list" @back-to-parent="handleBackToParent"></text-prd-manager>
+                    </div>
+                    <!-- 任务详情页面优化 -->
+                    <div v-if="activeTab === 'taskDetail' && selectedTask" class="task-detail-container">
+                            <div class="task-header" style="margin-bottom: 15px;">
+                                <!-- 横向布局：标题在左，返回按钮在右 -->
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <h3 style="margin: 0; font-size: 24px; font-weight: 600; color: #00D4AA;">{%raw%}{{ selectedTask.name }}{%endraw%}</h3>
+                                        <el-tag :type="getStatusType(selectedTask.status)" size="small" effect="light">{%raw%}{{ getStatusText(selectedTask.status) }}{%endraw%}</el-tag>
+                                    </div>
+                                    <el-button type="text" icon="el-icon-arrow-left" @click="goToTaskList" style="color: #409EFF; font-size: 14px;">← 返回列表</el-button>
+                                </div>
+                        </div>
+
+                        <div class="content-section">
+                            <!-- Cute Timeline：四阶段流程（可点击切换Tab） -->
+                            <timeline v-if="showCuteTimeline" timeline-theme="#00D4AA" timeline-bg="#00B894" style="margin-bottom: 12px;">
+                                <timeline-item :icon-size="'large'" @click.native="taskDetailTab='prdPreview'">
+                                    <template slot="others">📄</template>
+                                    <span style="cursor:pointer; font-weight:600;">需求原文</span>
+                                </timeline-item>
+                                <timeline-item :hollow="true" :icon-size="'large'" @click.native="taskDetailTab='confirmationItems'">
+                                    <template slot="others">✋</template>
+                                    <span style="cursor:pointer; font-weight:600;">人工确认</span>
+                                </timeline-item>
+                                <timeline-item :icon-size="'large'" @click.native="taskDetailTab='results'">
+                                    <template slot="others">📑</template>
+                                    <span style="cursor:pointer; font-weight:600;">测试用例结果</span>
+                                </timeline-item>
+                            </timeline>
+                            <div v-else class="detail-flow" style="margin-bottom: 10px;">
+                                <!-- 🌟 现代化发光圆点进度条（简化为4个Tab） -->
+                                <div class="flow-steps">
+                                    <!-- AI协作标签页 -->
+                                    <div v-if="aiCollaborationEnabled || hasLanggraphData()" class="flow-step"
+                                         :class="getFlowStepClass('aiDiscussion')"
+                                         @click="taskDetailTab='aiDiscussion'">
+                                        <div class="step-circle">1</div>
+                                        <div class="step-label">AI协作</div>
+                                    </div>
+
+                                    <div class="flow-step"
+                                         :class="getFlowStepClass('confirmationItems')"
+                                         @click="taskDetailTab='confirmationItems'">
+                                        <div class="step-circle">{%raw%}{{ getFlowStepNumber('confirmationItems') }}{%endraw%}</div>
+                                        <div class="step-label">人工确认</div>
+                                    </div>
+
+                                    <div class="flow-step"
+                                         :class="getFlowStepClass('testcaseGeneration')"
+                                         @click="taskDetailTab='testcaseGeneration'">
+                                        <div class="step-circle">{%raw%}{{ getFlowStepNumber('testcaseGeneration') }}{%endraw%}</div>
+                                        <div class="step-label">用例生成</div>
+                                    </div>
+
+                                    <div class="flow-step"
+                                         :class="getFlowStepClass('results')"
+                                         @click="taskDetailTab='results'">
+                                        <div class="step-circle">{%raw%}{{ getFlowStepNumber('results') }}{%endraw%}</div>
+                                        <div class="step-label">用例结果</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 📑 详细内容区域 -->
+                            <div class="detail-content-area">
+                                <!-- AI协作内容 -->
+                                <div v-if="(aiCollaborationEnabled || hasLanggraphData()) && taskDetailTab === 'aiDiscussion'" class="content-section">
+                                    <div class="section-header">
+                                        <h3>AI协作运行</h3>
+                                        <p class="section-desc">任务完整执行链路、执行状态和耗时</p>
+                                    </div>
+                                    <div class="ai-discussion-section langgraph-panel">
+                                        <div v-if="hasLanggraphData()" class="langgraph-overview">
+                                            <div class="langgraph-stat">
+                                                <span class="stat-label">节点</span>
+                                                <strong>{%raw%}{{ getLanggraphSummaryStats().successNodes }}{%endraw%}/{%raw%}{{ getLanggraphSummaryStats().totalNodes }}{%endraw%}</strong>
+                                            </div>
+                                            <div class="langgraph-stat">
+                                                <span class="stat-label">异常</span>
+                                                <strong>{%raw%}{{ getLanggraphSummaryStats().failedNodes }}{%endraw%}</strong>
+                                            </div>
+                                            <div class="langgraph-stat">
+                                                <span class="stat-label">耗时</span>
+                                                <strong>{%raw%}{{ getLanggraphSummaryStats().totalDuration }}{%endraw%}</strong>
+                                            </div>
+                                            <div class="langgraph-stat">
+                                                <span class="stat-label">大概费用</span>
+                                                <strong>{%raw%}{{ getLanggraphSummaryStats().roughCost }}{%endraw%}</strong>
+                                            </div>
+                                        </div>
+
+                                        <div v-if="hasLanggraphData()" class="langgraph-flow-block">
+                                            <div class="langgraph-flow-header">
+                                                <span>完整执行流程</span>
+                                                <small>{%raw%}{{ getLanggraphDisplayNodes().length }}{%endraw%} 个节点</small>
+                                            </div>
+                                            <div class="langgraph-timeline">
+                                                <div v-for="node in getLanggraphDisplayNodes()"
+                                                     :key="'flow-' + node.id"
+                                                     class="langgraph-step"
+                                                     :class="['status-' + (node.status || 'unknown'), { selected: isLanggraphNodeSelected(node) }]"
+                                                     @click="selectLanggraphNode(node)">
+                                                    <div class="step-dot"></div>
+                                                    <div class="step-body">
+                                                        <div class="step-topline">
+                                                            <strong>{%raw%}{{ getLanggraphNodeName(node.display_id || node.id) }}{%endraw%}</strong>
+                                                            <el-tag size="mini" :type="getLanggraphNodeStatusType(node.status)">{%raw%}{{ getLanggraphNodeStatusText(node.status) }}{%endraw%}</el-tag>
+                                                        </div>
+                                                        <div class="step-meta">耗时 {%raw%}{{ getLanggraphDurationText(node.duration_ms) }}{%endraw%}</div>
+                                                        <div v-if="node.error && node.error.message" class="step-error">{%raw%}{{ node.error.message }}{%endraw%}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div v-if="getSelectedLanggraphNode()" class="langgraph-node-detail">
+                                            <div class="node-detail-head">
+                                                <div>
+                                                    <h4>{%raw%}{{ getLanggraphNodeName(getSelectedLanggraphNode().display_id || getSelectedLanggraphNode().id) }}{%endraw%}</h4>
+                                                    <small>{%raw%}{{ getLanggraphNodeStatusText(getSelectedLanggraphNode().status) }}{%endraw%} · 耗时 {%raw%}{{ getLanggraphDurationText(getSelectedLanggraphNode().duration_ms) }}{%endraw%}</small>
+                                                </div>
+                                            </div>
+
+                                            <el-tabs class="node-io-tabs" value="input">
+                                                <el-tab-pane label="输入" name="input">
+                                                    <div v-if="getSelectedLanggraphMessagesByType('input').length > 0" class="node-io-list">
+                                                        <div v-for="message in getSelectedLanggraphMessagesByType('input')"
+                                                             :key="'node-input-' + message.debugIndex"
+                                                             class="node-io-item">
+                                                            <div class="node-io-title">{%raw%}{{ getLanggraphMessageTitle(message) }}{%endraw%}</div>
+                                                            <div class="record-preview">{%raw%}{{ getLanggraphMessagePreview(message) }}{%endraw%}</div>
+                                                            <el-collapse>
+                                                                <el-collapse-item title="查看业务输入" :name="'input-' + message.debugIndex">
+                                                                    <div class="record-content" v-html="renderMarkdown(getLanggraphMessageDisplayContent(message))"></div>
+                                                                </el-collapse-item>
+                                                            </el-collapse>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else class="node-io-empty">该环节暂无输入记录</div>
+                                                </el-tab-pane>
+                                                <el-tab-pane label="输出" name="output">
+                                                    <div v-if="getSelectedLanggraphMessagesByType('output').length > 0" class="node-io-list">
+                                                        <div v-for="message in getSelectedLanggraphMessagesByType('output')"
+                                                             :key="'node-output-' + message.debugIndex"
+                                                             class="node-io-item">
+                                                            <div class="node-io-title">{%raw%}{{ getLanggraphMessageTitle(message) }}{%endraw%}</div>
+                                                            <div class="record-preview">{%raw%}{{ getLanggraphMessagePreview(message) }}{%endraw%}</div>
+                                                            <el-collapse>
+                                                                <el-collapse-item title="查看完整内容" :name="'output-' + message.debugIndex">
+                                                                    <div class="record-content" v-html="renderMarkdown(getLanggraphMessageDisplayContent(message))"></div>
+                                                                </el-collapse-item>
+                                                            </el-collapse>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else class="node-io-empty">该环节暂无输出记录</div>
+                                                </el-tab-pane>
+                                            </el-tabs>
+                                        </div>
+
+                                        <div v-else class="empty-state">
+                                            <i class="el-icon-chat-dot-round"></i>
+                                            <p>暂无可展示的AI协作记录</p>
+                                            <small>{%raw%}{{ (langgraphView && langgraphView.message) || '当前任务还没有生成可展示的对话或流程图数据' }}{%endraw%}</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 人工确认内容 -->
+                                <div v-else-if="taskDetailTab === 'confirmationItems'" class="content-section">
+                                    <div class="section-header">
+                                        <h3>✋ 人工确认</h3>
+                                        <p class="section-desc">AI需要您确认的问题</p>
+                                    </div>
+                                    <div class="confirmation-section">
+                                    <!-- 显示确认表单 -->
+                                    <div v-if="confirmationItems.length > 0 && !confirmationSubmitted">
+                                        <div class="confirmation-highlight">
+                                            <div class="confirmation-title">请回答以下问题</div>
+                                            <p style="margin-bottom: 20px; color: #666;">
+                                                您的回答将直接影响最终测试用例的质量和覆盖度，请仔细阅读并提供详细回答。
+                                            </p>
+                                            <!-- 顶部快速提交按钮 -->
+                                            <div style="text-align: center; margin-bottom: 20px; padding: 15px; background: #f0fffe; border-radius: 8px; border: 1px solid #bfdbfe;">
+                                                <div style="font-size: 14px; color: #1e40af; margin-bottom: 10px;">
+                                                    填写完所有问题后，点击下方按钮提交
+                                                </div>
+                                                <el-button type="primary" @click.prevent.stop="submitConfirmation" size="medium"
+                                                    style="background: linear-gradient(45deg, #43e97b, #38f9d7); border: none; padding: 12px 30px;"
+                                                    :autofocus="false">
+                                                    🚀 提交确认回答
+                                                </el-button>
+                                            </div>
+                                        </div>
+
+                                        <el-form ref="confirmForm" :model="confirmationResponses" label-width="0">
+                                            <div v-for="(item, index) in confirmationItems" :key="index" class="confirmation-item">
+                                                <el-card shadow="never" style="margin-bottom: 15px; border-radius: 8px; border: 1px solid #e8e8e8;">
+                                                    <div slot="header" style="background: linear-gradient(45deg, #00D4AA, #00B894); color: white; margin: -20px; padding: 10px 15px; border-radius: 8px 8px 0 0;">
+                                                        <span style="font-weight: bold; font-size: 14px;">❓ 问题 {%raw%}{{ index + 1 }}{%endraw%}</span>
+                                                        <span v-if="item.type" style="margin-left: 10px; font-size: 11px; opacity: 0.8;">({%raw%}{{ item.type }}{%endraw%})</span>
+                                                    </div>
+                                                    <div style="padding: 15px 0;">
+                                                        <!-- 问题详情（更紧凑的布局） -->
+                                                        <div v-if="item.question_details" style="margin-bottom: 12px; padding: 10px; background: #f8f9fa; border-radius: 6px; border-left: 3px solid #00D4AA;">
+                                                            <div style="color: #666; font-size: 13px; line-height: 1.5;">
+                                                                <div v-html="renderMarkdown(item.question_details)"></div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- 答案输入框（更紧凑） -->
+                                                        <div style="margin-top: 12px;">
+                                                            <label style="display: block; margin-bottom: 6px; font-weight: bold; color: #303133; font-size: 13px;">
+                                                                您的回答 <span style="color: #f56c6c;">*</span>
+                                                            </label>
+                                                            <el-input type="textarea" :rows="3"
+                                                                v-model="confirmationResponses['answer_' + index]"
+                                                                :placeholder="getAnswerPlaceholder(item)"
+                                                                style="font-size: 13px;"
+                                                                show-word-limit
+                                                                maxlength="2000">
+                                                            </el-input>
+                                                        </div>
+                                                    </div>
+                                                </el-card>
+                                            </div>
+                                            <!-- 底部提交按钮区域（粘性定位） -->
+                                            <div class="sticky-submit-area" style="position: sticky; bottom: 0; z-index: 100; background: white; padding: 20px; margin-top: 30px; border-top: 2px solid #e6f7ff; box-shadow: 0 -2px 8px rgba(0,0,0,0.1); text-align: center;">
+                                                <el-button type="primary" @click.prevent.stop="submitConfirmation" size="large"
+                                                    style="background: linear-gradient(45deg, #43e97b, #38f9d7); border: none; padding: 15px 40px;"
+                                                    :autofocus="false">
+                                                    🚀 提交确认回答
+                                                </el-button>
+                                            </div>
+                                        </el-form>
+                                    </div>
+
+                                    <!-- 显示已提交的确认结果 -->
+                                    <div v-else-if="submittedConfirmationResults.length > 0 || confirmationSubmitted">
+                                        <div class="confirmation-submitted">
+                                            <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: linear-gradient(45deg, #67c23a, #85ce61); border-radius: 12px; color: white;">
+                                                <div style="font-size: 24px; margin-bottom: 10px;">✅</div>
+                                                <div style="font-size: 18px; font-weight: bold;">确认已提交成功</div>
+                                                <div style="font-size: 14px; opacity: 0.9; margin-top: 5px;">
+                                                    AI正在基于您的回答继续生成测试用例...
+                                                </div>
+                                            </div>
+
+                                            <div style="margin-bottom: 20px;">
+                                                <h3 style="color: #303133; margin-bottom: 15px;">📋 您的确认回答</h3>
+                                            </div>
+
+                                            <div v-for="(result, index) in submittedConfirmationResults" :key="index" class="submitted-result-item">
+                                                <el-card shadow="never" style="margin-bottom: 20px; border-radius: 8px; border: 1px solid #e4e7ed;">
+                                                    <div style="border-bottom: 1px solid #f0f0f0; padding-bottom: 15px; margin-bottom: 15px;">
+                                                        <h4 style="color: #303133; margin: 0; font-size: 16px; line-height: 1.5;">
+                                                            <span style="color: #00B894; font-weight: bold;">❓ 问题 {%raw%}{{ index + 1 }}{%endraw%}:</span>
+                                                            <span style="margin-left: 8px;">{%raw%}{{ result.question }}{%endraw%}</span>
+                                                        </h4>
+                                                    </div>
+
+                                                    <div v-if="result.description" style="margin-bottom: 15px; padding: 12px; background: #f8f9fa; border-radius: 6px;">
+                                                        <div style="font-size: 12px; color: #909399; margin-bottom: 5px;">问题描述:</div>
+                                                        <div style="color: #666; font-size: 14px; line-height: 1.6;" v-html="renderMarkdown(result.description)"></div>
+                                                    </div>
+
+                                                    <div v-if="result.reference_examples && result.reference_examples.length > 0" style="margin-bottom: 15px; padding: 12px; background: #f6ffed; border-radius: 6px;">
+                                                        <div style="font-size: 12px; color: #52c41a; margin-bottom: 8px; font-weight: bold;">参考示例:</div>
+                                                        <ul style="margin: 0; padding-left: 18px; color: #666; font-size: 14px;">
+                                                            <li v-for="example in result.reference_examples" :key="example" style="margin-bottom: 5px;">
+                                                                {%raw%}{{ example }}{%endraw%}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <div v-if="result.confirm_points && result.confirm_points.length > 0" style="margin-bottom: 15px; padding: 12px; background: #fff7e6; border-radius: 6px;">
+                                                        <div style="font-size: 12px; color: #fa8c16; margin-bottom: 8px; font-weight: bold;">确认要点:</div>
+                                                        <ul style="margin: 0; padding-left: 18px; color: #666; font-size: 14px;">
+                                                            <li v-for="point in result.confirm_points" :key="point" style="margin-bottom: 5px;">
+                                                                {%raw%}{{ point }}{%endraw%}
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+                                                    <div style="padding: 15px; background: #f0fffe; border-radius: 6px; border-left: 4px solid #00D4AA;">
+                                                        <div style="font-size: 12px; color: #00D4AA; margin-bottom: 8px; font-weight: bold;">✅ 您的回答:</div>
+                                                        <div style="color: #303133; font-size: 14px; line-height: 1.6; white-space: pre-wrap;">
+                                                            {%raw%}{{ result.answer }}{%endraw%}
+                                                        </div>
+                                                    </div>
+                                                </el-card>
+                                            </div>
+
+                                            <div style="text-align: center; margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                                                <div style="color: #666; font-size: 14px; margin-bottom: 10px;">
+                                                    🤖 AI正在基于您的确认结果完善PRD文档并生成测试用例
+                                                </div>
+                                                <el-button type="primary" @click="taskDetailTab = 'testcaseGeneration'" size="small">
+                                                    查看生成进度
+                                                </el-button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 默认状态：无人工确认项 -->
+                                    <div v-else class="no-confirmation-items" style="text-align: center; padding: 60px 40px; color: #999;">
+                                        <i class="el-icon-info"></i>
+                                        <p>正在获取确认项...</p>
+                                    </div>
+                                    </div>
+                                </div>
+
+                                <!-- 用例生成内容 -->
+                                <div v-else-if="taskDetailTab === 'testcaseGeneration'" class="content-section">
+                                    <div class="section-header">
+                                        <h3>🧪 用例生成</h3>
+                                        <p class="section-desc">系统正在基于最终PRD生成测试用例</p>
+                                    </div>
+                                    <div class="test-analysis-section">
+                                        <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
+                                            <div style="margin-bottom: 24px;">
+                                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                                    <h4 style="margin: 0; color: #303133;">当前进度</h4>
+                                                    <span style="font-size: 14px; color: #00B894; font-weight: 600;">
+                                                        {%raw%}{{ getSelectedTaskProgress() }}{%endraw%}%
+                                                    </span>
+                                                </div>
+                                                <el-progress
+                                                    :percentage="getSelectedTaskProgress()"
+                                                    :stroke-width="16"
+                                                    :show-text="false"
+                                                    color="#00B894">
+                                                </el-progress>
+                                            </div>
+                                            <div style="padding: 18px 20px; background: #f8fdfc; border-radius: 10px; border-left: 4px solid #00B894; margin-bottom: 18px;">
+                                                <div style="font-size: 16px; font-weight: 600; color: #303133; margin-bottom: 8px;">
+                                                    {%raw%}{{ getGenerationStatusText() }}{%endraw%}
+                                                </div>
+                                                <div style="font-size: 14px; line-height: 1.7; color: #606266;">
+                                                    {%raw%}{{ getGenerationStatusHint() }}{%endraw%}
+                                                </div>
+                                            </div>
+                                            <div v-if="taskResults && taskResults.length > 0" style="padding: 16px 20px; background: #f0fffe; border-radius: 10px; border: 1px solid rgba(0, 212, 170, 0.2);">
+                                                <div style="font-size: 14px; color: #606266;">
+                                                    当前已整理测试用例
+                                                    <span style="font-weight: 700; color: #00B894;">
+                                                        {%raw%}{{ taskResults.length }}{%endraw%}
+                                                    </span>
+                                                    条
+                                                </div>
+                                            </div>
+                                            <div v-else class="empty-state" style="padding: 24px 0 0;">
+                                                <i class="el-icon-loading"></i>
+                                                <p>测试用例生成中</p>
+                                                <small>生成完成后将在结果页展示最终用例</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 测试用例结果内容 -->
+                                <div v-else-if="taskDetailTab === 'results'" class="content-section">
+                                    <div class="section-header">
+                                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                            <div>
+                                                <h3>📑 测试用例结果</h3>
+                                                <p class="section-desc">AI为您生成的专业测试用例文档</p>
+                                            </div>
+                                            <el-button v-if="selectedTask && selectedTask.status === 'completed'"
+                                                      size="medium"
+                                                      type="success"
+                                                      @click="downloadResults('excel')"
+                                                      class="download-btn"
+                                                      style="margin-top: 8px;">
+                                            📊 下载Excel文件
+                                        </el-button>
+                                    </div>
+                                    </div>
+                                    <div class="results-section">
+                                        <div v-if="taskResults && taskResults.length > 0" class="results-content">
+                                            <div class="results-table">
+                                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+                                                    <h4 style="margin: 0;">📋 测试用例预览</h4>
+                                                    <span v-if="taskResults && taskResults.length > 0"
+                                                          style="background: linear-gradient(45deg, #00D4AA, #00B894); color: white; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: bold;">
+                                                        共 {%raw%}{{ taskResults.length }}{%endraw%} 条用例
+                                                    </span>
+                                                </div>
+                                                <div class="table-container">
+                                                    <div v-if="taskResults && taskResults.length > 0" v-html="renderTestCasesAsHtmlTable(taskResults)"></div>
+                                                </div>
+                                                <el-collapse v-if="selectedTask && selectedTask.test_analysis" style="margin-top: 20px;">
+                                                    <el-collapse-item title="生成摘要" name="generation-summary">
+                                                        <div class="markdown-content" style="background: #fff; padding: 8px 0;">
+                                                            <div v-html="renderMarkdown(selectedTask.test_analysis)"></div>
+                                                        </div>
+                                                    </el-collapse-item>
+                                                </el-collapse>
+                                            </div>
+                                        </div>
+                                        <div v-else-if="selectedTask && selectedTask.status === 'completed'" class="empty-state">
+                                            <i class="el-icon-document"></i>
+                                            <p>暂无测试用例数据</p>
+                                            <small>任务已完成，但未读取到可展示的用例结果</small>
+                                        </div>
+                                        <div v-else class="empty-state">
+                                            <i class="el-icon-document"></i>
+                                            <p>📑 测试用例正在生成中...</p>
+                                            <small>请耐心等待AI完成分析</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </el-main>
+            </el-container>
+
+            <!-- 协作流程抽屉视图 -->
+            <el-drawer class="collab-drawer" :visible.sync="showCollabDrawer" :size="collabFullScreen ? '100%' : '50%'" append-to-body :with-header="false">
+                <div class="agent-chat-container">
+                    <!-- 炫酷聊天界面展示 -->
+                    <div v-if="agentMessages && agentMessages.length > 0" class="ai-chat-bubbles">
+                        <!-- 聊天头部 -->
+                        <div class="chat-header-enhanced">
+                            <div class="chat-title-enhanced">🤖 生成过程调试</div>
+                            <div class="chat-subtitle-enhanced">查看各阶段模型输入、输出和处理过程</div>
+                            <div>
+                                <el-button size="mini" @click="toggleCollabFullScreen" type="text" style="color:#fff;">{%raw%}{{ collabFullScreen ? '退出全屏' : '全屏' }}{%endraw%}</el-button>
+                            </div>
+                        </div>
+
+                        <!-- 聊天消息区域 -->
+                        <div class="chat-messages-enhanced">
+                            <!-- 消息气泡 -->
+                            <div v-for="(message, index) in agentMessages"
+                                 :key="index"
+                                 class="message-wrapper-enhanced"
+                                 :class="getMessageAlignment(message)">
+
+                                <!-- 角色头像区域 -->
+                                <div class="avatar-section-enhanced">
+                                    <div class="role-name-above-avatar">{%raw%}{{ getMessageRoleName(message) }}{%endraw%}</div>
+                                    <div class="avatar-enhanced"
+                                         :class="getAvatarClass(message)"
+                                         :style="getAvatarStyle(message)">
+                                        {%raw%}{{ getMessageRoleIcon(message) }}{%endraw%}
+                                    </div>
+                                </div>
+
+                                <!-- 消息气泡 -->
+                                <div class="message-bubble-enhanced"
+                                     :class="getBubbleClass(message)">
+                                    <div class="message-content-enhanced">
+                                        <div v-if="!isMessageExpanded('chat_' + index)" class="content-preview-enhanced">
+                                            <p class="preview-text">{%raw%}{{ getChatPreview(message.content) }}{%endraw%}<span v-if="cleanPrdMarkers(message.content).length > 50">...</span></p>
+                                            <div v-if="cleanPrdMarkers(message.content).length > 50" class="expand-btn-container">
+                                                <el-button type="text" size="small" @click="toggleMessageExpansion('chat_' + index)" class="expand-btn">
+                                                    <i class="el-icon-arrow-down"></i> 查看完整对话
+                                                </el-button>
+                                            </div>
+                                        </div>
+                                        <div v-else class="content-full-enhanced">
+                                            <div class="full-content" v-html="renderMarkdown(message.content)"></div>
+                                            <div class="collapse-btn-container">
+                                                <el-button type="text" size="small" @click="toggleMessageExpansion('chat_' + index)" class="collapse-btn">
+                                                    <i class="el-icon-arrow-up"></i> 收起对话
+                                                </el-button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="timestamp-enhanced">{%raw%}{{ formatTime(message.timestamp) }}{%endraw%}</div>
+                                    <div class="role-description-enhanced">{%raw%}{{ getMessageRoleDescription(message) }}{%endraw%}</div>
+                                </div>
+                            </div>
+
+                            <!-- 打字指示器 -->
+                            <div v-if="isAIThinking" class="typing-indicator-enhanced">
+                                <div class="avatar-section-enhanced">
+                                    <div class="role-name-above-avatar">AI助手</div>
+                                    <div class="avatar-enhanced ai-thinking">🤖</div>
+                                </div>
+                                <div class="typing-bubble-enhanced">
+                                    <div class="typing-dots-enhanced">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 协作状态指示 -->
+                        <div class="collaboration-status-enhanced">
+                            <div class="status-title">🎯 处理进展: {%raw%}{{ agentMessages.length }}{%endraw%} 条记录</div>
+                            <div class="status-subtitle">Spec2Case 正在整理需求并生成测试用例</div>
+                        </div>
+                    </div>
+
+                    <div v-else class="no-messages" style="text-align: center; padding: 60px 40px; color: #999;">
+                        <i class="el-icon-chat-dot-round" style="font-size: 64px; margin-bottom: 20px; color: #ddd;"></i>
+                        <h3 style="color: #666; margin-bottom: 15px; font-size: 18px;">暂无生成过程记录</h3>
+                        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
+                            任务开始后，这里会展示关键阶段的模型输入和输出<br>
+                            便于排查 PRD 整理、需求拆分和用例生成问题
+                        </p>
+                    </div>
+                </div>
+            </el-drawer>
+
+        </div>
+    </div>
+
+    <!-- JavaScript保持原有逻辑，但添加新的方法 -->
+    <script src="/static/libs/vue.min.js"></script>
+    <script src="/static/libs/element-ui.min.js"></script>
+    <script src="/static/libs/axios.min.js"></script>
+    <script src="/static/libs/marked.min.js"></script>
+    <script src="/static/libs/vue-cute-timeline/index.umd.js"></script>
+    <!-- Cute Timeline UMD (local fallback) -->
+    <link rel="stylesheet" href="/static/libs/vue-cute-timeline/index.css">
+    <script>
+        // 全局注册Cute Timeline组件（CDN UMD），兼容多种全局名与导出形式
+        (function(){
+            try {
+                if (!window.Vue) return;
+                var lib = window['vue-cute-timeline'] || window['VueCuteTimeline'] || window.VueCuteTimeline || window.vueCuteTimeline || window['VueCuteTimelineUmd'] || window['VueCuteTimelineDefault'] || window['Timeline'];
+                if (!lib) return;
+                // 优先使用Vue.use
+                if (typeof lib.install === 'function') {
+                    window.Vue.use(lib);
+                    return;
+                }
+                // 否则按组件方式注册
+                var TL = lib.Timeline || lib.timeline || lib.TimelineComponent || (lib.default && lib.default.Timeline);
+                var TLI = lib.TimelineItem || lib.timelineItem || (lib.default && lib.default.TimelineItem);
+                var TLT = lib.TimelineTitle || lib.timelineTitle || (lib.default && lib.default.TimelineTitle);
+                if (TL) window.Vue.component('Timeline', TL);
+                if (TLI) window.Vue.component('TimelineItem', TLI);
+                if (TLT) window.Vue.component('TimelineTitle', TLT);
+            } catch(e) { console.warn('CuteTimeline 注册失败', e); }
+        })();
+    </script>
+    <!-- 图片流程进度组件 -->
+    <script src="/static/components/image_pipeline_progress.js?v=1.1"></script>
+    <script src="/static/requirement_module.js?v=1.1"></script>
+    <script src="/static/text_prd_manager.js?v=1.1"></script>
+    <!-- Phase 1-3: 统一任务管理组件 -->
+    <script src="/static/task_card.js?v=1.1"></script>
+    <script src="/static/task_manager.js?v=1.1"></script>
+    <script src="/static/dashboard.js?v=1.0"></script>
+    <script src="/static/vue_client_improved.js?v=1.1"></script>
+</body>
+
+</html>

@@ -1,0 +1,567 @@
+/**
+ * 统一任务管理样式
+ * 根据 UI_REDESIGN_PLAN_A.md 设计文档实现
+ */
+
+.task-manager-container {
+    padding: 0;
+}
+
+/* ========== 筛选器（更圆润、优化版） ========== */
+.filter-card {
+    margin-bottom: 20px;
+    border-radius: 18px;
+    border: 1px solid #E5E7EB;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.filter-card .el-card__body {
+    padding: 18px 20px;
+}
+
+.filter-card .el-form {
+    margin-bottom: 0;
+}
+
+.filter-card .el-form-item {
+    margin-bottom: 0;
+}
+
+.filter-card .el-radio-button__inner {
+    border-radius: 10px !important;
+    transition: all 0.2s ease;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.filter-card .el-radio-button__orig-radio:checked+.el-radio-button__inner {
+    background: #10B981 !important;
+    border-color: #10B981 !important;
+}
+
+/* ========== 统计栏（更圆润、优化版） ========== */
+.stats-bar {
+    display: flex;
+    gap: 20px;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F0FAF7 100%);
+    border-radius: 8px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    border: 1px solid #D8EFE8;
+    box-shadow: none;
+}
+
+.stat-item {
+    font-size: 14px;
+    color: #6B7280;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stat-item strong {
+    font-size: 18px;
+    color: #111827;
+    font-weight: 700;
+}
+
+.stat-item.highlight-warning {
+    color: #F59E0B;
+    font-weight: 600;
+}
+
+.stat-item.highlight-warning strong {
+    color: #D97706;
+}
+
+/* ========== 任务网格（极简留白） ========== */
+.tasks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 768px) {
+    .tasks-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
+
+/* ========== 任务卡片（圆润柔和风格 - 优化版） ========== */
+.task-card {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    background: #FFFFFF;
+    box-shadow: none;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #E5E7EB;
+}
+
+/* 增加卡片内边距，提升垂直高度 */
+.task-card .el-card__body {
+    padding: 20px 20px;
+}
+
+.task-card:hover {
+    box-shadow: 0 10px 24px rgba(16, 24, 40, 0.08);
+    transform: translateY(-2px);
+}
+
+/* 状态指示器（左侧竖条 - 加宽） */
+.task-card::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+}
+
+/* ========== 草稿状态（淡灰色渐变） ========== */
+.task-card.status-draft {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
+    border-color: #E5E7EB;
+}
+
+.task-card.status-draft::after {
+    background: #9CA3AF;
+}
+
+/* ========== 待启动状态（淡紫蓝渐变） ========== */
+.task-card.status-pending {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F5F7FF 100%);
+    border-color: #C7D2FE;
+}
+
+.task-card.status-pending::after {
+    background: #818CF8;
+}
+
+.task-card.status-pending:hover {
+    box-shadow: 0 4px 12px rgba(129, 140, 248, 0.15);
+}
+
+/* ========== 运行中状态（淡蓝色渐变） ========== */
+.task-card.status-processing {
+    background: linear-gradient(135deg, #FFFFFF 0%, #EFF6FF 100%);
+    border-color: #BFDBFE;
+}
+
+.task-card.status-processing::after {
+    background: #3B82F6;
+}
+
+.task-card.status-processing:hover {
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+/* ========== 等待确认状态（淡黄色渐变 - 稍醒目） ========== */
+.task-card.status-waiting {
+    background: linear-gradient(135deg, #FFFFFF 0%, #FFFBEB 100%);
+    border-color: #FDE68A;
+    box-shadow: none;
+}
+
+.task-card.status-waiting::after {
+    background: #F59E0B;
+}
+
+.task-card.status-waiting:hover {
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+    border-color: #FCD34D;
+}
+
+/* ========== 已完成状态（淡绿色渐变） ========== */
+.task-card.status-completed {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F0FDF4 100%);
+    border-color: #BBF7D0;
+}
+
+.task-card.status-completed::after {
+    background: #22C55E;
+}
+
+.task-card.status-completed:hover {
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15);
+}
+
+/* ========== 失败状态（淡红色渐变） ========== */
+.task-card.status-failed {
+    background: linear-gradient(135deg, #FFFFFF 0%, #FEF2F2 100%);
+    border-color: #FECACA;
+}
+
+.task-card.status-failed::after {
+    background: #EF4444;
+}
+
+.task-card.status-failed:hover {
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+}
+
+/* 卡片头部 */
+.task-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+    gap: 12px;
+    padding-left: 6px;
+}
+
+.task-title-row {
+    flex: 1;
+}
+
+.task-title {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+    color: #111827;
+    word-break: break-word;
+    line-height: 1.5;
+    letter-spacing: 0;
+}
+
+/* 类型标签 */
+.task-type-label {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    color: #6B7280;
+    padding: 2px 0;
+}
+
+/* 状态标签（更圆润、美化版） */
+.task-status-tag,
+.task-card-header .el-tag {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    padding: 6px 12px !important;
+    border-radius: 999px !important;
+    border: none !important;
+    box-shadow: none;
+    letter-spacing: 0;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+}
+
+/* 不同状态的标签颜色优化 */
+.task-card-header .el-tag--success {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+    color: #FFFFFF !important;
+}
+
+.task-card-header .el-tag--warning {
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important;
+    color: #FFFFFF !important;
+}
+
+.task-card-header .el-tag--info {
+    background: linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%) !important;
+    color: #374151 !important;
+}
+
+.task-card-header .el-tag--primary {
+    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
+    color: #FFFFFF !important;
+}
+
+.task-card-header .el-tag--danger {
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%) !important;
+    color: #FFFFFF !important;
+}
+
+/* 卡片内容 */
+.task-card-content {
+    margin-bottom: 18px;
+    padding-left: 6px;
+}
+
+.task-summary {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+    color: #6B7280;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    padding: 9px 12px;
+    background: rgba(255, 255, 255, 0.68);
+    border-radius: 8px;
+    border: 1px solid #EAECF0;
+}
+
+.task-summary span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.task-summary i {
+    font-size: 15px;
+    opacity: 0.7;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 任务类型标签（中间位置 - 美化版） */
+.task-summary .task-type-badge {
+    font-weight: 700;
+    color: #1F2937;
+    padding: 5px 10px;
+    background: #FFFFFF;
+    border-radius: 999px;
+    font-size: 13px;
+    border: 1.5px solid rgba(209, 213, 219, 0.5);
+    box-shadow: none;
+    letter-spacing: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* 图片数量等信息项 */
+.task-summary .task-info-item {
+    color: #6B7280;
+    font-weight: 500;
+}
+
+.task-progress {
+    margin-bottom: 14px;
+    padding: 8px 12px;
+    background: rgba(239, 246, 255, 0.6);
+    border-radius: 12px;
+    border-left: 3px solid #60A5FA;
+}
+
+/* 进度条样式优化 */
+.task-progress .el-progress__text {
+    font-weight: 700 !important;
+    color: #2563EB !important;
+}
+
+.task-confirmation {
+    margin-bottom: 12px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+    border-radius: 16px;
+    font-size: 13px;
+    color: #92400E;
+    font-weight: 700;
+    border-left: 4px solid #F59E0B;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    box-shadow: 0 3px 10px rgba(251, 191, 36, 0.2);
+    letter-spacing: 0.3px;
+}
+
+.task-confirmation i {
+    color: #F59E0B;
+    font-size: 20px;
+    filter: drop-shadow(0 2px 4px rgba(245, 158, 11, 0.3));
+    flex-shrink: 0;
+}
+
+.task-confirmation span {
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+    line-height: 1.5;
+}
+
+.task-time {
+    font-size: 13px;
+    color: #9CA3AF;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.task-time i {
+    opacity: 0.8;
+}
+
+/* 卡片底部 */
+.task-card-footer {
+    border-top: 1px solid #F3F4F6;
+    padding-top: 12px;
+    padding-left: 6px;
+}
+
+/* 任务操作区（方案A：主按钮+下拉菜单） */
+.task-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.primary-actions {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+}
+
+.primary-actions .el-button {
+    flex: 1;
+    max-width: 140px;
+}
+
+/* "更多"按钮（圆形按钮美化） */
+.task-actions .el-button.is-circle {
+    background: linear-gradient(135deg, #F9FAFB 0%, #E5E7EB 100%) !important;
+    border: 1.5px solid #D1D5DB !important;
+    color: #374151 !important;
+    width: 34px !important;
+    height: 34px !important;
+    padding: 0 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.task-actions .el-button.is-circle:hover {
+    background: linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%) !important;
+    border-color: #9CA3AF !important;
+    color: #111827 !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px) rotate(90deg);
+}
+
+.task-actions .el-button.is-circle i {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.task-card-footer .el-button {
+    margin: 0;
+    border-radius: 6px !important;
+    font-weight: 600;
+    font-size: 13px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+}
+
+.task-card-footer .el-button--mini {
+    padding: 9px 16px;
+}
+
+/* 主要操作按钮 - 渐变效果 */
+.task-card-footer .el-button--primary,
+.task-card-footer .el-button--success {
+    background: #00A884 !important;
+    border: none !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+}
+
+.task-card-footer .el-button--primary:hover,
+.task-card-footer .el-button--success:hover {
+    background: #008f73 !important;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+    transform: translateY(-1px);
+}
+
+/* 次要操作按钮（编辑按钮 - 非常明显） */
+.task-card-footer .el-button--text {
+    color: #1F2937 !important;
+    background: #E5E7EB !important;
+    border: 1px solid #9CA3AF !important;
+    font-weight: 600 !important;
+}
+
+.task-card-footer .el-button--text:hover {
+    background: #D1D5DB !important;
+    color: #111827 !important;
+    border-color: #6B7280 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 警告按钮 - 渐变效果 */
+.task-card-footer .el-button--danger {
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%) !important;
+    border: none !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
+}
+
+.task-card-footer .el-button--danger:hover {
+    background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%) !important;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+    transform: translateY(-1px);
+}
+
+/* 警告提示按钮 - 渐变效果 */
+.task-card-footer .el-button--warning {
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important;
+    border: none !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
+}
+
+.task-card-footer .el-button--warning:hover {
+    background: linear-gradient(135deg, #D97706 0%, #B45309 100%) !important;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+    transform: translateY(-1px);
+}
+
+/* 删除按钮 */
+.task-card-footer .delete-btn {
+    color: #DC2626 !important;
+    background: #FFFFFF !important;
+    border: 1px solid #E5E7EB !important;
+}
+
+.task-card-footer .delete-btn:hover {
+    background: #FEF2F2 !important;
+    border-color: #FCA5A5 !important;
+}
+
+/* ========== 分页 ========== */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 1200px) {
+    .tasks-grid {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .filter-card .el-form-item {
+        width: 100%;
+        margin-right: 0 !important;
+    }
+    
+    .stats-bar {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .task-card-footer .el-button-group {
+        flex-direction: column;
+    }
+    
+    .task-card-footer .el-button {
+        width: 100%;
+    }
+}

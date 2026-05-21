@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spec2case"
+version = "0.1.0"
+description = "Spec2Case web service"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.setuptools.packages.find]
+include = [
+    "agents*",
+    "config*",
+    "database*",
+    "routes*",
+    "services*",
+    "utils*",
+]
+
+[tool.setuptools.package-data]
+database = [
+    "fixtures/*.json",
+    "fixtures/sample_social_post_interaction_v1_artifacts/**/*",
+]

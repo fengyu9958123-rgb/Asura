@@ -1,0 +1,440 @@
+[
+  {
+    "id": "LLM-0001",
+    "timestamp": "2026-05-18T15:23:41.083348",
+    "stage": "03_text_prd_logic_review",
+    "agent": "TextPRDLogicReviewer",
+    "model_type": "requirement",
+    "model": "deepseek-v4-pro",
+    "api": "",
+    "usage": {
+      "input_tokens": 1805,
+      "cached_input_tokens": 0,
+      "output_tokens": 1506,
+      "total_tokens": 3311,
+      "estimated": true,
+      "source": "estimated",
+      "raw": {}
+    },
+    "pricing_snapshot": {
+      "input_price_per_million": 12.0,
+      "cached_input_price_per_million": 1.0,
+      "output_price_per_million": 24.0,
+      "currency": "CNY",
+      "pricing_note": "按阿里云百炼 deepseek-v4-pro 官方按量价格默认；缓存命中价按 2026-04-29 后公开调整价。",
+      "configured": true
+    },
+    "cost": 0.057803999999999994,
+    "currency": "CNY",
+    "metadata": {}
+  },
+  {
+    "id": "LLM-0002",
+    "timestamp": "2026-05-18T15:25:23.147000",
+    "stage": "05_text_final_prd_integrate",
+    "agent": "TextFinalPRDIntegrator",
+    "model_type": "requirement",
+    "model": "deepseek-v4-pro",
+    "api": "",
+    "usage": {
+      "input_tokens": 1416,
+      "cached_input_tokens": 0,
+      "output_tokens": 1325,
+      "total_tokens": 2741,
+      "estimated": false,
+      "source": "provider",
+      "raw": {
+        "model": "deepseek-v4-pro",
+        "prompt_tokens": 1416,
+        "completion_tokens": 1325,
+        "total_tokens": 2741,
+        "cached_input_tokens": 0
+      }
+    },
+    "pricing_snapshot": {
+      "input_price_per_million": 12.0,
+      "cached_input_price_per_million": 1.0,
+      "output_price_per_million": 24.0,
+      "currency": "CNY",
+      "pricing_note": "按阿里云百炼 deepseek-v4-pro 官方按量价格默认；缓存命中价按 2026-04-29 后公开调整价。",
+      "configured": true
+    },
+    "cost": 0.048792,
+    "currency": "CNY",
+    "metadata": {}
+  },
+  {
+    "id": "LLM-0003",
+    "timestamp": "2026-05-18T15:25:32.383710",
+    "stage": "04a_prd_block_builder",
+    "agent": "PRDBlockBuilder",
+    "model_type": "split",
+    "model": "gpt-5.5",
+    "api": "openai-responses",
+    "usage": {
+      "input_tokens": 1914,
+      "cached_input_tokens": 0,
+      "output_tokens": 377,
+      "total_tokens": 2291,
+      "estimated": false,
+      "source": "provider",
+      "raw": {
+        "model": "gpt-5.5",
+        "input_tokens": 1914,
+        "output_tokens": 377,
+        "total_tokens": 2291,
+        "raw": {
+          "input_tokens": 1914,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens": 377,
+          "output_tokens_details": {
+            "reasoning_tokens": 110
+          },
+          "total_tokens": 2291
+        }
+      }
+    },
+    "pricing_snapshot": {
+      "input_price_per_million": 5.0,
+      "cached_input_price_per_million": 0.5,
+      "output_price_per_million": 30.0,
+      "currency": "USD",
+      "pricing_note": "按 OpenAI GPT-5.5 官方 API 价格默认；当前使用代理网关，实际账单以代理供应商为准。",
+      "configured": true
+    },
+    "cost": 0.02088,
+    "currency": "USD",
+    "metadata": {
+      "api": "openai-responses"
+    }
+  },
+  {
+    "id": "LLM-0004",
+    "timestamp": "2026-05-18T15:26:19.170980",
+    "stage": "04b_prd_knowledge_builder",
+    "agent": "PRDKnowledgeBuilder",
+    "model_type": "split",
+    "model": "gpt-5.5",
+    "api": "openai-responses",
+    "usage": {
+      "input_tokens": 2481,
+      "cached_input_tokens": 0,
+      "output_tokens": 2358,
+      "total_tokens": 4839,
+      "estimated": false,
+      "source": "provider",
+      "raw": {
+        "model": "gpt-5.5",
+        "input_tokens": 2481,
+        "output_tokens": 2358,
+        "total_tokens": 4839,
+        "raw": {
+          "input_tokens": 2481,
+          "input_tokens_details": {
+            "cached_tokens": 0
+          },
+          "output_tokens": 2358,
+          "output_tokens_details": {
+            "reasoning_tokens": 516
+          },
+          "total_tokens": 4839
+        }
+      }
+    },
+    "pricing_snapshot": {
+      "input_price_per_million": 5.0,
+      "cached_input_price_per_million": 0.5,
+      "output_price_per_million": 30.0,
+      "currency": "USD",
+      "pricing_note": "按 OpenAI GPT-5.5 官方 API 价格默认；当前使用代理网关，实际账单以代理供应商为准。",
+      "configured": true
+    },
+    "cost": 0.083145,
+    "currency": "USD",
+    "metadata": {
+      "api": "openai-responses"
+    }
+  },
+  {
+    "id": "LLM-0005",
+    "timestamp": "2026-05-18T15:28:59.918830",
+    "stage": "testcase_LU-001",
+    "agent": "ModuleTestCaseWriter",
+    "model_type": "requirement",
+    "model": "deepseek-v4-pro",
+    "api": "",
+    "usage": {
+      "input_tokens": 1594,
+      "cached_input_tokens": 0,
+      "output_tokens": 4070,
+      "total_tokens": 5664,
+      "estimated": false,
+      "source": "provider",
+      "raw": {
+        "model": "deepseek-v4-pro",
+        "prompt_tokens": 1594,
+        "completion_tokens": 4070,
+        "total_tokens": 5664,
+        "cached_input_tokens": 0
+      }
+    },
+    "pricing_snapshot": {
+      "input_price_per_million": 12.0,
+      "cached_input_price_per_million": 1.0,
+      "output_price_per_million": 24.0,
+      "currency": "CNY",
+      "pricing_note": "按阿里云百炼 deepseek-v4-pro 官方按量价格默认；缓存命中价按 2026-04-29 后公开调整价。",
+      "configured": true
+    },
+    "cost": 0.116808,
+    "currency": "CNY",
+    "metadata": {}
+  },
+  {
+    "id": "LLM-0006",
+    "timestamp": "2026-05-18T15:31:42.668268",
+    "stage": "testcase_LU-002",
+    "agent": "ModuleTestCaseWriter",
+    "model_type": "requirement",
+    "model": "deepseek-v4-pro",
+    "api": "",
+    "usage": {
+      "input_tokens": 1593,
+      "cached_input_tokens": 0,
+      "output_tokens": 3437,
+      "total_tokens": 5030,
+      "estimated": false,
+      "source": "provider",
+      "raw": {
+        "model": "deepseek-v4-pro",
+        "prompt_tokens": 1593,
+        "completion_tokens": 3437,
+        "total_tokens": 5030,
+        "cached_input_tokens": 0
+      }
+    },
+    "pricing_snapshot": {
+      "input_price_per_million": 12.0,
+      "cached_input_price_per_million": 1.0,
+      "output_price_per_million": 24.0,
+      "currency": "CNY",
+      "pricing_note": "按阿里云百炼 deepseek-v4-pro 官方按量价格默认；缓存命中价按 2026-04-29 后公开调整价。",
+      "configured": true
+    },
+    "cost": 0.101604,
+    "currency": "CNY",
+    "metadata": {}
+  },
+  {
+    "id": "LLM-0007",
+    "timestamp": "2026-05-18T15:33:14.284740",
+    "stage": "testcase_LU-003",
+    "agent": "ModuleTestCaseWriter",
+    "model_type": "requirement",
+    "model": "deepseek-v4-pro",
+    "api": "",
+    "usage": {
+      "input_tokens": 1500,
+      "cached_input_tokens": 0,
+      "output_tokens": 1784,
+      "total_tokens": 3284,
+      "estimated": false,
+      "source": "provider",
+      "raw": {
+        "model": "deepseek-v4-pro",
+        "prompt_tokens": 1500,
+        "completion_tokens": 1784,
+        "total_tokens": 3284,
+        "cached_input_tokens": 0
+      }
+    },
+    "pricing_snapshot": {
+      "input_price_per_million": 12.0,
+      "cached_input_price_per_million": 1.0,
+      "output_price_per_million": 24.0,
+      "currency": "CNY",
+      "pricing_note": "按阿里云百炼 deepseek-v4-pro 官方按量价格默认；缓存命中价按 2026-04-29 后公开调整价。",
+      "configured": true
+    },
+    "cost": 0.060816,
+    "currency": "CNY",
+    "metadata": {}
+  },
+  {
+    "id": "LLM-0008",
+    "timestamp": "2026-05-18T15:38:00.056574",
+    "stage": "testcase_LU-004",
+    "agent": "ModuleTestCaseWriter",
+    "model_type": "requirement",
+    "model": "deepseek-v4-pro",
+    "api": "",
+    "usage": {
+      "input_tokens": 1537,
+      "cached_input_tokens": 0,
+      "output_tokens": 5593,
+      "total_tokens": 7130,
+      "estimated": false,
+      "source": "provider",
+      "raw": {
+        "model": "deepseek-v4-pro",
+        "prompt_tokens": 1537,
+        "completion_tokens": 5593,
+        "total_tokens": 7130,
+        "cached_input_tokens": 0
+      }
+    },
+    "pricing_snapshot": {
+      "input_price_per_million": 12.0,
+      "cached_input_price_per_million": 1.0,
+      "output_price_per_million": 24.0,
+      "currency": "CNY",
+      "pricing_note": "按阿里云百炼 deepseek-v4-pro 官方按量价格默认；缓存命中价按 2026-04-29 后公开调整价。",
+      "configured": true
+    },
+    "cost": 0.15267599999999998,
+    "currency": "CNY",
+    "metadata": {}
+  },
+  {
+    "id": "LLM-0009",
+    "timestamp": "2026-05-18T15:41:51.800407",
+    "stage": "testcase_LU-005",
+    "agent": "ModuleTestCaseWriter",
+    "model_type": "requirement",
+    "model": "deepseek-v4-pro",
+    "api": "",
+    "usage": {
+      "input_tokens": 1555,
+      "cached_input_tokens": 0,
+      "output_tokens": 3653,
+      "total_tokens": 5208,
+      "estimated": false,
+      "source": "provider",
+      "raw": {
+        "model": "deepseek-v4-pro",
+        "prompt_tokens": 1555,
+        "completion_tokens": 3653,
+        "total_tokens": 5208,
+        "cached_input_tokens": 0
+      }
+    },
+    "pricing_snapshot": {
+      "input_price_per_million": 12.0,
+      "cached_input_price_per_million": 1.0,
+      "output_price_per_million": 24.0,
+      "currency": "CNY",
+      "pricing_note": "按阿里云百炼 deepseek-v4-pro 官方按量价格默认；缓存命中价按 2026-04-29 后公开调整价。",
+      "configured": true
+    },
+    "cost": 0.106332,
+    "currency": "CNY",
+    "metadata": {}
+  },
+  {
+    "id": "LLM-0010",
+    "timestamp": "2026-05-18T15:43:04.028593",
+    "stage": "testcase_INT-001",
+    "agent": "IntegrationTestCaseWriter",
+    "model_type": "requirement",
+    "model": "deepseek-v4-pro",
+    "api": "",
+    "usage": {
+      "input_tokens": 2747,
+      "cached_input_tokens": 0,
+      "output_tokens": 1267,
+      "total_tokens": 4014,
+      "estimated": false,
+      "source": "provider",
+      "raw": {
+        "model": "deepseek-v4-pro",
+        "prompt_tokens": 2747,
+        "completion_tokens": 1267,
+        "total_tokens": 4014,
+        "cached_input_tokens": 0
+      }
+    },
+    "pricing_snapshot": {
+      "input_price_per_million": 12.0,
+      "cached_input_price_per_million": 1.0,
+      "output_price_per_million": 24.0,
+      "currency": "CNY",
+      "pricing_note": "按阿里云百炼 deepseek-v4-pro 官方按量价格默认；缓存命中价按 2026-04-29 后公开调整价。",
+      "configured": true
+    },
+    "cost": 0.063372,
+    "currency": "CNY",
+    "metadata": {}
+  },
+  {
+    "id": "LLM-0011",
+    "timestamp": "2026-05-18T15:45:58.116916",
+    "stage": "testcase_INT-002",
+    "agent": "IntegrationTestCaseWriter",
+    "model_type": "requirement",
+    "model": "deepseek-v4-pro",
+    "api": "",
+    "usage": {
+      "input_tokens": 2693,
+      "cached_input_tokens": 0,
+      "output_tokens": 2864,
+      "total_tokens": 5557,
+      "estimated": false,
+      "source": "provider",
+      "raw": {
+        "model": "deepseek-v4-pro",
+        "prompt_tokens": 2693,
+        "completion_tokens": 2864,
+        "total_tokens": 5557,
+        "cached_input_tokens": 0
+      }
+    },
+    "pricing_snapshot": {
+      "input_price_per_million": 12.0,
+      "cached_input_price_per_million": 1.0,
+      "output_price_per_million": 24.0,
+      "currency": "CNY",
+      "pricing_note": "按阿里云百炼 deepseek-v4-pro 官方按量价格默认；缓存命中价按 2026-04-29 后公开调整价。",
+      "configured": true
+    },
+    "cost": 0.10105199999999999,
+    "currency": "CNY",
+    "metadata": {}
+  },
+  {
+    "id": "LLM-0012",
+    "timestamp": "2026-05-18T15:50:00.604962",
+    "stage": "testcase_INT-003",
+    "agent": "IntegrationTestCaseWriter",
+    "model_type": "requirement",
+    "model": "deepseek-v4-pro",
+    "api": "",
+    "usage": {
+      "input_tokens": 2757,
+      "cached_input_tokens": 0,
+      "output_tokens": 4450,
+      "total_tokens": 7207,
+      "estimated": false,
+      "source": "provider",
+      "raw": {
+        "model": "deepseek-v4-pro",
+        "prompt_tokens": 2757,
+        "completion_tokens": 4450,
+        "total_tokens": 7207,
+        "cached_input_tokens": 0
+      }
+    },
+    "pricing_snapshot": {
+      "input_price_per_million": 12.0,
+      "cached_input_price_per_million": 1.0,
+      "output_price_per_million": 24.0,
+      "currency": "CNY",
+      "pricing_note": "按阿里云百炼 deepseek-v4-pro 官方按量价格默认；缓存命中价按 2026-04-29 后公开调整价。",
+      "configured": true
+    },
+    "cost": 0.139884,
+    "currency": "CNY",
+    "metadata": {}
+  }
+]

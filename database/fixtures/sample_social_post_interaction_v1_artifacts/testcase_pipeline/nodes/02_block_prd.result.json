@@ -1,0 +1,30 @@
+{
+  "node": "02_block_prd",
+  "status": "success",
+  "started_at": "2026-05-18T15:25:23.182455",
+  "finished_at": "2026-05-18T15:25:32.389577",
+  "duration_ms": 9207,
+  "input_state": {
+    "module_id": "5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03",
+    "task_name": "社交发帖互动 v1.0",
+    "output_dir": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline",
+    "status": "running",
+    "current_node": "02_block_prd"
+  },
+  "updates": {
+    "blocked_prd_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/04a_blocked_prd.md",
+    "block_plan_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/04a_prd_block_plan.json",
+    "prd_blocks_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/04a_prd_blocks.json"
+  },
+  "output_state": {
+    "module_id": "5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03",
+    "task_name": "社交发帖互动 v1.0",
+    "output_dir": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline",
+    "status": "running",
+    "current_node": "02_block_prd",
+    "blocked_prd_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/04a_blocked_prd.md",
+    "block_plan_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/04a_prd_block_plan.json",
+    "prd_blocks_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/04a_prd_blocks.json"
+  },
+  "error": null
+}

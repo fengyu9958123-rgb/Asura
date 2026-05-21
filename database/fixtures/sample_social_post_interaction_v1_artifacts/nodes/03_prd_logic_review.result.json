@@ -1,0 +1,40 @@
+{
+  "node": "03_prd_logic_review",
+  "status": "success",
+  "started_at": "2026-05-18T15:23:41.063735",
+  "finished_at": "2026-05-18T15:23:41.084758",
+  "duration_ms": 21,
+  "input_state": {
+    "prd_id": "5d753c2e-131f-48d4-bb95-a7ef30184f91",
+    "task_id": "5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03",
+    "task_name": "社交发帖互动 v1.0",
+    "business": "",
+    "output_dir": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03",
+    "phase": "pre_confirmation",
+    "current_node": "03_prd_logic_review",
+    "status": "running",
+    "original_prd_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/prd/00_original_prd.md",
+    "cleaned_prd_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/prd/01_cleaned_prd.md"
+  },
+  "updates": {
+    "review_result_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/prd/02_logic_review.json",
+    "confirmation_items_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/confirmation/items.json",
+    "needs_confirmation": true
+  },
+  "output_state": {
+    "prd_id": "5d753c2e-131f-48d4-bb95-a7ef30184f91",
+    "task_id": "5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03",
+    "task_name": "社交发帖互动 v1.0",
+    "business": "",
+    "output_dir": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03",
+    "phase": "pre_confirmation",
+    "current_node": "03_prd_logic_review",
+    "status": "running",
+    "original_prd_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/prd/00_original_prd.md",
+    "cleaned_prd_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/prd/01_cleaned_prd.md",
+    "review_result_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/prd/02_logic_review.json",
+    "confirmation_items_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/confirmation/items.json",
+    "needs_confirmation": true
+  },
+  "error": null
+}

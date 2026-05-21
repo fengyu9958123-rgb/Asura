@@ -1,0 +1,65 @@
+{
+  "blocks": [
+    {
+      "block_id": "B-001",
+      "type": "SECTION",
+      "title": "1. 发帖（图文）",
+      "start_line": 1,
+      "end_line": 17,
+      "heading_path": [
+        "需求设备范围：Web/H5 前台",
+        "1. 发帖（图文）",
+        "1.2 发布与异常"
+      ]
+    },
+    {
+      "block_id": "B-002",
+      "type": "SECTION",
+      "title": "2. 动态流（时间线）",
+      "start_line": 18,
+      "end_line": 33,
+      "heading_path": [
+        "需求设备范围：Web/H5 前台",
+        "2. 动态流（时间线）",
+        "2.2 卡片展示"
+      ]
+    },
+    {
+      "block_id": "B-003",
+      "type": "SECTION",
+      "title": "3. 点赞互动",
+      "start_line": 34,
+      "end_line": 44,
+      "heading_path": [
+        "需求设备范围：Web/H5 前台",
+        "3. 点赞互动",
+        "3.2 交互与防抖"
+      ]
+    },
+    {
+      "block_id": "B-004",
+      "type": "SECTION",
+      "title": "4. 评论与回复",
+      "start_line": 45,
+      "end_line": 58,
+      "heading_path": [
+        "需求设备范围：Web/H5 前台",
+        "4. 评论与回复",
+        "4.2 评论删除与折叠"
+      ]
+    },
+    {
+      "block_id": "B-005",
+      "type": "SECTION",
+      "title": "5. 关注/取消关注与个人主页",
+      "start_line": 59,
+      "end_line": 72,
+      "heading_path": [
+        "需求设备范围：Web/H5 前台",
+        "5. 关注/取消关注与个人主页",
+        "5.2 关注操作"
+      ]
+    }
+  ],
+  "warnings": []
+}

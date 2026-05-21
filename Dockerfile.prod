@@ -1,0 +1,99 @@
+ARG SPEC2CASE_BASE_IMAGE=python:3.11-slim-bookworm
+ARG SPEC2CASE_PIP_INDEX_URL=
+ARG SPEC2CASE_APT_MIRROR=
+ARG SPEC2CASE_APT_SECURITY_MIRROR=
+
+FROM ${SPEC2CASE_BASE_IMAGE} AS builder
+
+ARG SPEC2CASE_PIP_INDEX_URL=
+ARG SPEC2CASE_APT_MIRROR=
+ARG SPEC2CASE_APT_SECURITY_MIRROR=
+
+WORKDIR /build
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+RUN if [ -n "${SPEC2CASE_APT_MIRROR}" ]; then \
+        mv /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/debian.sources.bak 2>/dev/null || true; \
+        printf 'deb %s bookworm main\n' "${SPEC2CASE_APT_MIRROR}" > /etc/apt/sources.list; \
+        printf 'deb %s bookworm-updates main\n' "${SPEC2CASE_APT_MIRROR}" >> /etc/apt/sources.list; \
+        if [ -n "${SPEC2CASE_APT_SECURITY_MIRROR}" ]; then \
+            printf 'deb %s bookworm-security main\n' "${SPEC2CASE_APT_SECURITY_MIRROR}" >> /etc/apt/sources.list; \
+        fi; \
+    fi \
+    && apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN if [ -n "${SPEC2CASE_PIP_INDEX_URL}" ]; then \
+        python -m pip config set global.index-url "${SPEC2CASE_PIP_INDEX_URL}"; \
+    fi \
+    && python -m pip install --no-cache-dir --upgrade pip build wheel setuptools
+
+COPY pyproject.toml ./
+COPY agents ./agents
+COPY config ./config
+COPY database ./database
+COPY routes ./routes
+COPY services ./services
+COPY utils ./utils
+
+RUN find . -type d -name "__pycache__" -prune -exec rm -rf {} + \
+    && python -m build --wheel --no-isolation --outdir /dist
+
+
+FROM ${SPEC2CASE_BASE_IMAGE} AS runtime
+
+ARG SPEC2CASE_PIP_INDEX_URL=
+ARG SPEC2CASE_APT_MIRROR=
+ARG SPEC2CASE_APT_SECURITY_MIRROR=
+
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app \
+    FLASK_ENV=production \
+    SHOW_AI_COLLABORATION=False \
+    UPLOAD_FOLDER=/app/uploads \
+    AUTOGEN_CONFIG_PATH=/app/config/OAI_CONFIG_LIST
+
+RUN if [ -n "${SPEC2CASE_APT_MIRROR}" ]; then \
+        mv /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/debian.sources.bak 2>/dev/null || true; \
+        printf 'deb %s bookworm main\n' "${SPEC2CASE_APT_MIRROR}" > /etc/apt/sources.list; \
+        printf 'deb %s bookworm-updates main\n' "${SPEC2CASE_APT_MIRROR}" >> /etc/apt/sources.list; \
+        if [ -n "${SPEC2CASE_APT_SECURITY_MIRROR}" ]; then \
+            printf 'deb %s bookworm-security main\n' "${SPEC2CASE_APT_SECURITY_MIRROR}" >> /etc/apt/sources.list; \
+        fi; \
+    fi \
+    && apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN if [ -n "${SPEC2CASE_PIP_INDEX_URL}" ]; then \
+        python -m pip config set global.index-url "${SPEC2CASE_PIP_INDEX_URL}"; \
+    fi \
+    && python -m pip install --no-cache-dir --upgrade pip \
+    && python -m pip install --no-cache-dir -r requirements.txt \
+    && python -m pip install --no-cache-dir gunicorn
+
+COPY --from=builder /dist/*.whl /tmp/
+RUN python -m pip install --no-cache-dir /tmp/*.whl \
+    && rm -f /tmp/*.whl
+
+COPY app.py app_config.py ./
+COPY templates ./templates
+COPY static ./static
+COPY docker/entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh \
+    && mkdir -p /app/data/tasks /app/uploads /app/outputs/excel /app/outputs/html /app/outputs/md /app/outputs/raw /app/logs /app/config
+
+EXPOSE 5002
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:5002", "--workers", "1", "--threads", "8", "--timeout", "1800", "--access-logfile", "-", "--error-logfile", "-"]

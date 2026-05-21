@@ -1,0 +1,21 @@
+{
+  "prd_id": "5d753c2e-131f-48d4-bb95-a7ef30184f91",
+  "task_id": "5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03",
+  "task_name": "社交发帖互动 v1.0",
+  "business": "",
+  "output_dir": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03",
+  "phase": "completed",
+  "current_node": "07_save_result",
+  "status": "completed",
+  "needs_confirmation": true,
+  "original_prd_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/prd/00_original_prd.md",
+  "cleaned_prd_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/prd/01_cleaned_prd.md",
+  "review_result_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/prd/02_logic_review.json",
+  "confirmation_items_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/confirmation/items.json",
+  "confirmation_answers_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/confirmation/answers.json",
+  "final_prd_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/prd/03_final_prd.md",
+  "test_results_path": "",
+  "testcase_artifact_dir": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline",
+  "testcase_artifact_index": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/artifact_index.json",
+  "result_index_path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/result_index.json"
+}

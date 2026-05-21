@@ -1,0 +1,173 @@
+{
+  "calls": 12,
+  "input_tokens": 23592,
+  "cached_input_tokens": 0,
+  "output_tokens": 32684,
+  "total_tokens": 56276,
+  "estimated_calls": 1,
+  "provider_usage_calls": 11,
+  "unpriced_calls": 0,
+  "costs_by_currency": {
+    "CNY": 0.94914,
+    "USD": 0.10402499999999999
+  },
+  "by_model": {
+    "deepseek-v4-pro": {
+      "calls": 10,
+      "input_tokens": 19197,
+      "cached_input_tokens": 0,
+      "output_tokens": 29949,
+      "total_tokens": 49146,
+      "costs_by_currency": {
+        "CNY": 0.94914
+      },
+      "unpriced_calls": 0
+    },
+    "gpt-5.5": {
+      "calls": 2,
+      "input_tokens": 4395,
+      "cached_input_tokens": 0,
+      "output_tokens": 2735,
+      "total_tokens": 7130,
+      "costs_by_currency": {
+        "USD": 0.10402499999999999
+      },
+      "unpriced_calls": 0
+    }
+  },
+  "by_stage": {
+    "03_text_prd_logic_review": {
+      "calls": 1,
+      "input_tokens": 1805,
+      "cached_input_tokens": 0,
+      "output_tokens": 1506,
+      "total_tokens": 3311,
+      "costs_by_currency": {
+        "CNY": 0.057803999999999994
+      },
+      "unpriced_calls": 0
+    },
+    "05_text_final_prd_integrate": {
+      "calls": 1,
+      "input_tokens": 1416,
+      "cached_input_tokens": 0,
+      "output_tokens": 1325,
+      "total_tokens": 2741,
+      "costs_by_currency": {
+        "CNY": 0.048792
+      },
+      "unpriced_calls": 0
+    },
+    "04a_prd_block_builder": {
+      "calls": 1,
+      "input_tokens": 1914,
+      "cached_input_tokens": 0,
+      "output_tokens": 377,
+      "total_tokens": 2291,
+      "costs_by_currency": {
+        "USD": 0.02088
+      },
+      "unpriced_calls": 0
+    },
+    "04b_prd_knowledge_builder": {
+      "calls": 1,
+      "input_tokens": 2481,
+      "cached_input_tokens": 0,
+      "output_tokens": 2358,
+      "total_tokens": 4839,
+      "costs_by_currency": {
+        "USD": 0.083145
+      },
+      "unpriced_calls": 0
+    },
+    "testcase_LU-001": {
+      "calls": 1,
+      "input_tokens": 1594,
+      "cached_input_tokens": 0,
+      "output_tokens": 4070,
+      "total_tokens": 5664,
+      "costs_by_currency": {
+        "CNY": 0.116808
+      },
+      "unpriced_calls": 0
+    },
+    "testcase_LU-002": {
+      "calls": 1,
+      "input_tokens": 1593,
+      "cached_input_tokens": 0,
+      "output_tokens": 3437,
+      "total_tokens": 5030,
+      "costs_by_currency": {
+        "CNY": 0.101604
+      },
+      "unpriced_calls": 0
+    },
+    "testcase_LU-003": {
+      "calls": 1,
+      "input_tokens": 1500,
+      "cached_input_tokens": 0,
+      "output_tokens": 1784,
+      "total_tokens": 3284,
+      "costs_by_currency": {
+        "CNY": 0.060816
+      },
+      "unpriced_calls": 0
+    },
+    "testcase_LU-004": {
+      "calls": 1,
+      "input_tokens": 1537,
+      "cached_input_tokens": 0,
+      "output_tokens": 5593,
+      "total_tokens": 7130,
+      "costs_by_currency": {
+        "CNY": 0.15267599999999998
+      },
+      "unpriced_calls": 0
+    },
+    "testcase_LU-005": {
+      "calls": 1,
+      "input_tokens": 1555,
+      "cached_input_tokens": 0,
+      "output_tokens": 3653,
+      "total_tokens": 5208,
+      "costs_by_currency": {
+        "CNY": 0.106332
+      },
+      "unpriced_calls": 0
+    },
+    "testcase_INT-001": {
+      "calls": 1,
+      "input_tokens": 2747,
+      "cached_input_tokens": 0,
+      "output_tokens": 1267,
+      "total_tokens": 4014,
+      "costs_by_currency": {
+        "CNY": 0.063372
+      },
+      "unpriced_calls": 0
+    },
+    "testcase_INT-002": {
+      "calls": 1,
+      "input_tokens": 2693,
+      "cached_input_tokens": 0,
+      "output_tokens": 2864,
+      "total_tokens": 5557,
+      "costs_by_currency": {
+        "CNY": 0.10105199999999999
+      },
+      "unpriced_calls": 0
+    },
+    "testcase_INT-003": {
+      "calls": 1,
+      "input_tokens": 2757,
+      "cached_input_tokens": 0,
+      "output_tokens": 4450,
+      "total_tokens": 7207,
+      "costs_by_currency": {
+        "CNY": 0.139884
+      },
+      "unpriced_calls": 0
+    }
+  },
+  "updated_at": "2026-05-18T15:50:00.605681"
+}

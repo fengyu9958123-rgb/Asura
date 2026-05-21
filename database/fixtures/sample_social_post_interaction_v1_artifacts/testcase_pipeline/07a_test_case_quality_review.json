@@ -1,0 +1,8 @@
+{
+  "enabled": false,
+  "reason": "PRD Knowledge pipeline skips final testcase quality review; testcase quality is controlled by BLOCK/LU context generation.",
+  "actions": [],
+  "applied_actions": [],
+  "skipped_actions": [],
+  "issues": []
+}

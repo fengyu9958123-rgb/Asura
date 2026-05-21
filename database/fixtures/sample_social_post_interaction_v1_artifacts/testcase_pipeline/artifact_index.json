@@ -1,0 +1,427 @@
+{
+  "task_id": "langgraph_testcase_graph",
+  "base_dir": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline",
+  "generated_at": "2026-05-18T15:50:00.623161",
+  "artifacts": {
+    "final_prd": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/00_final_prd.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:25:32.387825"
+    },
+    "blocked_prd_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/04a_blocked_prd.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:25:32.388034"
+    },
+    "prd_block_plan_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/04a_prd_block_plan.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:25:32.388420"
+    },
+    "prd_blocks_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/04a_prd_blocks.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:25:32.388769"
+    },
+    "prd_block_builder_prompt": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/prompts/04a_prd_block_builder.prompt.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:25:32.389035"
+    },
+    "prd_block_builder_response": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/responses/04a_prd_block_builder.response.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:25:32.389217"
+    },
+    "prd_block_plan_raw_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/04a_prd_block_plan.raw.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:25:32.389421"
+    },
+    "prd_block_validation": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/04a_block_validation.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:25:32.389556"
+    },
+    "prd_knowledge_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/04b_prd_knowledge.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:26:19.173073"
+    },
+    "prd_knowledge_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/04b_prd_knowledge.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:26:19.173335"
+    },
+    "prd_knowledge_builder_prompt": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/prompts/04b_prd_knowledge_builder.prompt.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:26:19.173624"
+    },
+    "prd_knowledge_builder_response": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/responses/04b_prd_knowledge_builder.response.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:26:19.173835"
+    },
+    "prd_knowledge_raw_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/04b_prd_knowledge.raw.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:26:19.174139"
+    },
+    "prd_knowledge_validation": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/04b_prd_knowledge.validation.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:26:19.174359"
+    },
+    "context_units_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/05_context_units.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:26:19.178166"
+    },
+    "context_units_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/05_context_units.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:26:19.178375"
+    },
+    "LU-001_assembled_context_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/contexts/assembled/LU-001.context.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:26:19.181765"
+    },
+    "LU-001_assembled_context_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/contexts/assembled/LU-001.context.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:26:19.181944"
+    },
+    "LU-001_prompt": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/prompts/test_cases/LU-001.prompt.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:26:19.182133"
+    },
+    "LU-001_response": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/responses/test_cases/LU-001.response.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:28:59.920782"
+    },
+    "LU-001_cases_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/LU-001.cases.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:28:59.921846"
+    },
+    "LU-001_cases_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/LU-001.cases.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:28:59.927275"
+    },
+    "LU-001_case_validation": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/LU-001.validation.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:28:59.927527"
+    },
+    "LU-002_assembled_context_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/contexts/assembled/LU-002.context.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:28:59.931914"
+    },
+    "LU-002_assembled_context_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/contexts/assembled/LU-002.context.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:28:59.932098"
+    },
+    "LU-002_prompt": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/prompts/test_cases/LU-002.prompt.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:28:59.932298"
+    },
+    "LU-002_response": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/responses/test_cases/LU-002.response.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:31:42.670523"
+    },
+    "LU-002_cases_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/LU-002.cases.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:31:42.671308"
+    },
+    "LU-002_cases_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/LU-002.cases.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:31:42.675331"
+    },
+    "LU-002_case_validation": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/LU-002.validation.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:31:42.675504"
+    },
+    "LU-003_assembled_context_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/contexts/assembled/LU-003.context.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:31:42.678443"
+    },
+    "LU-003_assembled_context_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/contexts/assembled/LU-003.context.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:31:42.678642"
+    },
+    "LU-003_prompt": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/prompts/test_cases/LU-003.prompt.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:31:42.678817"
+    },
+    "LU-003_response": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/responses/test_cases/LU-003.response.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:33:14.286196"
+    },
+    "LU-003_cases_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/LU-003.cases.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:33:14.286624"
+    },
+    "LU-003_cases_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/LU-003.cases.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:33:14.290367"
+    },
+    "LU-003_case_validation": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/LU-003.validation.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:33:14.290599"
+    },
+    "LU-004_assembled_context_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/contexts/assembled/LU-004.context.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:33:14.294092"
+    },
+    "LU-004_assembled_context_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/contexts/assembled/LU-004.context.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:33:14.294311"
+    },
+    "LU-004_prompt": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/prompts/test_cases/LU-004.prompt.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:33:14.294503"
+    },
+    "LU-004_response": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/responses/test_cases/LU-004.response.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:38:00.058277"
+    },
+    "LU-004_cases_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/LU-004.cases.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:38:00.058905"
+    },
+    "LU-004_cases_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/LU-004.cases.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:38:00.062624"
+    },
+    "LU-004_case_validation": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/LU-004.validation.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:38:00.062810"
+    },
+    "LU-005_assembled_context_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/contexts/assembled/LU-005.context.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:38:00.065482"
+    },
+    "LU-005_assembled_context_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/contexts/assembled/LU-005.context.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:38:00.065677"
+    },
+    "LU-005_prompt": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/prompts/test_cases/LU-005.prompt.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:38:00.065867"
+    },
+    "LU-005_response": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/responses/test_cases/LU-005.response.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:41:51.802111"
+    },
+    "LU-005_cases_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/LU-005.cases.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:41:51.802638"
+    },
+    "LU-005_cases_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/LU-005.cases.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:41:51.806358"
+    },
+    "LU-005_case_validation": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/LU-005.validation.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:41:51.806620"
+    },
+    "INT-001_assembled_context_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/contexts/assembled/INT-001.context.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:41:51.810624"
+    },
+    "INT-001_assembled_context_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/contexts/assembled/INT-001.context.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:41:51.810860"
+    },
+    "INT-001_prompt": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/prompts/test_cases/INT-001.prompt.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:41:51.811180"
+    },
+    "INT-001_response": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/responses/test_cases/INT-001.response.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:43:04.031146"
+    },
+    "INT-001_cases_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/INT-001.cases.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:43:04.031709"
+    },
+    "INT-001_cases_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/INT-001.cases.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:43:04.035924"
+    },
+    "INT-001_case_validation": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/INT-001.validation.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:43:04.036267"
+    },
+    "INT-002_assembled_context_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/contexts/assembled/INT-002.context.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:43:04.039948"
+    },
+    "INT-002_assembled_context_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/contexts/assembled/INT-002.context.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:43:04.040258"
+    },
+    "INT-002_prompt": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/prompts/test_cases/INT-002.prompt.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:43:04.040574"
+    },
+    "INT-002_response": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/responses/test_cases/INT-002.response.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:45:58.118655"
+    },
+    "INT-002_cases_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/INT-002.cases.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:45:58.119000"
+    },
+    "INT-002_cases_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/INT-002.cases.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:45:58.122437"
+    },
+    "INT-002_case_validation": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/INT-002.validation.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:45:58.122653"
+    },
+    "INT-003_assembled_context_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/contexts/assembled/INT-003.context.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:45:58.126282"
+    },
+    "INT-003_assembled_context_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/contexts/assembled/INT-003.context.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:45:58.126447"
+    },
+    "INT-003_prompt": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/prompts/test_cases/INT-003.prompt.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:45:58.126663"
+    },
+    "INT-003_response": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/responses/test_cases/INT-003.response.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:50:00.606125"
+    },
+    "INT-003_cases_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/INT-003.cases.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:50:00.606359"
+    },
+    "INT-003_cases_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/INT-003.cases.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:50:00.608707"
+    },
+    "INT-003_case_validation": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/test_cases/INT-003.validation.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:50:00.608863"
+    },
+    "test_cases_by_unit_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/06_test_cases.by_unit.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:50:00.610760"
+    },
+    "test_cases_by_package_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/06_test_cases.by_package.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:50:00.612362"
+    },
+    "test_cases_before_review_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/07_test_cases.before_review.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:50:00.616530"
+    },
+    "test_cases_before_review_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/07_test_cases.before_review.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:50:00.616814"
+    },
+    "test_case_quality_review_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/07a_test_case_quality_review.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:50:00.616931"
+    },
+    "test_cases_after_quality_review_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/07a_test_cases.after_quality_review.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:50:00.617696"
+    },
+    "test_cases_after_quality_review_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/07a_test_cases.after_quality_review.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:50:00.617961"
+    },
+    "test_cases_final_json": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/07_test_cases.final.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:50:00.618957"
+    },
+    "test_cases_final_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/07_test_cases.final.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:50:00.619139"
+    },
+    "test_cases_final_json_legacy": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/06_test_cases.final.json",
+      "type": "json",
+      "updated_at": "2026-05-18T15:50:00.619823"
+    },
+    "test_cases_final_md_legacy": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/06_test_cases.final.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:50:00.619951"
+    },
+    "test_analysis_md": {
+      "path": "outputs/text_pipeline_langgraph/task_5d753c2e-131f-48d4-bb95-a7ef30184f91_2da2c3e5-128c-49d1-8235-0a5cfad5cc03/testcase_pipeline/08_test_analysis.md",
+      "type": "text",
+      "updated_at": "2026-05-18T15:50:00.620149"
+    }
+  }
+}
