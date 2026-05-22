@@ -101,10 +101,16 @@ SHOW_AI_COLLABORATION=True
 ```bash
 git clone https://github.com/fengyu9958123-rgb/Asura.git
 cd spec2case
+# 创建 Python 虚拟环境 使用 venv 模块在当前目录下创建一个名为 .venv 的虚拟环境，用于隔离项目依赖，避免污染系统 Python 环境。
 python3 -m venv .venv
+# 激活虚拟环境 在 macOS / Linux 下激活虚拟环境。激活后，终端提示符前会显示 (.venv)，并且后续的 python、pip 命令都将使用该环境下的版本  pycharm可忽略 windows 使用cmd
 source .venv/bin/activate
+# 安装项目依赖 根据 requirements.txt 文件中列出的包名和版本，一次性安装项目所需的所有第三方库。
 pip install -r requirements.txt
+# 复制配置文件模板 将示例配置文件 OAI_CONFIG_LIST.example 复制为正式配置文件 OAI_CONFIG_LIST（通常用于存储大模型 API 的配置信息，如千问、OpenAI 的密钥和端点）。
 cp config/OAI_CONFIG_LIST.example config/OAI_CONFIG_LIST
+# 初始化数据库 运行 database/init_db.py 脚本，并传入参数 init，用于创建或初始化项目所需的数据库表结构
 python database/init_db.py init
+# 启动项目
 ./start.sh
 ```
