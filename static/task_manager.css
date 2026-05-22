@@ -11,7 +11,7 @@
 .filter-card {
     margin-bottom: 20px;
     border-radius: 18px;
-    border: 1px solid #E5E7EB;
+    border: 1px solid var(--ac-border);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
@@ -35,8 +35,8 @@
 }
 
 .filter-card .el-radio-button__orig-radio:checked+.el-radio-button__inner {
-    background: #10B981 !important;
-    border-color: #10B981 !important;
+    background: var(--ac-primary) !important;
+    border-color: var(--ac-primary) !important;
 }
 
 /* ========== 统计栏（更圆润、优化版） ========== */
@@ -44,17 +44,17 @@
     display: flex;
     gap: 20px;
     padding: 14px 18px;
-    background: linear-gradient(135deg, #FFFFFF 0%, #F0FAF7 100%);
+    background: linear-gradient(135deg, var(--ac-bg-elevated) 0%, var(--ac-primary-soft) 100%);
     border-radius: 8px;
     margin-bottom: 18px;
     flex-wrap: wrap;
-    border: 1px solid #D8EFE8;
+    border: 1px solid var(--ac-primary-border);
     box-shadow: none;
 }
 
 .stat-item {
     font-size: 14px;
-    color: #6B7280;
+    color: var(--ac-text-secondary);
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -63,7 +63,7 @@
 
 .stat-item strong {
     font-size: 18px;
-    color: #111827;
+    color: var(--ac-text);
     font-weight: 700;
 }
 
@@ -96,11 +96,11 @@
     cursor: pointer;
     transition: all 0.2s ease;
     border-radius: 8px;
-    background: #FFFFFF;
+    background: var(--ac-bg-elevated);
     box-shadow: none;
     position: relative;
     overflow: hidden;
-    border: 1px solid #E5E7EB;
+    border: 1px solid var(--ac-border);
 }
 
 /* 增加卡片内边距，提升垂直高度 */
@@ -125,8 +125,8 @@
 
 /* ========== 草稿状态（淡灰色渐变） ========== */
 .task-card.status-draft {
-    background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
-    border-color: #E5E7EB;
+    background: linear-gradient(135deg, var(--ac-bg-elevated) 0%, #F8FAFC 100%);
+    border-color: var(--ac-border);
 }
 
 .task-card.status-draft::after {
@@ -135,7 +135,7 @@
 
 /* ========== 待启动状态（淡紫蓝渐变） ========== */
 .task-card.status-pending {
-    background: linear-gradient(135deg, #FFFFFF 0%, #F5F7FF 100%);
+    background: linear-gradient(135deg, var(--ac-bg-elevated) 0%, #F5F7FF 100%);
     border-color: #C7D2FE;
 }
 
@@ -149,7 +149,7 @@
 
 /* ========== 运行中状态（淡蓝色渐变） ========== */
 .task-card.status-processing {
-    background: linear-gradient(135deg, #FFFFFF 0%, #EFF6FF 100%);
+    background: linear-gradient(135deg, var(--ac-bg-elevated) 0%, #EFF6FF 100%);
     border-color: #BFDBFE;
 }
 
@@ -163,7 +163,7 @@
 
 /* ========== 等待确认状态（淡黄色渐变 - 稍醒目） ========== */
 .task-card.status-waiting {
-    background: linear-gradient(135deg, #FFFFFF 0%, #FFFBEB 100%);
+    background: linear-gradient(135deg, var(--ac-bg-elevated) 0%, #FFFBEB 100%);
     border-color: #FDE68A;
     box-shadow: none;
 }
@@ -179,7 +179,7 @@
 
 /* ========== 已完成状态（淡绿色渐变） ========== */
 .task-card.status-completed {
-    background: linear-gradient(135deg, #FFFFFF 0%, #F0FDF4 100%);
+    background: linear-gradient(135deg, var(--ac-bg-elevated) 0%, #F0FDF4 100%);
     border-color: #BBF7D0;
 }
 
@@ -193,7 +193,7 @@
 
 /* ========== 失败状态（淡红色渐变） ========== */
 .task-card.status-failed {
-    background: linear-gradient(135deg, #FFFFFF 0%, #FEF2F2 100%);
+    background: linear-gradient(135deg, var(--ac-bg-elevated) 0%, #FEF2F2 100%);
     border-color: #FECACA;
 }
 
@@ -223,7 +223,7 @@
     margin: 0;
     font-size: 17px;
     font-weight: 600;
-    color: #111827;
+    color: var(--ac-text);
     word-break: break-word;
     line-height: 1.5;
     letter-spacing: 0;
@@ -234,7 +234,7 @@
     display: inline-block;
     font-size: 12px;
     font-weight: 500;
-    color: #6B7280;
+    color: var(--ac-text-secondary);
     padding: 2px 0;
 }
 
@@ -256,28 +256,28 @@
 
 /* 不同状态的标签颜色优化 */
 .task-card-header .el-tag--success {
-    background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
-    color: #FFFFFF !important;
+    background: linear-gradient(135deg, var(--ac-primary) 0%, #059669 100%) !important;
+    color: var(--ac-bg-elevated) !important;
 }
 
 .task-card-header .el-tag--warning {
     background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important;
-    color: #FFFFFF !important;
+    color: var(--ac-bg-elevated) !important;
 }
 
 .task-card-header .el-tag--info {
-    background: linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%) !important;
+    background: linear-gradient(135deg, var(--ac-border) 0%, #D1D5DB 100%) !important;
     color: #374151 !important;
 }
 
 .task-card-header .el-tag--primary {
     background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important;
-    color: #FFFFFF !important;
+    color: var(--ac-bg-elevated) !important;
 }
 
 .task-card-header .el-tag--danger {
     background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%) !important;
-    color: #FFFFFF !important;
+    color: var(--ac-bg-elevated) !important;
 }
 
 /* 卡片内容 */
@@ -290,13 +290,13 @@
     display: flex;
     gap: 16px;
     font-size: 13px;
-    color: #6B7280;
+    color: var(--ac-text-secondary);
     margin-bottom: 14px;
     flex-wrap: wrap;
     padding: 9px 12px;
     background: rgba(255, 255, 255, 0.68);
     border-radius: 8px;
-    border: 1px solid #EAECF0;
+    border: 1px solid var(--ac-border);
 }
 
 .task-summary span {
@@ -319,9 +319,9 @@
 /* 任务类型标签（中间位置 - 美化版） */
 .task-summary .task-type-badge {
     font-weight: 700;
-    color: #1F2937;
+    color: var(--ac-text);
     padding: 5px 10px;
-    background: #FFFFFF;
+    background: var(--ac-bg-elevated);
     border-radius: 999px;
     font-size: 13px;
     border: 1.5px solid rgba(209, 213, 219, 0.5);
@@ -335,7 +335,7 @@
 
 /* 图片数量等信息项 */
 .task-summary .task-info-item {
-    color: #6B7280;
+    color: var(--ac-text-secondary);
     font-weight: 500;
 }
 
@@ -422,7 +422,7 @@
 
 /* "更多"按钮（圆形按钮美化） */
 .task-actions .el-button.is-circle {
-    background: linear-gradient(135deg, #F9FAFB 0%, #E5E7EB 100%) !important;
+    background: linear-gradient(135deg, #F9FAFB 0%, var(--ac-border) 100%) !important;
     border: 1.5px solid #D1D5DB !important;
     color: #374151 !important;
     width: 34px !important;
@@ -433,9 +433,9 @@
 }
 
 .task-actions .el-button.is-circle:hover {
-    background: linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%) !important;
+    background: linear-gradient(135deg, var(--ac-border) 0%, #D1D5DB 100%) !important;
     border-color: #9CA3AF !important;
-    color: #111827 !important;
+    color: var(--ac-text) !important;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
     transform: translateY(-1px) rotate(90deg);
 }
@@ -466,29 +466,29 @@
 .task-card-footer .el-button--success {
     background: #00A884 !important;
     border: none !important;
-    color: #FFFFFF !important;
+    color: var(--ac-bg-elevated) !important;
     box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
 }
 
 .task-card-footer .el-button--primary:hover,
 .task-card-footer .el-button--success:hover {
-    background: #008f73 !important;
+    background: var(--ac-primary-hover) !important;
     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
     transform: translateY(-1px);
 }
 
 /* 次要操作按钮（编辑按钮 - 非常明显） */
 .task-card-footer .el-button--text {
-    color: #1F2937 !important;
-    background: #E5E7EB !important;
+    color: var(--ac-text) !important;
+    background: var(--ac-border) !important;
     border: 1px solid #9CA3AF !important;
     font-weight: 600 !important;
 }
 
 .task-card-footer .el-button--text:hover {
     background: #D1D5DB !important;
-    color: #111827 !important;
-    border-color: #6B7280 !important;
+    color: var(--ac-text) !important;
+    border-color: var(--ac-text-secondary) !important;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -496,7 +496,7 @@
 .task-card-footer .el-button--danger {
     background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%) !important;
     border: none !important;
-    color: #FFFFFF !important;
+    color: var(--ac-bg-elevated) !important;
     box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
 }
 
@@ -510,7 +510,7 @@
 .task-card-footer .el-button--warning {
     background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important;
     border: none !important;
-    color: #FFFFFF !important;
+    color: var(--ac-bg-elevated) !important;
     box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
 }
 
@@ -523,8 +523,8 @@
 /* 删除按钮 */
 .task-card-footer .delete-btn {
     color: #DC2626 !important;
-    background: #FFFFFF !important;
-    border: 1px solid #E5E7EB !important;
+    background: var(--ac-bg-elevated) !important;
+    border: 1px solid var(--ac-border) !important;
 }
 
 .task-card-footer .delete-btn:hover {

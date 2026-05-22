@@ -7,9 +7,9 @@ ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 cd "${ROOT_DIR}"
 
-SPEC2CASE_REGION="${SPEC2CASE_REGION:-cn}"
+AICASE_REGION="${AICASE_REGION:-cn}"
 
-if [ "${SPEC2CASE_REGION}" = "cn" ]; then
+if [ "${AICASE_REGION}" = "cn" ]; then
     DEFAULT_BASE_IMAGE_FALLBACK="docker.1ms.run/library/python:3.11-slim-bookworm"
     DEFAULT_PIP_INDEX_URL="https://pypi.tuna.tsinghua.edu.cn/simple"
     DEFAULT_APT_MIRROR="https://mirrors.tuna.tsinghua.edu.cn/debian"
@@ -21,16 +21,16 @@ else
     DEFAULT_APT_SECURITY_MIRROR=""
 fi
 
-SPEC2CASE_PORT="${SPEC2CASE_PORT:-5002}"
-SPEC2CASE_DATA_DIR="${SPEC2CASE_DATA_DIR:-./runtime}"
-SPEC2CASE_SKIP_DOCKER_START="${SPEC2CASE_SKIP_DOCKER_START:-0}"
-SPEC2CASE_BASE_IMAGE="${SPEC2CASE_BASE_IMAGE:-python:3.11-slim-bookworm}"
-SPEC2CASE_BASE_IMAGE_FALLBACK="${SPEC2CASE_BASE_IMAGE_FALLBACK:-${DEFAULT_BASE_IMAGE_FALLBACK}}"
-SPEC2CASE_PIP_INDEX_URL="${SPEC2CASE_PIP_INDEX_URL:-${DEFAULT_PIP_INDEX_URL}}"
-SPEC2CASE_APT_MIRROR="${SPEC2CASE_APT_MIRROR:-${DEFAULT_APT_MIRROR}}"
-SPEC2CASE_APT_SECURITY_MIRROR="${SPEC2CASE_APT_SECURITY_MIRROR:-${DEFAULT_APT_SECURITY_MIRROR}}"
-export SPEC2CASE_PORT SPEC2CASE_DATA_DIR SPEC2CASE_BASE_IMAGE
-export SPEC2CASE_PIP_INDEX_URL SPEC2CASE_APT_MIRROR SPEC2CASE_APT_SECURITY_MIRROR
+AICASE_PORT="${AICASE_PORT:-5002}"
+AICASE_DATA_DIR="${AICASE_DATA_DIR:-./runtime}"
+AICASE_SKIP_DOCKER_START="${AICASE_SKIP_DOCKER_START:-0}"
+AICASE_BASE_IMAGE="${AICASE_BASE_IMAGE:-python:3.11-slim-bookworm}"
+AICASE_BASE_IMAGE_FALLBACK="${AICASE_BASE_IMAGE_FALLBACK:-${DEFAULT_BASE_IMAGE_FALLBACK}}"
+AICASE_PIP_INDEX_URL="${AICASE_PIP_INDEX_URL:-${DEFAULT_PIP_INDEX_URL}}"
+AICASE_APT_MIRROR="${AICASE_APT_MIRROR:-${DEFAULT_APT_MIRROR}}"
+AICASE_APT_SECURITY_MIRROR="${AICASE_APT_SECURITY_MIRROR:-${DEFAULT_APT_SECURITY_MIRROR}}"
+export AICASE_PORT AICASE_DATA_DIR AICASE_BASE_IMAGE
+export AICASE_PIP_INDEX_URL AICASE_APT_MIRROR AICASE_APT_SECURITY_MIRROR
 
 DOCKER_WITH_SUDO=0
 DOCKER_COMPOSE_IMPL=""
@@ -217,8 +217,8 @@ ensure_docker() {
 
 ensure_base_image() {
     local candidates=(
-        "${SPEC2CASE_BASE_IMAGE}"
-        "${SPEC2CASE_BASE_IMAGE_FALLBACK}"
+        "${AICASE_BASE_IMAGE}"
+        "${AICASE_BASE_IMAGE_FALLBACK}"
     )
     local image
 
@@ -226,38 +226,38 @@ ensure_base_image() {
         [ -n "${image}" ] || continue
 
         if docker_cmd image inspect "${image}" >/dev/null 2>&1; then
-            if [ "${SPEC2CASE_BASE_IMAGE}" != "${image}" ]; then
-                warn "当前基础镜像 ${SPEC2CASE_BASE_IMAGE} 不可用，改用本地已存在的 ${image}"
-                SPEC2CASE_BASE_IMAGE="${image}"
+            if [ "${AICASE_BASE_IMAGE}" != "${image}" ]; then
+                warn "当前基础镜像 ${AICASE_BASE_IMAGE} 不可用，改用本地已存在的 ${image}"
+                AICASE_BASE_IMAGE="${image}"
             fi
-            export SPEC2CASE_BASE_IMAGE
+            export AICASE_BASE_IMAGE
             return 0
         fi
 
         if docker_cmd pull "${image}" >/dev/null 2>&1; then
-            if [ "${SPEC2CASE_BASE_IMAGE}" != "${image}" ]; then
-                warn "当前基础镜像 ${SPEC2CASE_BASE_IMAGE} 拉取失败，改用 ${image}"
-                SPEC2CASE_BASE_IMAGE="${image}"
+            if [ "${AICASE_BASE_IMAGE}" != "${image}" ]; then
+                warn "当前基础镜像 ${AICASE_BASE_IMAGE} 拉取失败，改用 ${image}"
+                AICASE_BASE_IMAGE="${image}"
             fi
-            export SPEC2CASE_BASE_IMAGE
+            export AICASE_BASE_IMAGE
             return 0
         fi
     done
 
-    warn "未能预拉取基础镜像 ${SPEC2CASE_BASE_IMAGE} 或回退镜像 ${SPEC2CASE_BASE_IMAGE_FALLBACK}，将继续尝试构建。"
+    warn "未能预拉取基础镜像 ${AICASE_BASE_IMAGE} 或回退镜像 ${AICASE_BASE_IMAGE_FALLBACK}，将继续尝试构建。"
 }
 
 prepare_runtime() {
     log "准备运行目录和模型配置"
 
     mkdir -p \
-        "${SPEC2CASE_DATA_DIR}/data" \
-        "${SPEC2CASE_DATA_DIR}/uploads" \
-        "${SPEC2CASE_DATA_DIR}/outputs" \
-        "${SPEC2CASE_DATA_DIR}/logs" \
-        "${SPEC2CASE_DATA_DIR}/config"
+        "${AICASE_DATA_DIR}/data" \
+        "${AICASE_DATA_DIR}/uploads" \
+        "${AICASE_DATA_DIR}/outputs" \
+        "${AICASE_DATA_DIR}/logs" \
+        "${AICASE_DATA_DIR}/config"
 
-    CONFIG_FILE="${SPEC2CASE_DATA_DIR}/config/OAI_CONFIG_LIST"
+    CONFIG_FILE="${AICASE_DATA_DIR}/config/OAI_CONFIG_LIST"
     if [ ! -f "${CONFIG_FILE}" ]; then
         cp config/OAI_CONFIG_LIST.example "${CONFIG_FILE}"
         warn "已生成 ${CONFIG_FILE}，首次使用前请在页面“模型配置”中填写模型信息。"
@@ -265,7 +265,7 @@ prepare_runtime() {
 }
 
 start_service() {
-    if [ "${SPEC2CASE_SKIP_DOCKER_START}" = "1" ]; then
+    if [ "${AICASE_SKIP_DOCKER_START}" = "1" ]; then
         log "跳过 Docker 启动"
         compose_cmd config >/dev/null
         return
@@ -273,7 +273,7 @@ start_service() {
 
     ensure_base_image
 
-    log "启动 Spec2Case"
+    log "启动 AIcase"
     if ! compose_cmd up -d --build; then
         cat >&2 <<'EOF'
 
@@ -283,7 +283,7 @@ start_service() {
 - Docker Hub 匿名拉取限流，请执行 docker login 后重试。
 - Docker Desktop/daemon 配置的镜像源不可用，请更换或关闭异常 registry mirror。
 - 当前网络无法拉取 python:3.11-slim-bookworm 等基础镜像。
-- 如不在中国大陆网络环境，可执行 SPEC2CASE_REGION=global bash scripts/quick-start.sh。
+- 如不在中国大陆网络环境，可执行 AICASE_REGION=global bash scripts/quick-start.sh。
 
 处理后重新执行：
   bash scripts/quick-start.sh
@@ -298,8 +298,8 @@ main() {
     start_service
 
     log "启动完成"
-    printf '访问地址: http://localhost:%s\n' "${SPEC2CASE_PORT}"
-    printf '模型配置: %s/config/OAI_CONFIG_LIST\n' "${SPEC2CASE_DATA_DIR}"
+    printf '访问地址: http://localhost:%s\n' "${AICASE_PORT}"
+    printf '模型配置: %s/config/OAI_CONFIG_LIST\n' "${AICASE_DATA_DIR}"
 }
 
 main "$@"

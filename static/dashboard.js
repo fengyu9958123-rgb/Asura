@@ -49,10 +49,10 @@ Vue.component('dashboard-component', {
             <el-col :span="6">
                 <el-card class="stat-card" shadow="hover">
                     <div class="stat-content">
-                        <i class="el-icon-success stat-icon" style="color: #00D4AA;"></i>
+                        <i class="el-icon-success stat-icon" style="color: var(--ac-primary-light);"></i>
                         <div class="stat-info">
                             <p class="stat-label">今日完成</p>
-                            <p class="stat-value" style="color: #00D4AA;">
+                            <p class="stat-value" style="color: var(--ac-primary-light);">
                                 {{ stats.completed_today }}
                             </p>
                         </div>
@@ -66,7 +66,7 @@ Vue.component('dashboard-component', {
             <el-col :span="12">
                 <el-card class="action-card" shadow="hover" @click.native="createImageTask">
                     <div class="action-content">
-                        <i class="el-icon-picture action-icon" style="color: #00D4AA;"></i>
+                        <i class="el-icon-picture action-icon" style="color: var(--ac-primary-light);"></i>
                         <div class="action-info">
                             <h3>📸 新建图片需求任务</h3>
                             <p>上传产品原型图、UI设计图等</p>

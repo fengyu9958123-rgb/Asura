@@ -1,20 +1,20 @@
-name: spec2case
+name: aicase
 
 services:
-  spec2case:
+  aicase:
     build:
       context: .
       dockerfile: Dockerfile.prod
       args:
-        SPEC2CASE_BASE_IMAGE: "${SPEC2CASE_BASE_IMAGE:-python:3.11-slim-bookworm}"
-        SPEC2CASE_PIP_INDEX_URL: "${SPEC2CASE_PIP_INDEX_URL:-}"
-        SPEC2CASE_APT_MIRROR: "${SPEC2CASE_APT_MIRROR:-}"
-        SPEC2CASE_APT_SECURITY_MIRROR: "${SPEC2CASE_APT_SECURITY_MIRROR:-}"
-    image: spec2case:latest
-    container_name: "${SPEC2CASE_CONTAINER_NAME:-spec2case}"
+        AICASE_BASE_IMAGE: "${AICASE_BASE_IMAGE:-python:3.11-slim-bookworm}"
+        AICASE_PIP_INDEX_URL: "${AICASE_PIP_INDEX_URL:-}"
+        AICASE_APT_MIRROR: "${AICASE_APT_MIRROR:-}"
+        AICASE_APT_SECURITY_MIRROR: "${AICASE_APT_SECURITY_MIRROR:-}"
+    image: aicase:latest
+    container_name: "${AICASE_CONTAINER_NAME:-aicase}"
     restart: unless-stopped
     ports:
-      - "${SPEC2CASE_PORT:-5002}:5002"
+      - "${AICASE_PORT:-5002}:5002"
     environment:
       FLASK_ENV: development
       LOG_LEVEL: "${LOG_LEVEL:-INFO}"
@@ -23,11 +23,11 @@ services:
       UPLOAD_FOLDER: /app/uploads
       AUTOGEN_CONFIG_PATH: /app/config/OAI_CONFIG_LIST
     volumes:
-      - ${SPEC2CASE_DATA_DIR:-./runtime}/data:/app/data
-      - ${SPEC2CASE_DATA_DIR:-./runtime}/uploads:/app/uploads
-      - ${SPEC2CASE_DATA_DIR:-./runtime}/outputs:/app/outputs
-      - ${SPEC2CASE_DATA_DIR:-./runtime}/logs:/app/logs
-      - ${SPEC2CASE_DATA_DIR:-./runtime}/config:/app/config
+      - ${AICASE_DATA_DIR:-./runtime}/data:/app/data
+      - ${AICASE_DATA_DIR:-./runtime}/uploads:/app/uploads
+      - ${AICASE_DATA_DIR:-./runtime}/outputs:/app/outputs
+      - ${AICASE_DATA_DIR:-./runtime}/logs:/app/logs
+      - ${AICASE_DATA_DIR:-./runtime}/config:/app/config
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5002/api/status"]
       interval: 30s

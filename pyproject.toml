@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "spec2case"
+name = "aicase"
 version = "0.1.0"
-description = "Spec2Case web service"
+description = "AIcase web service"
 requires-python = ">=3.11"
 dependencies = []
 

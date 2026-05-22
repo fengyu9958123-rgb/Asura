@@ -1,6 +1,6 @@
-# Spec2Case
+# AIcase
 
-Spec2Case 是一个面向 QA、测试开发、产品和研发团队的生产级 AI 测试用例生成平台，可以把 PRD、需求文档、产品规格说明、原型图、设计稿、业务截图等输入，转换为结构化、可执行、可导出的测试用例。
+AIcase 是一个面向 QA、测试开发、产品和研发团队的生产级 AI 测试用例生成平台，可以把 PRD、需求文档、产品规格说明、原型图、设计稿、业务截图等输入，转换为结构化、可执行、可导出的测试用例。
 
 可直接进入测试设计、用例评审和回归测试准备流程。
 
@@ -10,7 +10,7 @@ Spec2Case 是一个面向 QA、测试开发、产品和研发团队的生产级 
 
 ## 界面预览
 
-![Spec2Case 首页](docs/images/01-home.png)
+![AIcase 首页](docs/images/01-home.png)
 
 ![AI 协作运行](docs/images/08-ai-collaboration.png)
 
@@ -36,7 +36,7 @@ Spec2Case 是一个面向 QA、测试开发、产品和研发团队的生产级 
 
 ```bash
 git clone git@github.com:fengyu9958123-rgb/Asura.git
-cd spec2case
+cd aicase
 bash scripts/quick-start.sh
 ```
 
@@ -69,7 +69,7 @@ http://localhost:5002
 
 ```bash
 git clone https://github.com/fengyu9958123-rgb/Asura.git
-cd spec2case
+cd aicase
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -113,7 +113,7 @@ MIT
 
 ## 开发者的话
 
-Spec2Case 的目标不是替代人工，而是把真实需求、人工确认和模型能力结合起来，让测试用例生成更高效、风格统一。现实里的 PRD、截图和业务说明很少天然完整，所以保留人工确认是必要的，AI 更适合做整理、补全和结构化。
+AIcase 的目标不是替代人工，而是把真实需求、人工确认和模型能力结合起来，让测试用例生成更高效、风格统一。现实里的 PRD、截图和业务说明很少天然完整，所以保留人工确认是必要的，AI 更适合做整理、补全和结构化。
 
 没有把企业知识库或 RAG 放进主链路，是因为包袱太重，知识库本身质量不好反而适得其反。
 

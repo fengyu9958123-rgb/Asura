@@ -1,6 +1,6 @@
 # 部署说明
 
-Spec2Case 是面向 QA、测试开发、产品和研发团队的生产级 AI 测试用例生成平台，可将 PRD、需求文档、产品规格说明、原型图、设计稿和业务截图转换为结构化、可执行、可导出的测试用例。
+AIcase 是面向 QA、测试开发、产品和研发团队的生产级 AI 测试用例生成平台，可将 PRD、需求文档、产品规格说明、原型图、设计稿和业务截图转换为结构化、可执行、可导出的测试用例。
 
 这不是一个开源 demo 或概念验证项目，而是从真实业务测试交付中迭代出来的 AI 用例生成智能体。项目经过 80+ 小需求、十几个大版本需求验证，生成测试用例可用率达 90%+，适合直接进入测试设计、用例评审和回归测试准备流程。
 
@@ -10,19 +10,19 @@ Spec2Case 是面向 QA、测试开发、产品和研发团队的生产级 AI 测
 
 ```bash
 git clone https://github.com/fengyu9958123-rgb/Asura.git
-cd spec2case
+cd aicase
 bash scripts/quick-start.sh
 ```
 
 自定义端口和持久化目录：
 
 ```bash
-SPEC2CASE_PORT=8080 SPEC2CASE_DATA_DIR=/data/spec2case bash scripts/quick-start.sh
+AICASE_PORT=8080 AICASE_DATA_DIR=/data/aicase bash scripts/quick-start.sh
 ```
 
 访问 `http://localhost:5002`。
 
-首次打开页面后，先进入“模型配置”完成三类模型配置。Spec2Case 不是简单调用一次大模型写用例，流程包含需求审查、人工确认、PRD 整合、需求拆分和用例生成，模型能力会直接影响用例覆盖度和可执行性。
+首次打开页面后，先进入“模型配置”完成三类模型配置。AIcase 不是简单调用一次大模型写用例，流程包含需求审查、人工确认、PRD 整合、需求拆分和用例生成，模型能力会直接影响用例覆盖度和可执行性。
 
 | 用途 | 推荐模型 | 作用 | 选型建议 |
 | --- | --- | --- | --- |
@@ -81,8 +81,8 @@ docker compose restart
 ## 常见环境变量
 
 ```text
-SPEC2CASE_PORT=5002
-SPEC2CASE_DATA_DIR=/data/spec2case
+AICASE_PORT=5002
+AICASE_DATA_DIR=/data/aicase
 LOG_LEVEL=INFO
 SHOW_AI_COLLABORATION=True
 ```
@@ -100,7 +100,7 @@ SHOW_AI_COLLABORATION=True
 
 ```bash
 git clone https://github.com/fengyu9958123-rgb/Asura.git
-cd spec2case
+cd aicase
 # 创建 Python 虚拟环境 使用 venv 模块在当前目录下创建一个名为 .venv 的虚拟环境，用于隔离项目依赖，避免污染系统 Python 环境。
 python3 -m venv .venv
 # 激活虚拟环境 在 macOS / Linux 下激活虚拟环境。激活后，终端提示符前会显示 (.venv)，并且后续的 python、pip 命令都将使用该环境下的版本  pycharm可忽略 windows 使用cmd

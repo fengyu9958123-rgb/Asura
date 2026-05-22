@@ -1,5 +1,5 @@
 #!/bin/bash
-# Spec2Case 启动脚本
+# AIcase 启动脚本
 # 设置必要的环境变量和启动应用
 #
 # 用法:
@@ -25,5 +25,5 @@ else
 fi
 
 # 启动应用
-echo "🚀 启动 Spec2Case..."
+echo "🚀 启动 AIcase..."
 python app.py

@@ -1,25 +1,25 @@
-ARG SPEC2CASE_BASE_IMAGE=python:3.11-slim-bookworm
-ARG SPEC2CASE_PIP_INDEX_URL=
-ARG SPEC2CASE_APT_MIRROR=
-ARG SPEC2CASE_APT_SECURITY_MIRROR=
+ARG AICASE_BASE_IMAGE=python:3.11-slim-bookworm
+ARG AICASE_PIP_INDEX_URL=
+ARG AICASE_APT_MIRROR=
+ARG AICASE_APT_SECURITY_MIRROR=
 
-FROM ${SPEC2CASE_BASE_IMAGE} AS builder
+FROM ${AICASE_BASE_IMAGE} AS builder
 
-ARG SPEC2CASE_PIP_INDEX_URL=
-ARG SPEC2CASE_APT_MIRROR=
-ARG SPEC2CASE_APT_SECURITY_MIRROR=
+ARG AICASE_PIP_INDEX_URL=
+ARG AICASE_APT_MIRROR=
+ARG AICASE_APT_SECURITY_MIRROR=
 
 WORKDIR /build
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-RUN if [ -n "${SPEC2CASE_APT_MIRROR}" ]; then \
+RUN if [ -n "${AICASE_APT_MIRROR}" ]; then \
         mv /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/debian.sources.bak 2>/dev/null || true; \
-        printf 'deb %s bookworm main\n' "${SPEC2CASE_APT_MIRROR}" > /etc/apt/sources.list; \
-        printf 'deb %s bookworm-updates main\n' "${SPEC2CASE_APT_MIRROR}" >> /etc/apt/sources.list; \
-        if [ -n "${SPEC2CASE_APT_SECURITY_MIRROR}" ]; then \
-            printf 'deb %s bookworm-security main\n' "${SPEC2CASE_APT_SECURITY_MIRROR}" >> /etc/apt/sources.list; \
+        printf 'deb %s bookworm main\n' "${AICASE_APT_MIRROR}" > /etc/apt/sources.list; \
+        printf 'deb %s bookworm-updates main\n' "${AICASE_APT_MIRROR}" >> /etc/apt/sources.list; \
+        if [ -n "${AICASE_APT_SECURITY_MIRROR}" ]; then \
+            printf 'deb %s bookworm-security main\n' "${AICASE_APT_SECURITY_MIRROR}" >> /etc/apt/sources.list; \
         fi; \
     fi \
     && apt-get update && apt-get install -y --no-install-recommends \
@@ -27,8 +27,8 @@ RUN if [ -n "${SPEC2CASE_APT_MIRROR}" ]; then \
     python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN if [ -n "${SPEC2CASE_PIP_INDEX_URL}" ]; then \
-        python -m pip config set global.index-url "${SPEC2CASE_PIP_INDEX_URL}"; \
+RUN if [ -n "${AICASE_PIP_INDEX_URL}" ]; then \
+        python -m pip config set global.index-url "${AICASE_PIP_INDEX_URL}"; \
     fi \
     && python -m pip install --no-cache-dir --upgrade pip build wheel setuptools
 
@@ -44,11 +44,11 @@ RUN find . -type d -name "__pycache__" -prune -exec rm -rf {} + \
     && python -m build --wheel --no-isolation --outdir /dist
 
 
-FROM ${SPEC2CASE_BASE_IMAGE} AS runtime
+FROM ${AICASE_BASE_IMAGE} AS runtime
 
-ARG SPEC2CASE_PIP_INDEX_URL=
-ARG SPEC2CASE_APT_MIRROR=
-ARG SPEC2CASE_APT_SECURITY_MIRROR=
+ARG AICASE_PIP_INDEX_URL=
+ARG AICASE_APT_MIRROR=
+ARG AICASE_APT_SECURITY_MIRROR=
 
 WORKDIR /app
 
@@ -60,12 +60,12 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     UPLOAD_FOLDER=/app/uploads \
     AUTOGEN_CONFIG_PATH=/app/config/OAI_CONFIG_LIST
 
-RUN if [ -n "${SPEC2CASE_APT_MIRROR}" ]; then \
+RUN if [ -n "${AICASE_APT_MIRROR}" ]; then \
         mv /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/debian.sources.bak 2>/dev/null || true; \
-        printf 'deb %s bookworm main\n' "${SPEC2CASE_APT_MIRROR}" > /etc/apt/sources.list; \
-        printf 'deb %s bookworm-updates main\n' "${SPEC2CASE_APT_MIRROR}" >> /etc/apt/sources.list; \
-        if [ -n "${SPEC2CASE_APT_SECURITY_MIRROR}" ]; then \
-            printf 'deb %s bookworm-security main\n' "${SPEC2CASE_APT_SECURITY_MIRROR}" >> /etc/apt/sources.list; \
+        printf 'deb %s bookworm main\n' "${AICASE_APT_MIRROR}" > /etc/apt/sources.list; \
+        printf 'deb %s bookworm-updates main\n' "${AICASE_APT_MIRROR}" >> /etc/apt/sources.list; \
+        if [ -n "${AICASE_APT_SECURITY_MIRROR}" ]; then \
+            printf 'deb %s bookworm-security main\n' "${AICASE_APT_SECURITY_MIRROR}" >> /etc/apt/sources.list; \
         fi; \
     fi \
     && apt-get update && apt-get install -y --no-install-recommends \
@@ -74,8 +74,8 @@ RUN if [ -n "${SPEC2CASE_APT_MIRROR}" ]; then \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-RUN if [ -n "${SPEC2CASE_PIP_INDEX_URL}" ]; then \
-        python -m pip config set global.index-url "${SPEC2CASE_PIP_INDEX_URL}"; \
+RUN if [ -n "${AICASE_PIP_INDEX_URL}" ]; then \
+        python -m pip config set global.index-url "${AICASE_PIP_INDEX_URL}"; \
     fi \
     && python -m pip install --no-cache-dir --upgrade pip \
     && python -m pip install --no-cache-dir -r requirements.txt \

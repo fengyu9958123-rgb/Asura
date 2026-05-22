@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spec2Case - AI 需求转测试用例生成工具</title>
+    <title>AIcase - AI 需求转测试用例生成工具</title>
 
     <!-- 系统配置注入（后端渲染） -->
     <script>
@@ -15,6 +15,7 @@
     </script>
 
     <link rel="stylesheet" href="/static/libs/element-ui.css">
+    <link rel="stylesheet" href="/static/aicase-theme.css">
     <link rel="stylesheet" href="/static/vue_client_improved.css">
     <link rel="stylesheet" href="/static/modern-element-theme.css">
     <link rel="stylesheet" href="/static/requirement_module.css">
@@ -29,7 +30,7 @@
 
         /* 全局背景优化 */
         body {
-            background: #eef3f6;
+            background: var(--ac-bg);
             min-height: 100vh;
             margin: 0;
             font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -37,7 +38,7 @@
 
         /* 主容器美化 */
         .main-container {
-            background: #f6f8fb;
+            background: var(--ac-bg-subtle);
             border-radius: 0;
             margin: 0;
             min-height: 100vh;
@@ -48,8 +49,8 @@
         .main-container > .el-header {
             height: 64px !important;
             padding: 0 !important;
-            background: #ffffff;
-            border-bottom: 1px solid #e5e7eb;
+            background: var(--ac-bg-elevated);
+            border-bottom: 1px solid var(--ac-border);
         }
 
         /* 顶部导航栏 */
@@ -59,8 +60,8 @@
             align-items: center;
             padding: 0 28px;
             height: 100%;
-            background: #ffffff;
-            color: #1f2937;
+            background: var(--ac-bg-elevated);
+            color: var(--ac-text);
         }
 
         .logo {
@@ -82,24 +83,24 @@
             align-items: center;
             justify-content: center;
             border-radius: 8px;
-            background: #e8fbf6;
-            color: #00B894;
+            background: var(--ac-primary-soft);
+            color: var(--ac-primary);
             font-size: 14px;
             font-weight: 800;
             letter-spacing: 0;
-            border: 1px solid #c8f3e8;
+            border: 1px solid var(--ac-primary-border);
         }
 
         .logo-text {
             font-size: 20px;
             font-weight: 700;
-            color: #101828;
+            color: var(--ac-text);
             text-shadow: none;
         }
 
         .logo-subtitle {
             font-size: 11px;
-            color: #667085;
+            color: var(--ac-text-secondary);
             margin-top: 2px;
             letter-spacing: 0;
         }
@@ -114,11 +115,11 @@
 
         /* 人工确认区域突出显示 */
         .confirmation-highlight {
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            background: var(--ac-warning-soft);
             border-radius: 12px;
             padding: 25px;
             margin: 20px 0;
-            border-left: 6px solid #00B894;
+            border-left: 6px solid var(--ac-primary);
             box-shadow: 0 4px 12px rgba(230, 162, 60, 0.2);
         }
 
@@ -127,7 +128,7 @@
             align-items: center;
             font-size: 18px;
             font-weight: bold;
-            color: #00B894;
+            color: var(--ac-primary);
             margin-bottom: 15px;
         }
 
@@ -161,13 +162,13 @@
         }
 
         .task-type-card.image-card:hover {
-            box-shadow: 0 10px 24px rgba(0, 184, 148, 0.12) !important;
-            border-color: #00B894 !important;
+            box-shadow: 0 10px 24px rgba(79, 70, 229, 0.12) !important;
+            border-color: var(--ac-primary) !important;
         }
 
         .task-type-card.text-card:hover {
-            box-shadow: 0 10px 24px rgba(45, 184, 168, 0.12) !important;
-            border-color: #2DB8A8 !important;
+            box-shadow: 0 10px 24px rgba(79, 70, 229, 0.12) !important;
+            border-color: var(--ac-primary-hover) !important;
         }
 
         /* 按钮hover效果 */
@@ -180,10 +181,10 @@
             font-size: 12px;
             line-height: 1;
             padding: 6px 10px;
-            background: #f2f4f7;
-            color: #475467;
+            background: var(--ac-bg-subtle);
+            color: var(--ac-text-secondary);
             border-radius: 999px;
-            border: 1px solid #eaecf0;
+            border: 1px solid var(--ac-border);
             display: inline-flex;
             align-items: center;
         }
@@ -199,7 +200,7 @@
         .download-actions {
             text-align: center;
             padding: 20px;
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            background: var(--ac-bg-subtle);
             border-radius: 8px;
             margin: 15px 0;
         }
@@ -223,7 +224,7 @@
             width: 60px;
             height: 60px;
             border: 4px solid #f3f3f3;
-            border-top: 4px solid #00D4AA;
+            border-top: 4px solid var(--ac-primary-light);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -244,27 +245,27 @@
         }
 
         .status-running {
-            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            background: var(--ac-gradient-info);
             color: white;
         }
 
         .status-completed {
-            background: linear-gradient(45deg, #43e97b, #38f9d7);
+            background: var(--ac-gradient-success);
             color: white;
         }
 
         .status-waiting {
-            background: linear-gradient(45deg, #fa709a, #fee140);
+            background: var(--ac-gradient-warning);
             color: white;
         }
 
         /* 主要功能Tab样式优化 */
         .main-tabs-container {
-            background: #ffffff;
+            background: var(--ac-bg-elevated);
             padding: 0 28px;
             position: relative;
             overflow: hidden;
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid var(--ac-border);
         }
 
         .main-tabs-container::before {
@@ -296,7 +297,7 @@
         .main-tabs .el-tabs__item {
             border: none !important;
             background: transparent !important;
-            color: #667085 !important;
+            color: var(--ac-text-secondary) !important;
             margin-right: 0;
             border-radius: 0;
             transition: all 0.2s ease;
@@ -310,13 +311,13 @@
 
         .main-tabs .el-tabs__item:hover {
             background: transparent !important;
-            color: #00B894 !important;
+            color: var(--ac-primary) !important;
             transform: none;
         }
 
         .main-tabs .el-tabs__item.is-active {
             background: transparent !important;
-            color: #00B894 !important;
+            color: var(--ac-primary) !important;
             box-shadow: none;
         }
 
@@ -348,7 +349,7 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: #00B894;
+            background: var(--ac-primary);
             display: inline-block;
         }
 
@@ -365,7 +366,7 @@
             position: absolute;
             top: -8px;
             right: -8px;
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            background: var(--ac-gradient-danger);
             color: white;
             font-size: 10px;
             padding: 2px 6px;
@@ -386,7 +387,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: var(--ac-gradient-hero);
             position: relative;
             overflow: hidden;
         }
@@ -446,7 +447,7 @@
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 15px;
-            background: linear-gradient(45deg, #00D4AA, #00B894);
+            background: linear-gradient(45deg, var(--ac-primary-light), var(--ac-primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -454,7 +455,7 @@
 
         .placeholder-description {
             font-size: 16px;
-            color: #666;
+            color: var(--ac-text-secondary);
             line-height: 1.6;
             margin-bottom: 25px;
         }
@@ -463,19 +464,19 @@
             display: block;
             margin-top: 15px;
             font-size: 14px;
-            color: #888;
+            color: var(--ac-text-muted);
             text-align: left;
             background: #f8f9fa;
             padding: 15px;
             border-radius: 10px;
-            border-left: 4px solid #00D4AA;
+            border-left: 4px solid var(--ac-primary-light);
         }
 
         .coming-soon-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(45deg, #00D4AA, #00B894);
+            background: linear-gradient(45deg, var(--ac-primary-light), var(--ac-primary));
             color: white;
             padding: 12px 20px;
             border-radius: 25px;
@@ -503,27 +504,27 @@
             50% { transform: scale(1.25); opacity: 1; }
         }
 
-        /* 与大背景一致的主行动按钮样式（绿色渐变） */
+        /* 主行动按钮 */
         .collab-cta-btn {
-            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%) !important;
+            background: linear-gradient(135deg, var(--ac-primary-light) 0%, var(--ac-primary) 100%) !important;
             border: none !important;
             font-weight: 900 !important;
             border-radius: 26px !important;
             padding: 12px 22px !important;
-            box-shadow: 0 10px 24px rgba(0, 184, 148, 0.35), 0 6px 12px rgba(0, 212, 170, 0.25) !important;
+            box-shadow: 0 10px 24px rgba(79, 70, 229, 0.35), 0 6px 12px rgba(79, 70, 229, 0.25) !important;
             letter-spacing: 0.5px !important;
-            color: #fff !important;
+            color: var(--ac-bg-elevated) !important;
         }
         .collab-cta-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 14px 30px rgba(0, 184, 148, 0.45), 0 8px 16px rgba(0, 212, 170, 0.35) !important;
+            box-shadow: 0 14px 30px rgba(79, 70, 229, 0.45), 0 8px 16px rgba(79, 70, 229, 0.35) !important;
             transition: all 0.2s ease;
         }
 
         /* 侧边栏样式优化 */
         .sidebar-container {
-            background: #ffffff;
-            border-right: 1px solid #e5e7eb;
+            background: var(--ac-bg-elevated);
+            border-right: 1px solid var(--ac-border);
             position: relative;
         }
 
@@ -547,7 +548,7 @@
             overflow: hidden;
             height: 44px;
             line-height: 44px;
-            color: #475467;
+            color: var(--ac-text-secondary);
             font-weight: 600;
         }
 
@@ -560,14 +561,14 @@
         }
 
         .sidebar-menu .el-menu-item:hover {
-            background: #f2f7f6;
-            color: #00B894;
+            background: var(--ac-primary-soft);
+            color: var(--ac-primary);
             transform: none;
         }
 
         .sidebar-menu .el-menu-item.is-active {
-            background: #e8fbf6;
-            color: #008f73;
+            background: var(--ac-primary-soft);
+            color: var(--ac-primary-hover);
             box-shadow: none;
         }
 
@@ -585,15 +586,15 @@
             transform: none;
         }
 
-        /* 炫酷聊天界面样式 - 统一绿色主题 */
+        /* AI 协作聊天气泡 */
         .ai-chat-bubbles {
-            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
+            background: linear-gradient(135deg, var(--ac-primary-light) 0%, var(--ac-primary) 100%);
             border-radius: 20px;
             padding: 25px;
             margin: 20px 0;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 212, 170, 0.3);
+            box-shadow: 0 20px 60px rgba(79, 70, 229, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
@@ -640,8 +641,8 @@
             backdrop-filter: blur(15px);
             position: relative;
             z-index: 1;
-            border: 1px solid rgba(0, 212, 170, 0.1);
-            box-shadow: inset 0 1px 3px rgba(0, 212, 170, 0.05);
+            border: 1px solid rgba(79, 70, 229, 0.1);
+            box-shadow: inset 0 1px 3px rgba(79, 70, 229, 0.05);
         }
 
         .chat-messages-enhanced::-webkit-scrollbar {
@@ -654,7 +655,7 @@
         }
 
         .chat-messages-enhanced::-webkit-scrollbar-thumb {
-            background: linear-gradient(45deg, #00D4AA, #00B894);
+            background: linear-gradient(45deg, var(--ac-primary-light), var(--ac-primary));
             border-radius: 4px;
         }
 
@@ -703,15 +704,15 @@
         .role-name-above-avatar {
             font-size: 13px;
             font-weight: 600;
-            color: #00B894;
+            color: var(--ac-primary);
             margin-bottom: 8px;
             text-align: center;
             min-width: 80px;
             padding: 6px 12px;
             background: rgba(255,255,255,0.95);
             border-radius: 15px;
-            box-shadow: 0 3px 10px rgba(0, 212, 170, 0.2);
-            border: 1px solid rgba(0, 212, 170, 0.1);
+            box-shadow: 0 3px 10px rgba(79, 70, 229, 0.2);
+            border: 1px solid rgba(79, 70, 229, 0.1);
             backdrop-filter: blur(5px);
         }
 
@@ -723,7 +724,7 @@
             align-items: center;
             justify-content: center;
             font-size: 28px;
-            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.3);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.3);
             position: relative;
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -739,7 +740,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(transparent, rgba(0, 212, 170, 0.3), transparent);
+            background: conic-gradient(transparent, rgba(79, 70, 229, 0.3), transparent);
             animation: avatarSpin 4s linear infinite;
             z-index: 1;
         }
@@ -757,7 +758,7 @@
 
         .avatar-enhanced.test-architect {
             background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face');
-            background-color: #F56C6C;
+            background-color: var(--ac-danger);
         }
 
         .avatar-enhanced.test-writer {
@@ -771,7 +772,7 @@
         }
 
         .avatar-enhanced.ai-thinking {
-            background: linear-gradient(45deg, #00D4AA, #00B894);
+            background: linear-gradient(45deg, var(--ac-primary-light), var(--ac-primary));
         }
 
         /* 头像内的文字（备用方案） */
@@ -787,7 +788,7 @@
             padding: 18px 22px;
             border-radius: 22px;
             position: relative;
-            box-shadow: 0 6px 20px rgba(0, 212, 170, 0.12);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.12);
             backdrop-filter: blur(12px);
             animation: bubblePop 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -808,10 +809,10 @@
         }
 
         .message-bubble-enhanced.left {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
+            background: linear-gradient(135deg, var(--ac-bg-elevated) 0%, #f8fffe 100%);
             border-bottom-left-radius: 5px;
             color: #333;
-            border: 1px solid rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(79, 70, 229, 0.1);
         }
 
         .message-bubble-enhanced.left::before {
@@ -822,15 +823,15 @@
             width: 0;
             height: 0;
             border: 10px solid transparent;
-            border-right-color: #ffffff;
+            border-right-color: var(--ac-bg-elevated);
         }
 
         .message-bubble-enhanced.right {
-            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
+            background: linear-gradient(135deg, var(--ac-primary-light) 0%, var(--ac-primary) 100%);
             border-bottom-right-radius: 5px;
             color: white;
             margin-left: auto;
-            box-shadow: 0 4px 15px rgba(0, 212, 170, 0.2);
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.2);
         }
 
         .message-bubble-enhanced.right::before {
@@ -841,7 +842,7 @@
             width: 0;
             height: 0;
             border: 10px solid transparent;
-            border-left-color: #00D4AA;
+            border-left-color: var(--ac-primary-light);
         }
 
         .role-name-enhanced {
@@ -860,9 +861,9 @@
         .preview-text {
             margin: 0;
             padding: 12px 15px;
-            background: rgba(0, 212, 170, 0.08);
+            background: rgba(79, 70, 229, 0.08);
             border-radius: 10px;
-            border-left: 4px solid #00D4AA;
+            border-left: 4px solid var(--ac-primary-light);
             line-height: 1.6;
             font-size: 14px;
             position: relative;
@@ -875,7 +876,7 @@
         }
 
         .expand-btn, .collapse-btn {
-            color: #00D4AA !important;
+            color: var(--ac-primary-light) !important;
             font-size: 12px !important;
             font-weight: 500 !important;
             transition: all 0.2s ease !important;
@@ -884,19 +885,19 @@
         }
 
         .expand-btn:hover, .collapse-btn:hover {
-            background: rgba(0, 212, 170, 0.1) !important;
+            background: rgba(79, 70, 229, 0.1) !important;
             transform: translateY(-1px) !important;
         }
 
         .full-content {
             padding: 15px 18px;
-            background: rgba(0, 212, 170, 0.08);
+            background: rgba(79, 70, 229, 0.08);
             border-radius: 12px;
-            border-left: 4px solid #00D4AA;
+            border-left: 4px solid var(--ac-primary-light);
             line-height: 1.6;
             font-size: 14px;
             backdrop-filter: blur(5px);
-            border: 1px solid rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(79, 70, 229, 0.1);
         }
 
         .timestamp-enhanced {
@@ -919,7 +920,7 @@
         /* 左侧气泡的角色描述（AI角色，白色背景） */
         .message-bubble-enhanced.left .role-description-enhanced {
             color: rgba(51, 51, 51, 0.7);
-            background: rgba(0, 212, 170, 0.1);
+            background: rgba(79, 70, 229, 0.1);
         }
 
         /* 右侧气泡的角色描述（用户，绿色背景） */
@@ -963,7 +964,7 @@
         .typing-dots-enhanced span {
             width: 8px;
             height: 8px;
-            background: #00D4AA;
+            background: var(--ac-primary-light);
             border-radius: 50%;
             animation: typingDot 1.4s infinite ease-in-out;
         }
@@ -986,13 +987,13 @@
         .collaboration-status-enhanced {
             position: sticky;
             bottom: 0;
-            background: linear-gradient(45deg, #00D4AA 0%, #00B894 100%);
+            background: linear-gradient(45deg, var(--ac-primary-light) 0%, var(--ac-primary) 100%);
             color: white;
             padding: 18px;
             border-radius: 12px;
             text-align: center;
             margin-top: 25px;
-            box-shadow: 0 6px 20px rgba(0, 212, 170, 0.4);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
             position: relative;
             z-index: 1;
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -1011,17 +1012,17 @@
 
         .message-wrapper-enhanced:hover .avatar-enhanced {
             transform: scale(1.05) rotate(5deg);
-            box-shadow: 0 10px 30px rgba(0, 212, 170, 0.4);
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4);
         }
 
         .message-wrapper-enhanced:hover .message-bubble-enhanced {
-            box-shadow: 0 10px 30px rgba(0, 212, 170, 0.25);
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.25);
             transform: translateY(-2px);
         }
 
         .message-wrapper-enhanced:hover .role-name-above-avatar {
-            background: rgba(0, 212, 170, 0.1);
-            color: #00B894;
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--ac-primary);
             transform: translateY(-1px);
         }
 
@@ -1034,8 +1035,8 @@
             right: 0;
             bottom: 0;
             background:
-                radial-gradient(circle at 10% 20%, rgba(0, 212, 170, 0.03) 0%, transparent 30%),
-                radial-gradient(circle at 90% 80%, rgba(0, 184, 148, 0.03) 0%, transparent 30%);
+                radial-gradient(circle at 10% 20%, rgba(79, 70, 229, 0.03) 0%, transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(79, 70, 229, 0.03) 0%, transparent 30%);
             pointer-events: none;
             z-index: 0;
         }
@@ -1047,7 +1048,7 @@
             left: -2px;
             right: -2px;
             bottom: -2px;
-            background: linear-gradient(45deg, transparent, rgba(0, 212, 170, 0.1), transparent);
+            background: linear-gradient(45deg, transparent, rgba(79, 70, 229, 0.1), transparent);
             border-radius: 24px;
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -1128,7 +1129,7 @@
         .detail-flow {
             margin: 16px 0;
             padding: 20px 24px;
-            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+            background: linear-gradient(135deg, #f8fafc 0%, var(--ac-bg-elevated) 100%);
             border-radius: 16px;
             border: 1px solid #e1e8ed;
             position: relative;
@@ -1146,8 +1147,8 @@
             position: relative;
             z-index: 2;
             padding: 20px 16px; /* 减少padding提高空间利用率 */
-            background: #ffffff;
-            border: 1px solid #e5e7eb;
+            background: var(--ac-bg-elevated);
+            border: 1px solid var(--ac-border);
             border-radius: 8px; /* 减少圆角 */
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
@@ -1160,7 +1161,7 @@
             left: 80px;
             right: 80px;
             height: 2px;
-            background: #e5e7eb;
+            background: var(--ac-border);
             z-index: 1;
             transform: translateY(-50%);
         }
@@ -1193,13 +1194,13 @@
             z-index: 10;
             border: 2px solid #d1d5db;
             box-sizing: border-box;
-            background: #ffffff;
+            background: var(--ac-bg-elevated);
             color: #6b7280;
         }
 
         /* ⚫ 默认状态 - 未激活 */
         .flow-step .step-circle {
-            background: #ffffff;
+            background: var(--ac-bg-elevated);
             color: #9ca3af;
             border: 2px solid #d1d5db;
         }
@@ -1273,7 +1274,7 @@
         .analysis-report.markdown-body h2,
         .analysis-report.markdown-body h3,
         .analysis-report.markdown-body h4 {
-            color: #00D4AA !important;
+            color: var(--ac-primary-light) !important;
             font-weight: 600 !important;
             margin-top: 24px !important;
             margin-bottom: 16px !important;
@@ -1305,8 +1306,8 @@
         }
 
         .analysis-report.markdown-body code {
-            background: rgba(0, 212, 170, 0.1) !important;
-            color: #00D4AA !important;
+            background: rgba(79, 70, 229, 0.1) !important;
+            color: var(--ac-primary-light) !important;
             padding: 2px 6px !important;
             border-radius: 4px !important;
             font-size: 13px !important;
@@ -1322,8 +1323,8 @@
         }
 
         .analysis-report.markdown-body blockquote {
-            border-left: 4px solid #00D4AA !important;
-            background: rgba(0, 212, 170, 0.05) !important;
+            border-left: 4px solid var(--ac-primary-light) !important;
+            background: rgba(79, 70, 229, 0.05) !important;
             padding: 12px 16px !important;
             margin: 16px 0 !important;
             border-radius: 0 8px 8px 0 !important;
@@ -1394,7 +1395,7 @@
         .section-header {
             padding: 16px 24px 12px;
             border-bottom: 1px solid #f0f0f0;
-            background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
+            background: linear-gradient(135deg, #f8faff 0%, var(--ac-bg-elevated) 100%);
         }
 
         .section-header h3 {
@@ -1427,8 +1428,8 @@
         }
 
         .langgraph-stat {
-            background: #ffffff;
-            border: 1px solid #e5e7eb;
+            background: var(--ac-bg-elevated);
+            border: 1px solid var(--ac-border);
             border-radius: 8px;
             padding: 12px 14px;
             min-height: 68px;
@@ -1449,8 +1450,8 @@
 
         .langgraph-flow-block,
         .langgraph-records {
-            background: #ffffff;
-            border: 1px solid #e5e7eb;
+            background: var(--ac-bg-elevated);
+            border: 1px solid var(--ac-border);
             border-radius: 8px;
             margin-bottom: 16px;
         }
@@ -1468,7 +1469,7 @@
         .langgraph-flow-header span,
         .langgraph-records-head h4 {
             margin: 0;
-            color: #1f2937;
+            color: var(--ac-text);
             font-size: 15px;
             font-weight: 700;
         }
@@ -1520,7 +1521,7 @@
             width: 24px;
             height: 24px;
             border-radius: 50%;
-            border: 3px solid #ffffff;
+            border: 3px solid var(--ac-bg-elevated);
             background: #94a3b8;
             box-shadow: 0 0 0 1px #cbd5e1;
             flex: 0 0 24px;
@@ -1544,7 +1545,7 @@
         }
 
         .langgraph-step.selected .step-dot {
-            box-shadow: 0 0 0 4px rgba(0, 212, 170, 0.16), 0 0 0 1px rgba(0, 184, 148, 0.45);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.16), 0 0 0 1px rgba(79, 70, 229, 0.45);
         }
 
         .langgraph-step .step-body {
@@ -1570,7 +1571,7 @@
         }
 
         .langgraph-step .step-topline strong {
-            color: #1f2937;
+            color: var(--ac-text);
             font-size: 14px;
             line-height: 1.2;
             white-space: nowrap;
@@ -1594,8 +1595,8 @@
         }
 
         .langgraph-node-detail {
-            background: #ffffff;
-            border: 1px solid #e5e7eb;
+            background: var(--ac-bg-elevated);
+            border: 1px solid var(--ac-border);
             border-radius: 8px;
             margin-bottom: 16px;
         }
@@ -1611,7 +1612,7 @@
 
         .node-detail-head h4 {
             margin: 0 0 4px 0;
-            color: #1f2937;
+            color: var(--ac-text);
             font-size: 15px;
             font-weight: 700;
         }
@@ -1634,11 +1635,11 @@
             border: 1px solid #eef2f7;
             border-radius: 8px;
             padding: 12px;
-            background: #ffffff;
+            background: var(--ac-bg-elevated);
         }
 
         .node-io-title {
-            color: #1f2937;
+            color: var(--ac-text);
             font-size: 13px;
             font-weight: 700;
             margin-bottom: 8px;
@@ -1671,7 +1672,7 @@
         }
 
         .record-title span {
-            color: #1f2937;
+            color: var(--ac-text);
             font-size: 13px;
             font-weight: 600;
             overflow: hidden;
@@ -1700,8 +1701,8 @@
         .record-content {
             max-height: 520px;
             overflow: auto;
-            color: #1f2937;
-            background: #ffffff;
+            color: var(--ac-text);
+            background: var(--ac-bg-elevated);
             border: 1px solid #eef2f7;
             border-radius: 6px;
             padding: 12px 14px;
@@ -1783,19 +1784,19 @@
         /* 优化结果区域样式 */
 
         .download-btn {
-            background: linear-gradient(135deg, var(--primary-color) 0%, #00E5BC 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--ac-primary-light) 100%);
             border: none;
             padding: 8px 20px;
             font-size: 14px;
             font-weight: 600;
-            box-shadow: 0 2px 8px rgba(0, 212, 170, 0.25);
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
             transition: all 0.3s ease;
             border-radius: 6px;
         }
 
         .download-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.4);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
         }
 
         .table-container {
@@ -1939,7 +1940,7 @@
         }
 
         .analysis-3d-card {
-            background: linear-gradient(135deg, #ffffff 0%, #fafbfc 50%, #f8f9fa 100%);
+            background: linear-gradient(135deg, var(--ac-bg-elevated) 0%, #fafbfc 50%, #f8f9fa 100%);
             border-radius: 12px;
             box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.08),
@@ -1949,7 +1950,7 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--ac-border);
             backdrop-filter: blur(20px);
         }
 
@@ -1960,7 +1961,7 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, #1f2937, #374151, #4b5563);
+            background: linear-gradient(90deg, var(--ac-text), #374151, #4b5563);
             opacity: 0.8;
         }
 
@@ -1975,7 +1976,7 @@
         }
 
         .analysis-3d-card:hover::before {
-            background: linear-gradient(90deg, #00D4AA, #00B894, #00E5BC);
+            background: linear-gradient(90deg, var(--ac-primary-light), var(--ac-primary), var(--ac-primary-light));
             opacity: 1;
         }
 
@@ -1983,8 +1984,8 @@
             padding: 24px 28px 20px;
             text-align: left;
             position: relative;
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-            border-bottom: 1px solid #e5e7eb;
+            background: linear-gradient(135deg, #f8f9fa 0%, var(--ac-bg-elevated) 100%);
+            border-bottom: 1px solid var(--ac-border);
         }
 
         .card-icon {
@@ -2001,7 +2002,7 @@
             margin: 0;
             font-size: 18px;
             font-weight: 600;
-            color: #1f2937;
+            color: var(--ac-text);
             letter-spacing: -0.025em;
             display: inline-block;
             vertical-align: middle;
@@ -2021,7 +2022,7 @@
         }
 
         .analysis-text-content {
-            background: #ffffff;
+            background: var(--ac-bg-elevated);
             border-radius: 8px;
             padding: 20px;
             border: 1px solid #f3f4f6;
@@ -2069,7 +2070,7 @@
         }
 
         .analysis-text-content strong {
-            color: #1f2937;
+            color: var(--ac-text);
             font-weight: 600;
         }
 
@@ -2086,7 +2087,7 @@
         }
 
         .analysis-text-content h5, .analysis-text-content h6 {
-            color: #1f2937;
+            color: var(--ac-text);
             font-weight: 600;
             margin: 20px 0 12px 0;
             font-size: 16px;
@@ -2161,7 +2162,7 @@
         <!-- 加载层 -->
         <div class="loading-overlay" v-if="isLoading">
             <div class="loading-spinner"></div>
-            <p style="margin-top: 20px; font-size: 16px; color: #666;">正在分析需求并生成测试用例...</p>
+            <p style="margin-top: 20px; font-size: 16px; color: var(--ac-text-secondary);">正在分析需求并生成测试用例...</p>
         </div>
 
         <div class="main-container">
@@ -2169,14 +2170,14 @@
             <el-header height="80px">
                 <div class="header-content">
                     <div class="logo">
-                        <span class="logo-mark">S2C</span>
+                        <span class="logo-mark">AC</span>
                         <div>
-                            <div class="logo-text">Spec2Case</div>
+                            <div class="logo-text">AIcase</div>
                             <div class="logo-subtitle">AI 需求转测试用例生成工具</div>
                         </div>
                     </div>
                     <div class="header-right">
-                        <el-button size="small" icon="el-icon-refresh" @click="refreshData" style="background: #ffffff; border: 1px solid #d0d5dd; color: #344054; font-weight: 600; border-radius: 6px; box-shadow: none;">
+                        <el-button size="small" icon="el-icon-refresh" @click="refreshData" style="background: var(--ac-bg-elevated); border: 1px solid var(--ac-border-strong); color: var(--ac-text-secondary); font-weight: 600; border-radius: 6px; box-shadow: none;">
                             刷新
                         </el-button>
                     </div>
@@ -2192,7 +2193,7 @@
                         <span slot="label" class="tab-label">
                             <div class="tab-content">
                                 <i class="tab-icon">🧪</i>
-                                <span class="tab-text">Spec 转测试用例</span>
+                                <span class="tab-text">AI转测试用例</span>
                             </div>
                         </span>
                     </el-tab-pane>
@@ -2222,7 +2223,7 @@
                     </div>
                 </el-aside>
 
-                <el-main style="background: #f6f8fb; padding: 24px;">
+                <el-main style="background: var(--ac-bg-subtle); padding: 24px;">
                     <!-- 统一任务管理 (Phase 3) -->
                     <div v-if="activeTab === 'unifiedTaskList'">
                         <task-manager-component
@@ -2238,10 +2239,10 @@
                     <div v-if="activeTab === 'modelSettings'" class="model-settings-page">
                         <div class="page-header" style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 18px; gap: 20px;">
                             <div>
-                                <h2 style="font-size: 24px; color: #101828; margin: 0 0 8px 0; font-weight: 700;">
+                                <h2 style="font-size: 24px; color: var(--ac-text); margin: 0 0 8px 0; font-weight: 700;">
                                     模型配置
                                 </h2>
-                                <p style="color: #667085; font-size: 14px; margin: 0;">按阶段配置模型，保存后新启动任务生效。</p>
+                                <p style="color: var(--ac-text-secondary); font-size: 14px; margin: 0;">按阶段配置模型，保存后新启动任务生效。</p>
                             </div>
                             <div style="display:flex; gap: 8px; flex-shrink: 0;">
                                 <el-button icon="el-icon-refresh" @click="fetchModelSettings" :loading="modelSettingsLoading">刷新</el-button>
@@ -2252,20 +2253,20 @@
                         <div style="display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px;">
                             <div v-for="guide in modelStageGuides" :key="guide.type"
                                  :class="'model-stage-guide model-stage-guide-' + guide.type"
-                                 style="background:#fff; border:1px solid #E4E7ED; border-radius:8px; padding:14px 16px; min-height:96px; box-shadow:none;">
+                                 style="border:1px solid var(--ac-border); border-radius:8px; padding:14px 16px; min-height:96px; box-shadow:none;">
                                 <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:8px;">
                                     <div>
-                                        <div style="font-size:15px; font-weight:700; color:#303133;">{%raw%}{{ guide.label }}{%endraw%}</div>
+                                        <div style="font-size:15px; font-weight:700; color:var(--ac-text);">{%raw%}{{ guide.label }}{%endraw%}</div>
                                     </div>
                                     <el-tag size="mini" :type="guide.type === 'split' ? 'danger' : (guide.type === 'vision' ? 'success' : 'info')" effect="plain">
                                         {%raw%}{{ guide.level }}{%endraw%}
                                     </el-tag>
                                 </div>
-                                <p style="margin:0; color:#606266; font-size:13px; line-height:1.55;">{%raw%}{{ guide.description }}{%endraw%}</p>
+                                <p style="margin:0; color:var(--ac-text-secondary); font-size:13px; line-height:1.55;">{%raw%}{{ guide.description }}{%endraw%}</p>
                             </div>
                         </div>
 
-                        <el-card shadow="never" style="border-radius: 8px; border:1px solid #E4E7ED;">
+                        <el-card shadow="never" style="border-radius: 8px; border:1px solid var(--ac-border);">
                             <div slot="header" style="display:flex; justify-content:space-between; align-items:center;">
                                 <span style="font-weight: 600;">模型配置</span>
                                 <el-button size="mini" icon="el-icon-plus" @click="addModelConfig">新增模型</el-button>
@@ -2277,8 +2278,9 @@
 
                                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap:14px;">
                                     <div v-for="(model, index) in modelSettings.models" :key="model.id || index"
-                                         style="border:1px solid #EBEEF5; border-radius:8px; padding:16px; background:#ffffff;">
-                                        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid #EBEEF5;">
+                                         :class="'model-config-card model-config-card-' + (model.model_type || 'requirement')"
+                                         style="border-radius:8px; padding:16px;">
+                                        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--ac-border);">
                                             <div style="display:flex; align-items:center; gap:10px; min-width:0;">
                                                 <el-tag size="small" :type="model.model_type === 'split' ? 'danger' : (model.model_type === 'vision' ? 'success' : 'info')" effect="plain">
                                                     {%raw%}{{ getModelTypeLabel(model.model_type) }}{%endraw%}
@@ -2290,7 +2292,7 @@
                                             <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
                                                 <el-switch v-model="model.enabled"></el-switch>
                                                 <el-button size="mini" icon="el-icon-connection" @click="testModelConfig(model)" :loading="model.testing">测试</el-button>
-                                                <el-button size="mini" type="text" style="color:#F56C6C;" @click="removeModelConfig(index)">删除</el-button>
+                                                <el-button size="mini" type="text" style="color:var(--ac-danger);" @click="removeModelConfig(index)">删除</el-button>
                                             </div>
                                         </div>
 
@@ -2325,7 +2327,7 @@
 
                                         <div style="margin-top:14px; padding-top:14px; border-top:1px dashed #D0D5DD;">
                                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                                                <div style="font-size:13px; color:#344054; font-weight:600;">计费参考（可选）</div>
+                                                <div style="font-size:13px; color:var(--ac-text-secondary); font-weight:600;">计费参考（可选）</div>
                                                 <el-tag size="mini" effect="plain">每百万 Token</el-tag>
                                             </div>
                                             <div style="display:grid; grid-template-columns: 1fr 1fr 1fr 96px; gap:10px; margin-bottom:10px;">
@@ -2388,10 +2390,10 @@
                     <!-- 新建任务页面 - 选择上传方式 -->
                     <div v-if="activeTab === 'newTask'" class="new-task-page">
                         <div class="page-header" style="margin-bottom: 22px;">
-                            <h2 style="font-size: 24px; color: #101828; margin: 0 0 8px 0; font-weight: 700;">
+                            <h2 style="font-size: 24px; color: var(--ac-text); margin: 0 0 8px 0; font-weight: 700;">
                                 创建测试用例生成任务
                             </h2>
-                            <p style="color: #667085; font-size: 14px; margin: 0;">导入产品规格、PRD 或 UI 截图，生成结构化可执行测试用例。</p>
+                            <p style="color: var(--ac-text-secondary); font-size: 14px; margin: 0;">导入产品规格、PRD 或 UI 截图，生成结构化可执行测试用例。</p>
                         </div>
 
                         <!-- 左右分栏：每边一种上传类型 + 详细说明 -->
@@ -2402,16 +2404,16 @@
                                     <!-- 图片需求卡片 - 主功能卡片 -->
                                     <el-card shadow="never" :body-style="{ padding: '24px' }"
                                         class="task-type-card image-card"
-                                        style="margin-bottom: 12px; border: 1px solid #b7eadf; background: #ffffff; border-radius: 8px; transition: all 0.2s ease;">
+                                        style="margin-bottom: 12px; border: 1px solid #b7eadf; background: var(--ac-bg-elevated); border-radius: 8px; transition: all 0.2s ease;">
                                         <div style="display:flex; align-items:flex-start; gap:16px; margin-bottom: 18px;">
-                                        <div class="method-icon" style="width: 48px; height: 48px; border-radius: 8px; background:#e8fbf6; display:flex; align-items:center; justify-content:center; font-size: 24px; flex-shrink:0;">
-                                            <i class="el-icon-picture-outline" style="color: #00D4AA;"></i>
+                                        <div class="method-icon" style="width: 48px; height: 48px; border-radius: 8px; background:var(--ac-primary-soft); display:flex; align-items:center; justify-content:center; font-size: 24px; flex-shrink:0;">
+                                            <i class="el-icon-picture-outline" style="color: var(--ac-primary-light);"></i>
                                         </div>
                                         <div style="min-width:0;">
-                                            <h3 style="font-size: 20px; font-weight: 700; color: #101828; margin: 0 0 8px;">
+                                            <h3 style="font-size: 20px; font-weight: 700; color: var(--ac-text); margin: 0 0 8px;">
                                                 图片/原型需求
                                             </h3>
-                                            <p style="color: #667085; font-size: 14px; line-height: 1.6; margin: 0;">
+                                            <p style="color: var(--ac-text-secondary); font-size: 14px; line-height: 1.6; margin: 0;">
                                                 上传原型图、设计稿或带标注截图，适合图文结合、UI 流程类需求。
                                             </p>
                                         </div>
@@ -2423,7 +2425,7 @@
                                         </div>
                                         <el-button type="success" icon="el-icon-plus" size="large"
                                             @click="activeTab = 'createImageRequirement'"
-                                            style="width: 100%; margin-bottom: 8px; font-size: 15px; padding: 12px 18px; border-radius: 6px; background: #00B894; border: none; box-shadow: none; font-weight: 600;">
+                                            style="width: 100%; margin-bottom: 8px; font-size: 15px; padding: 12px 18px; border-radius: 6px; background: var(--ac-primary); border: none; box-shadow: none; font-weight: 600;">
                                             新建图片需求
                                         </el-button>
                                         <el-button type="text"
@@ -2434,12 +2436,12 @@
                                     </el-card>
 
                                     <!-- 图片需求说明 - 紧凑版 -->
-                                    <el-card shadow="never" :body-style="{ padding: '14px 16px' }" style="border: 1px solid #e5e7eb; background: #ffffff; border-radius: 8px;">
+                                    <el-card shadow="never" :body-style="{ padding: '14px 16px' }" style="border: 1px solid var(--ac-border); background: var(--ac-bg-elevated); border-radius: 8px;">
                                         <div style="line-height: 1.6; font-size: 13px;">
-                                            <p style="margin: 0 0 8px; color: #008f73; font-size: 14px; font-weight: 600;">
+                                            <p style="margin: 0 0 8px; color: var(--ac-primary-hover); font-size: 14px; font-weight: 600;">
                                                 <i class="el-icon-picture-outline"></i> 适用：图片/原型类需求
                                             </p>
-                                            <ul style="margin: 0; padding-left: 18px; color: #606266; font-size: 13px;">
+                                            <ul style="margin: 0; padding-left: 18px; color: var(--ac-text-secondary); font-size: 13px;">
                                                 <li>墨刀、Axure、Figma 截图</li>
                                                 <li>UI 设计稿、带标注截图</li>
                                                 <li>每个模块建议最多 5 张图</li>
@@ -2455,16 +2457,16 @@
                                     <!-- 文本PRD卡片 - 主功能卡片 -->
                                     <el-card shadow="never" :body-style="{ padding: '24px' }"
                                         class="task-type-card text-card"
-                                        style="margin-bottom: 12px; border: 1px solid #c7d7fe; background: #ffffff; border-radius: 8px; transition: all 0.2s ease;">
+                                        style="margin-bottom: 12px; border: 1px solid #c7d7fe; background: var(--ac-bg-elevated); border-radius: 8px; transition: all 0.2s ease;">
                                         <div style="display:flex; align-items:flex-start; gap:16px; margin-bottom: 18px;">
                                         <div class="method-icon" style="width: 48px; height: 48px; border-radius: 8px; background:#eef4ff; display:flex; align-items:center; justify-content:center; font-size: 24px; flex-shrink:0;">
                                             <i class="el-icon-document" style="color: #55D4C8;"></i>
                                         </div>
                                         <div style="min-width:0;">
-                                            <h3 style="font-size: 20px; font-weight: 700; color: #101828; margin: 0 0 8px;">
+                                            <h3 style="font-size: 20px; font-weight: 700; color: var(--ac-text); margin: 0 0 8px;">
                                                 文本需求
                                             </h3>
-                                            <p style="color: #667085; font-size: 14px; line-height: 1.6; margin: 0;">
+                                            <p style="color: var(--ac-text-secondary); font-size: 14px; line-height: 1.6; margin: 0;">
                                                 上传或粘贴纯文本需求文档，适合规则、流程、接口和功能说明。
                                             </p>
                                         </div>
@@ -2476,7 +2478,7 @@
                                         </div>
                                         <el-button type="success" icon="el-icon-plus" size="large"
                                             @click="activeTab = 'createTextPRD'"
-                                            style="width: 100%; margin-bottom: 8px; font-size: 15px; padding: 12px 18px; border-radius: 6px; background: #2DB8A8; border: none; box-shadow: none; font-weight: 600;">
+                                            style="width: 100%; margin-bottom: 8px; font-size: 15px; padding: 12px 18px; border-radius: 6px; background: var(--ac-primary-hover); border: none; box-shadow: none; font-weight: 600;">
                                             新建文本需求
                                         </el-button>
                                         <el-button type="text"
@@ -2487,12 +2489,12 @@
                                     </el-card>
 
                                     <!-- 文本PRD说明 - 紧凑版 -->
-                                    <el-card shadow="never" :body-style="{ padding: '14px 16px' }" style="border: 1px solid #e5e7eb; background: #ffffff; border-radius: 8px;">
+                                    <el-card shadow="never" :body-style="{ padding: '14px 16px' }" style="border: 1px solid var(--ac-border); background: var(--ac-bg-elevated); border-radius: 8px;">
                                         <div style="line-height: 1.6; font-size: 13px;">
                                             <p style="margin: 0 0 8px; color: #409EFF; font-size: 14px; font-weight: 600;">
                                                 <i class="el-icon-document"></i> 适用：文本规格/PRD
                                             </p>
-                                            <ul style="margin: 0; padding-left: 18px; color: #606266; font-size: 13px;">
+                                            <ul style="margin: 0; padding-left: 18px; color: var(--ac-text-secondary); font-size: 13px;">
                                                 <li>Markdown、TXT 或复制文本</li>
                                                 <li>业务规则、状态流转、异常处理</li>
                                                 <li>接口说明、功能优化说明</li>
@@ -2507,7 +2509,7 @@
                         <div style="margin-top: 18px;">
                             <el-alert type="info" :closable="false" style="padding: 10px 12px; border-radius: 8px;">
                                 <div style="display: flex; gap: 15px; align-items: center; justify-content: center; flex-wrap: wrap; font-size: 13px;">
-                                    <span style="color: #00D4AA; font-weight: 600;">
+                                    <span style="color: var(--ac-primary-light); font-weight: 600;">
                                         <i class="el-icon-picture"></i> 有图→图片模式
                                     </span>
                                     <span style="color: #909399;">|</span>
@@ -2548,7 +2550,7 @@
                                 <!-- 横向布局：标题在左，返回按钮在右 -->
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
                                     <div style="display: flex; align-items: center; gap: 10px;">
-                                        <h3 style="margin: 0; font-size: 24px; font-weight: 600; color: #00D4AA;">{%raw%}{{ selectedTask.name }}{%endraw%}</h3>
+                                        <h3 style="margin: 0; font-size: 24px; font-weight: 600; color: var(--ac-primary-light);">{%raw%}{{ selectedTask.name }}{%endraw%}</h3>
                                         <el-tag :type="getStatusType(selectedTask.status)" size="small" effect="light">{%raw%}{{ getStatusText(selectedTask.status) }}{%endraw%}</el-tag>
                                     </div>
                                     <el-button type="text" icon="el-icon-arrow-left" @click="goToTaskList" style="color: #409EFF; font-size: 14px;">← 返回列表</el-button>
@@ -2557,7 +2559,7 @@
 
                         <div class="content-section">
                             <!-- Cute Timeline：四阶段流程（可点击切换Tab） -->
-                            <timeline v-if="showCuteTimeline" timeline-theme="#00D4AA" timeline-bg="#00B894" style="margin-bottom: 12px;">
+                            <timeline v-if="showCuteTimeline" timeline-theme="var(--ac-primary-light)" timeline-bg="var(--ac-primary)" style="margin-bottom: 12px;">
                                 <timeline-item :icon-size="'large'" @click.native="taskDetailTab='prdPreview'">
                                     <template slot="others">📄</template>
                                     <span style="cursor:pointer; font-weight:600;">需求原文</span>
@@ -2720,7 +2722,7 @@
                                     <div v-if="confirmationItems.length > 0 && !confirmationSubmitted">
                                         <div class="confirmation-highlight">
                                             <div class="confirmation-title">请回答以下问题</div>
-                                            <p style="margin-bottom: 20px; color: #666;">
+                                            <p style="margin-bottom: 20px; color: var(--ac-text-secondary);">
                                                 您的回答将直接影响最终测试用例的质量和覆盖度，请仔细阅读并提供详细回答。
                                             </p>
                                             <!-- 顶部快速提交按钮 -->
@@ -2729,7 +2731,7 @@
                                                     填写完所有问题后，点击下方按钮提交
                                                 </div>
                                                 <el-button type="primary" @click.prevent.stop="submitConfirmation" size="medium"
-                                                    style="background: linear-gradient(45deg, #43e97b, #38f9d7); border: none; padding: 12px 30px;"
+                                                    style="background: var(--ac-gradient-success); border: none; padding: 12px 30px;"
                                                     :autofocus="false">
                                                     🚀 提交确认回答
                                                 </el-button>
@@ -2739,21 +2741,21 @@
                                         <el-form ref="confirmForm" :model="confirmationResponses" label-width="0">
                                             <div v-for="(item, index) in confirmationItems" :key="index" class="confirmation-item">
                                                 <el-card shadow="never" style="margin-bottom: 15px; border-radius: 8px; border: 1px solid #e8e8e8;">
-                                                    <div slot="header" style="background: linear-gradient(45deg, #00D4AA, #00B894); color: white; margin: -20px; padding: 10px 15px; border-radius: 8px 8px 0 0;">
+                                                    <div slot="header" style="background: linear-gradient(45deg, var(--ac-primary-light), var(--ac-primary)); color: white; margin: -20px; padding: 10px 15px; border-radius: 8px 8px 0 0;">
                                                         <span style="font-weight: bold; font-size: 14px;">❓ 问题 {%raw%}{{ index + 1 }}{%endraw%}</span>
                                                         <span v-if="item.type" style="margin-left: 10px; font-size: 11px; opacity: 0.8;">({%raw%}{{ item.type }}{%endraw%})</span>
                                                     </div>
                                                     <div style="padding: 15px 0;">
                                                         <!-- 问题详情（更紧凑的布局） -->
-                                                        <div v-if="item.question_details" style="margin-bottom: 12px; padding: 10px; background: #f8f9fa; border-radius: 6px; border-left: 3px solid #00D4AA;">
-                                                            <div style="color: #666; font-size: 13px; line-height: 1.5;">
+                                                        <div v-if="item.question_details" style="margin-bottom: 12px; padding: 10px; background: #f8f9fa; border-radius: 6px; border-left: 3px solid var(--ac-primary-light);">
+                                                            <div style="color: var(--ac-text-secondary); font-size: 13px; line-height: 1.5;">
                                                                 <div v-html="renderMarkdown(item.question_details)"></div>
                                                             </div>
                                                         </div>
 
                                                         <!-- 答案输入框（更紧凑） -->
                                                         <div style="margin-top: 12px;">
-                                                            <label style="display: block; margin-bottom: 6px; font-weight: bold; color: #303133; font-size: 13px;">
+                                                            <label style="display: block; margin-bottom: 6px; font-weight: bold; color: var(--ac-text); font-size: 13px;">
                                                                 您的回答 <span style="color: #f56c6c;">*</span>
                                                             </label>
                                                             <el-input type="textarea" :rows="3"
@@ -2770,7 +2772,7 @@
                                             <!-- 底部提交按钮区域（粘性定位） -->
                                             <div class="sticky-submit-area" style="position: sticky; bottom: 0; z-index: 100; background: white; padding: 20px; margin-top: 30px; border-top: 2px solid #e6f7ff; box-shadow: 0 -2px 8px rgba(0,0,0,0.1); text-align: center;">
                                                 <el-button type="primary" @click.prevent.stop="submitConfirmation" size="large"
-                                                    style="background: linear-gradient(45deg, #43e97b, #38f9d7); border: none; padding: 15px 40px;"
+                                                    style="background: var(--ac-gradient-success); border: none; padding: 15px 40px;"
                                                     :autofocus="false">
                                                     🚀 提交确认回答
                                                 </el-button>
@@ -2790,26 +2792,26 @@
                                             </div>
 
                                             <div style="margin-bottom: 20px;">
-                                                <h3 style="color: #303133; margin-bottom: 15px;">📋 您的确认回答</h3>
+                                                <h3 style="color: var(--ac-text); margin-bottom: 15px;">📋 您的确认回答</h3>
                                             </div>
 
                                             <div v-for="(result, index) in submittedConfirmationResults" :key="index" class="submitted-result-item">
-                                                <el-card shadow="never" style="margin-bottom: 20px; border-radius: 8px; border: 1px solid #e4e7ed;">
+                                                <el-card shadow="never" style="margin-bottom: 20px; border-radius: 8px; border: 1px solid var(--ac-border);">
                                                     <div style="border-bottom: 1px solid #f0f0f0; padding-bottom: 15px; margin-bottom: 15px;">
-                                                        <h4 style="color: #303133; margin: 0; font-size: 16px; line-height: 1.5;">
-                                                            <span style="color: #00B894; font-weight: bold;">❓ 问题 {%raw%}{{ index + 1 }}{%endraw%}:</span>
+                                                        <h4 style="color: var(--ac-text); margin: 0; font-size: 16px; line-height: 1.5;">
+                                                            <span style="color: var(--ac-primary); font-weight: bold;">❓ 问题 {%raw%}{{ index + 1 }}{%endraw%}:</span>
                                                             <span style="margin-left: 8px;">{%raw%}{{ result.question }}{%endraw%}</span>
                                                         </h4>
                                                     </div>
 
                                                     <div v-if="result.description" style="margin-bottom: 15px; padding: 12px; background: #f8f9fa; border-radius: 6px;">
                                                         <div style="font-size: 12px; color: #909399; margin-bottom: 5px;">问题描述:</div>
-                                                        <div style="color: #666; font-size: 14px; line-height: 1.6;" v-html="renderMarkdown(result.description)"></div>
+                                                        <div style="color: var(--ac-text-secondary); font-size: 14px; line-height: 1.6;" v-html="renderMarkdown(result.description)"></div>
                                                     </div>
 
                                                     <div v-if="result.reference_examples && result.reference_examples.length > 0" style="margin-bottom: 15px; padding: 12px; background: #f6ffed; border-radius: 6px;">
                                                         <div style="font-size: 12px; color: #52c41a; margin-bottom: 8px; font-weight: bold;">参考示例:</div>
-                                                        <ul style="margin: 0; padding-left: 18px; color: #666; font-size: 14px;">
+                                                        <ul style="margin: 0; padding-left: 18px; color: var(--ac-text-secondary); font-size: 14px;">
                                                             <li v-for="example in result.reference_examples" :key="example" style="margin-bottom: 5px;">
                                                                 {%raw%}{{ example }}{%endraw%}
                                                             </li>
@@ -2818,16 +2820,16 @@
 
                                                     <div v-if="result.confirm_points && result.confirm_points.length > 0" style="margin-bottom: 15px; padding: 12px; background: #fff7e6; border-radius: 6px;">
                                                         <div style="font-size: 12px; color: #fa8c16; margin-bottom: 8px; font-weight: bold;">确认要点:</div>
-                                                        <ul style="margin: 0; padding-left: 18px; color: #666; font-size: 14px;">
+                                                        <ul style="margin: 0; padding-left: 18px; color: var(--ac-text-secondary); font-size: 14px;">
                                                             <li v-for="point in result.confirm_points" :key="point" style="margin-bottom: 5px;">
                                                                 {%raw%}{{ point }}{%endraw%}
                                                             </li>
                                                         </ul>
                                                     </div>
 
-                                                    <div style="padding: 15px; background: #f0fffe; border-radius: 6px; border-left: 4px solid #00D4AA;">
-                                                        <div style="font-size: 12px; color: #00D4AA; margin-bottom: 8px; font-weight: bold;">✅ 您的回答:</div>
-                                                        <div style="color: #303133; font-size: 14px; line-height: 1.6; white-space: pre-wrap;">
+                                                    <div style="padding: 15px; background: #f0fffe; border-radius: 6px; border-left: 4px solid var(--ac-primary-light);">
+                                                        <div style="font-size: 12px; color: var(--ac-primary-light); margin-bottom: 8px; font-weight: bold;">✅ 您的回答:</div>
+                                                        <div style="color: var(--ac-text); font-size: 14px; line-height: 1.6; white-space: pre-wrap;">
                                                             {%raw%}{{ result.answer }}{%endraw%}
                                                         </div>
                                                     </div>
@@ -2835,7 +2837,7 @@
                                             </div>
 
                                             <div style="text-align: center; margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
-                                                <div style="color: #666; font-size: 14px; margin-bottom: 10px;">
+                                                <div style="color: var(--ac-text-secondary); font-size: 14px; margin-bottom: 10px;">
                                                     🤖 AI正在基于您的确认结果完善PRD文档并生成测试用例
                                                 </div>
                                                 <el-button type="primary" @click="taskDetailTab = 'testcaseGeneration'" size="small">
@@ -2863,8 +2865,8 @@
                                         <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08);">
                                             <div style="margin-bottom: 24px;">
                                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                                                    <h4 style="margin: 0; color: #303133;">当前进度</h4>
-                                                    <span style="font-size: 14px; color: #00B894; font-weight: 600;">
+                                                    <h4 style="margin: 0; color: var(--ac-text);">当前进度</h4>
+                                                    <span style="font-size: 14px; color: var(--ac-primary); font-weight: 600;">
                                                         {%raw%}{{ getSelectedTaskProgress() }}{%endraw%}%
                                                     </span>
                                                 </div>
@@ -2872,21 +2874,21 @@
                                                     :percentage="getSelectedTaskProgress()"
                                                     :stroke-width="16"
                                                     :show-text="false"
-                                                    color="#00B894">
+                                                    color="var(--ac-primary)">
                                                 </el-progress>
                                             </div>
-                                            <div style="padding: 18px 20px; background: #f8fdfc; border-radius: 10px; border-left: 4px solid #00B894; margin-bottom: 18px;">
-                                                <div style="font-size: 16px; font-weight: 600; color: #303133; margin-bottom: 8px;">
+                                            <div style="padding: 18px 20px; background: #f8fdfc; border-radius: 10px; border-left: 4px solid var(--ac-primary); margin-bottom: 18px;">
+                                                <div style="font-size: 16px; font-weight: 600; color: var(--ac-text); margin-bottom: 8px;">
                                                     {%raw%}{{ getGenerationStatusText() }}{%endraw%}
                                                 </div>
-                                                <div style="font-size: 14px; line-height: 1.7; color: #606266;">
+                                                <div style="font-size: 14px; line-height: 1.7; color: var(--ac-text-secondary);">
                                                     {%raw%}{{ getGenerationStatusHint() }}{%endraw%}
                                                 </div>
                                             </div>
-                                            <div v-if="taskResults && taskResults.length > 0" style="padding: 16px 20px; background: #f0fffe; border-radius: 10px; border: 1px solid rgba(0, 212, 170, 0.2);">
-                                                <div style="font-size: 14px; color: #606266;">
+                                            <div v-if="taskResults && taskResults.length > 0" style="padding: 16px 20px; background: #f0fffe; border-radius: 10px; border: 1px solid rgba(79, 70, 229, 0.2);">
+                                                <div style="font-size: 14px; color: var(--ac-text-secondary);">
                                                     当前已整理测试用例
-                                                    <span style="font-weight: 700; color: #00B894;">
+                                                    <span style="font-weight: 700; color: var(--ac-primary);">
                                                         {%raw%}{{ taskResults.length }}{%endraw%}
                                                     </span>
                                                     条
@@ -2925,7 +2927,7 @@
                                                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
                                                     <h4 style="margin: 0;">📋 测试用例预览</h4>
                                                     <span v-if="taskResults && taskResults.length > 0"
-                                                          style="background: linear-gradient(45deg, #00D4AA, #00B894); color: white; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: bold;">
+                                                          style="background: linear-gradient(45deg, var(--ac-primary-light), var(--ac-primary)); color: white; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: bold;">
                                                         共 {%raw%}{{ taskResults.length }}{%endraw%} 条用例
                                                     </span>
                                                 </div>
@@ -2934,7 +2936,7 @@
                                                 </div>
                                                 <el-collapse v-if="selectedTask && selectedTask.test_analysis" style="margin-top: 20px;">
                                                     <el-collapse-item title="生成摘要" name="generation-summary">
-                                                        <div class="markdown-content" style="background: #fff; padding: 8px 0;">
+                                                        <div class="markdown-content" style="background: var(--ac-bg-elevated); padding: 8px 0;">
                                                             <div v-html="renderMarkdown(selectedTask.test_analysis)"></div>
                                                         </div>
                                                     </el-collapse-item>
@@ -2969,7 +2971,7 @@
                             <div class="chat-title-enhanced">🤖 生成过程调试</div>
                             <div class="chat-subtitle-enhanced">查看各阶段模型输入、输出和处理过程</div>
                             <div>
-                                <el-button size="mini" @click="toggleCollabFullScreen" type="text" style="color:#fff;">{%raw%}{{ collabFullScreen ? '退出全屏' : '全屏' }}{%endraw%}</el-button>
+                                <el-button size="mini" @click="toggleCollabFullScreen" type="text" style="color:var(--ac-bg-elevated);">{%raw%}{{ collabFullScreen ? '退出全屏' : '全屏' }}{%endraw%}</el-button>
                             </div>
                         </div>
 
@@ -3036,13 +3038,13 @@
                         <!-- 协作状态指示 -->
                         <div class="collaboration-status-enhanced">
                             <div class="status-title">🎯 处理进展: {%raw%}{{ agentMessages.length }}{%endraw%} 条记录</div>
-                            <div class="status-subtitle">Spec2Case 正在整理需求并生成测试用例</div>
+                            <div class="status-subtitle">AIcase 正在整理需求并生成测试用例</div>
                         </div>
                     </div>
 
                     <div v-else class="no-messages" style="text-align: center; padding: 60px 40px; color: #999;">
                         <i class="el-icon-chat-dot-round" style="font-size: 64px; margin-bottom: 20px; color: #ddd;"></i>
-                        <h3 style="color: #666; margin-bottom: 15px; font-size: 18px;">暂无生成过程记录</h3>
+                        <h3 style="color: var(--ac-text-secondary); margin-bottom: 15px; font-size: 18px;">暂无生成过程记录</h3>
                         <p style="font-size: 14px; line-height: 1.6; margin-bottom: 0;">
                             任务开始后，这里会展示关键阶段的模型输入和输出<br>
                             便于排查 PRD 整理、需求拆分和用例生成问题

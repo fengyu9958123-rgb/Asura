@@ -39,7 +39,7 @@
 .stat-label {
     margin: 0;
     font-size: 14px;
-    color: #909399;
+    color: var(--ac-text-muted);
     margin-bottom: 5px;
 }
 
@@ -47,7 +47,7 @@
     margin: 0;
     font-size: 28px;
     font-weight: 600;
-    color: #303133;
+    color: var(--ac-text);
 }
 
 /* ========== 快速入口卡片 ========== */
@@ -62,7 +62,7 @@
 }
 
 .action-card:hover {
-    border-color: #00D4AA;
+    border-color: var(--ac-primary-light);
     box-shadow: 0 4px 12px rgba(0, 212, 170, 0.2);
     transform: translateY(-3px);
 }
@@ -87,13 +87,13 @@
     margin: 0 0 5px 0;
     font-size: 18px;
     font-weight: 600;
-    color: #303133;
+    color: var(--ac-text);
 }
 
 .action-info p {
     margin: 0;
     font-size: 14px;
-    color: #909399;
+    color: var(--ac-text-muted);
 }
 
 .action-content > .el-icon-arrow-right {
@@ -127,7 +127,7 @@
 .task-item:hover {
     background: #F0F9FF;
     border-color: #409EFF;
-    box-shadow: 0 2px 8px rgba(64, 158, 255, 0.1);
+    box-shadow: 0 2px 8px var(--ac-primary-ring);
 }
 
 .task-info {
@@ -144,7 +144,7 @@
 .task-name {
     font-size: 15px;
     font-weight: 500;
-    color: #303133;
+    color: var(--ac-text);
 }
 
 .task-meta {
@@ -155,7 +155,7 @@
 
 .task-time {
     font-size: 13px;
-    color: #909399;
+    color: var(--ac-text-muted);
 }
 
 .task-item > .el-icon-arrow-right {

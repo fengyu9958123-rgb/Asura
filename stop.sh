@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Spec2Case 应用停止脚本
+# AIcase 应用停止脚本
 # 用于优雅关闭正在运行的应用程序
 
-echo "🛑 正在停止 Spec2Case..."
+echo "🛑 正在停止 AIcase..."
 
 # 查找并停止 Python 应用进程
 echo "📋 查找正在运行的应用进程..."
@@ -65,7 +65,7 @@ echo "🔍 最终检查..."
 FINAL_CHECK=$(ps aux | grep -E "(python.*app\.py|start\.sh)" | grep -v grep)
 
 if [ -z "$FINAL_CHECK" ]; then
-    echo "✅ Spec2Case 已成功停止"
+    echo "✅ AIcase 已成功停止"
     echo "🎯 所有相关进程已清理完毕"
 else
     echo "⚠️  仍有以下进程在运行:"

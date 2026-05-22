@@ -1,53 +1,4 @@
-/* 全局CSS变量定义 */
-:root {
-    /* 主色调 - 统一绿色主题 */
-    --primary-color: #00D4AA;
-    --primary-light: #00E5BC;
-    --primary-dark: #00B894;
-    
-    /* 渐变色彩 - 统一绿色主题 */
-    --gradient-primary: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
-    --gradient-secondary: linear-gradient(135deg, #00B894 0%, #00D4AA 100%);
-    --gradient-success: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
-    --gradient-info: linear-gradient(135deg, #00B894 0%, #00E5BC 100%);
-    
-    /* 文本颜色 */
-    --text-primary: #303133;
-    --text-secondary: #606266;
-    --text-light: #909399;
-    --text-white: #ffffff;
-    
-    /* 背景色 */
-    --bg-primary: #ffffff;
-    --bg-secondary: #f8fafc;
-    --bg-light: #f5f7fa;
-    --bg-gradient: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
-    
-    /* 边框和阴影 */
-    --border-light: #e4e7ed;
-    --border-medium: #dcdfe6;
-    --shadow-light: 0 2px 12px rgba(0, 0, 0, 0.1);
-    --shadow-medium: 0 8px 24px rgba(0, 0, 0, 0.06);
-    --shadow-heavy: 0 12px 32px rgba(0, 0, 0, 0.09);
-    
-    /* 圆角 */
-    --radius-small: 6px;
-    --radius-medium: 12px;
-    --radius-large: 16px;
-    --radius-xl: 20px;
-    
-    /* 间距 */
-    --spacing-xs: 4px;
-    --spacing-sm: 8px;
-    --spacing-md: 16px;
-    --spacing-lg: 24px;
-    --spacing-xl: 32px;
-    
-    /* 过渡动画 */
-    --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-normal: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* 设计令牌见 static/aicase-theme.css */
 
 /* 全局重置和基础样式 */
 * {
@@ -138,7 +89,7 @@ html, body, #app {
 
 .main-tabs .el-tabs__item:hover {
     color: var(--primary-color);
-    background: rgba(64, 158, 255, 0.05);
+    background: var(--ac-primary-soft);
 }
 
 .main-tabs .el-tabs__item.is-active {
@@ -161,7 +112,7 @@ html, body, #app {
 
 /* "敬请期待"标签样式 - 增强可见性 */
 .main-tabs .el-tabs__item .coming-soon {
-    background: linear-gradient(135deg, #ff4757 0%, #ff6b8a 100%);
+    background: var(--ac-gradient-danger);
     color: white;
     font-size: 10px;
     padding: 4px 8px;
@@ -265,13 +216,13 @@ html, body, #app {
         .sidebar-nav .el-menu-item:hover {
             color: white;
             transform: translateX(6px);
-            box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3);
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
         }
 
         .sidebar-nav .el-menu-item.is-active {
             background: var(--gradient-primary);
             color: white;
-            box-shadow: 0 6px 20px rgba(0, 212, 170, 0.4);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
             transform: translateX(3px);
         }
 
@@ -722,7 +673,7 @@ html, body, #app {
 /* 禁用按钮的focus效果和其他可能导致滚动的效果 */
 .el-button:focus {
     outline: none !important;
-    box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2) !important;
+    box-shadow: 0 0 0 2px var(--ac-primary-ring) !important;
     transform: none !important;
 }
 
@@ -820,7 +771,7 @@ body {
 /* 确认项卡片头部优化 */
 .confirmation-item .el-card__header {
     padding: 8px 15px !important;
-    background: linear-gradient(45deg, #00D4AA, #00B894) !important;
+    background: linear-gradient(45deg, var(--ac-primary-light), var(--ac-primary)) !important;
     color: white !important;
     border-radius: 8px 8px 0 0 !important;
 }
@@ -864,19 +815,19 @@ body {
     border-radius: 0 !important;
     box-shadow: none !important;
     background:
-        linear-gradient(180deg, #f7fbfb 0%, #eef4f7 46%, #f6f8fb 100%) !important;
+        linear-gradient(180deg, #f7fbfb 0%, #eef4f7 46%, var(--ac-bg-subtle) 100%) !important;
 }
 
 .main-container > .el-header {
     height: 64px !important;
     padding: 0 !important;
     background: #fbfefe !important;
-    border-bottom: 1px solid #e5e7eb !important;
+    border-bottom: 1px solid var(--ac-border) !important;
 }
 
 .header-content {
     background: #fbfefe !important;
-    color: #101828 !important;
+    color: var(--ac-text) !important;
     padding: 0 28px !important;
 }
 
@@ -896,26 +847,26 @@ body {
     width: 38px !important;
     height: 38px !important;
     border-radius: 8px !important;
-    background: #e8fbf6 !important;
-    color: #00B894 !important;
-    border: 1px solid #c8f3e8 !important;
+    background: var(--ac-primary-soft) !important;
+    color: var(--ac-primary) !important;
+    border: 1px solid var(--ac-primary-border) !important;
     box-shadow: none !important;
 }
 
 .logo-text {
-    color: #101828 !important;
+    color: var(--ac-text) !important;
     text-shadow: none !important;
     font-size: 20px !important;
 }
 
 .logo-subtitle {
-    color: #667085 !important;
+    color: var(--ac-text-secondary) !important;
     text-shadow: none !important;
 }
 
 .main-tabs-container {
     background: #fbfefe !important;
-    border-bottom: 1px solid #e5e7eb !important;
+    border-bottom: 1px solid var(--ac-border) !important;
     padding: 0 28px !important;
 }
 
@@ -931,7 +882,7 @@ body {
     height: 42px !important;
     line-height: 42px !important;
     background: transparent !important;
-    color: #667085 !important;
+    color: var(--ac-text-secondary) !important;
     box-shadow: none !important;
     border: none !important;
     transform: none !important;
@@ -939,7 +890,7 @@ body {
 
 .main-tabs .el-tabs__item.is-active,
 .main-tabs .el-tabs__item:hover {
-    color: #00B894 !important;
+    color: var(--ac-primary) !important;
     background: transparent !important;
 }
 
@@ -949,13 +900,13 @@ body {
 
 /* 侧边栏容器 */
 .sidebar-container {
-    background: linear-gradient(180deg, #ffffff 0%, #f7fbfa 100%) !important;
-    border-right: 1px solid #e4e7ed !important;
+    background: linear-gradient(180deg, var(--ac-bg-elevated) 0%, #f7fbfa 100%) !important;
+    border-right: 1px solid var(--ac-border) !important;
 }
 
 /* 菜单容器 */
 .sidebar-menu.el-menu {
-    background: #ffffff !important;
+    background: var(--ac-bg-elevated) !important;
     border: none !important;
     padding: 18px 28px !important;
 }
@@ -965,14 +916,14 @@ body {
     line-height: 44px !important;
     margin: 4px 0 !important;
     border-radius: 8px !important;
-    color: #475467 !important;
+    color: var(--ac-text-secondary) !important;
     background: transparent !important;
     font-weight: 600 !important;
 }
 
 .sidebar-menu .el-menu-item.is-active {
-    color: #008f73 !important;
-    background-color: #e8fbf6 !important;
+    color: var(--ac-primary-hover) !important;
+    background-color: var(--ac-primary-soft) !important;
     font-weight: 700 !important;
     box-shadow: none !important;
 }
@@ -980,14 +931,14 @@ body {
 /* Hover状态 */
 .sidebar-menu .el-menu-item:hover,
 .el-submenu__title:hover {
-    background-color: #f2f7f6 !important;
-    color: #00B894 !important;
+    background-color: var(--ac-primary-soft) !important;
+    color: var(--ac-primary) !important;
     transform: none !important;
 }
 
 /* 展开的子菜单标题 */
 .el-submenu.is-opened > .el-submenu__title {
-    color: #00D4AA !important;
+    color: var(--ac-primary-light) !important;
 }
 
 /* ==================== 新建任务页面样式 ==================== */
@@ -1004,28 +955,28 @@ body {
 .new-task-page .feature-tag {
     display: inline-flex !important;
     padding: 6px 10px !important;
-    background: #f2f4f7 !important;
-    color: #475467 !important;
+    background: var(--ac-bg-subtle) !important;
+    color: var(--ac-text-secondary) !important;
     border-radius: 999px !important;
     font-size: 12px !important;
-    border: 1px solid #eaecf0 !important;
+    border: 1px solid var(--ac-border) !important;
 }
 
 .model-settings-page .page-header,
 .new-task-page .page-header {
     padding: 18px 20px !important;
     border-radius: 10px !important;
-    background: linear-gradient(135deg, #ffffff 0%, #effaf8 100%) !important;
+    background: linear-gradient(135deg, var(--ac-bg-elevated) 0%, #effaf8 100%) !important;
     border: 1px solid #dff3ef !important;
 }
 
 .new-task-page .task-type-card.image-card {
-    background: linear-gradient(135deg, #ffffff 0%, #ecfdf7 100%) !important;
+    background: linear-gradient(135deg, var(--ac-bg-elevated) 0%, #ecfdf7 100%) !important;
     border-color: #ace9d8 !important;
 }
 
 .new-task-page .task-type-card.text-card {
-    background: linear-gradient(135deg, #ffffff 0%, #eef6ff 100%) !important;
+    background: linear-gradient(135deg, var(--ac-bg-elevated) 0%, #eef6ff 100%) !important;
     border-color: #bfd7ff !important;
 }
 
@@ -1053,37 +1004,46 @@ body {
     width: 4px !important;
 }
 
-.model-stage-guide-vision {
-    background: linear-gradient(135deg, #ffffff 0%, #effdf7 100%) !important;
-    border-color: #c9efe2 !important;
+.model-stage-guide-vision,
+.model-config-card-vision {
+    background: linear-gradient(135deg, var(--ac-bg-elevated) 0%, var(--ac-success-soft) 100%) !important;
+    border-color: #a7f3d0 !important;
 }
 
 .model-stage-guide-vision::before {
-    background: #12b886 !important;
+    background: var(--ac-success) !important;
 }
 
 .model-stage-guide-requirement,
-.model-stage-guide-testcase {
-    background: linear-gradient(135deg, #ffffff 0%, #f3f7ff 100%) !important;
-    border-color: #d5e2ff !important;
+.model-stage-guide-testcase,
+.model-config-card-requirement,
+.model-config-card-testcase {
+    background: linear-gradient(135deg, var(--ac-bg-elevated) 0%, var(--ac-primary-soft) 100%) !important;
+    border-color: var(--ac-primary-border) !important;
 }
 
 .model-stage-guide-requirement::before,
 .model-stage-guide-testcase::before {
-    background: #4c8dff !important;
+    background: var(--ac-primary) !important;
 }
 
-.model-stage-guide-split {
-    background: linear-gradient(135deg, #ffffff 0%, #fff4f4 100%) !important;
-    border-color: #ffd4d4 !important;
+.model-stage-guide-split,
+.model-config-card-split {
+    background: linear-gradient(135deg, var(--ac-bg-elevated) 0%, var(--ac-danger-soft) 100%) !important;
+    border-color: #fecaca !important;
 }
 
 .model-stage-guide-split::before {
-    background: #ff6b6b !important;
+    background: var(--ac-danger) !important;
+}
+
+.model-config-card {
+    border: 1px solid var(--ac-border);
 }
 
 .model-settings-page .el-card {
-    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%) !important;
+    background: var(--ac-bg-elevated) !important;
+    border-color: var(--ac-border) !important;
 }
 
 /* 响应式调整 */

@@ -1,0 +1,88 @@
+/**
+ * AIcase 设计令牌 — 全站配色单一来源
+ * 风格：专业、克制、偏 SaaS / QA 工具，靛蓝主色 + 石板灰中性色
+ */
+
+:root {
+    /* 品牌主色 */
+    --ac-primary: #4f46e5;
+    --ac-primary-hover: #4338ca;
+    --ac-primary-light: #6366f1;
+    --ac-primary-soft: #eef2ff;
+    --ac-primary-border: #c7d2fe;
+    --ac-primary-ring: rgba(79, 70, 229, 0.22);
+
+    /* 辅助色（AI / 信息） */
+    --ac-accent: #0ea5e9;
+    --ac-accent-soft: #e0f2fe;
+
+    /* 语义色 */
+    --ac-success: #059669;
+    --ac-success-soft: #ecfdf5;
+    --ac-warning: #d97706;
+    --ac-warning-soft: #fffbeb;
+    --ac-danger: #dc2626;
+    --ac-danger-soft: #fef2f2;
+    --ac-info: #0284c7;
+    --ac-info-soft: #f0f9ff;
+
+    /* 中性色 */
+    --ac-bg: #f1f5f9;
+    --ac-bg-elevated: #ffffff;
+    --ac-bg-subtle: #f8fafc;
+    --ac-bg-muted: #e2e8f0;
+    --ac-border: #e2e8f0;
+    --ac-border-strong: #cbd5e1;
+    --ac-text: #0f172a;
+    --ac-text-secondary: #64748b;
+    --ac-text-muted: #94a3b8;
+    --ac-text-inverse: #ffffff;
+
+    /* 渐变（仅用于主按钮、强调区域，避免彩虹色） */
+    --ac-gradient-primary: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    --ac-gradient-primary-hover: linear-gradient(135deg, #4338ca 0%, #4f46e5 100%);
+    --ac-gradient-hero: linear-gradient(160deg, #f8fafc 0%, #e2e8f0 100%);
+    --ac-gradient-success: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    --ac-gradient-warning: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+    --ac-gradient-info: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);
+    --ac-gradient-danger: linear-gradient(135deg, #dc2626 0%, #f87171 100%);
+
+    /* 阴影与圆角 */
+    --ac-radius-sm: 6px;
+    --ac-radius-md: 10px;
+    --ac-radius-lg: 14px;
+    --ac-radius-xl: 18px;
+    --ac-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+    --ac-shadow-md: 0 4px 14px rgba(15, 23, 42, 0.08);
+    --ac-shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.1);
+    --ac-transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* 兼容旧变量名（vue_client_improved.css 等） */
+    --primary-color: var(--ac-primary-light);
+    --primary-light: var(--ac-primary-light);
+    --primary-dark: var(--ac-primary);
+    --gradient-primary: var(--ac-gradient-primary);
+    --gradient-secondary: var(--ac-gradient-primary-hover);
+    --gradient-success: var(--ac-gradient-success);
+    --gradient-info: var(--ac-gradient-info);
+    --text-primary: var(--ac-text);
+    --text-secondary: var(--ac-text-secondary);
+    --text-light: var(--ac-text-muted);
+    --text-white: var(--ac-text-inverse);
+    --bg-primary: var(--ac-bg-elevated);
+    --bg-secondary: var(--ac-bg-subtle);
+    --bg-light: var(--ac-bg);
+    --bg-gradient: var(--ac-bg);
+    --border-light: var(--ac-border);
+    --border-medium: var(--ac-border-strong);
+    --shadow-light: var(--ac-shadow-sm);
+    --shadow-medium: var(--ac-shadow-md);
+    --shadow-heavy: var(--ac-shadow-lg);
+    --radius-small: var(--ac-radius-sm);
+    --radius-medium: var(--ac-radius-md);
+    --radius-large: var(--ac-radius-lg);
+    --radius-xl: var(--ac-radius-xl);
+    --transition-fast: var(--ac-transition);
+    --transition-normal: var(--ac-transition);
+    --transition-slow: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
