@@ -181,6 +181,7 @@ class ModelConfigService:
         self._normalize_pricing(config)
         config.pop("api_key_masked", None)
         config.pop("id", None)
+        config.pop("testing", None)
         return {
             key: value
             for key, value in config.items()

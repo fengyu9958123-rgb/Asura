@@ -222,6 +222,7 @@ def _clean_internal_fields(config_list):
         'output_price_per_million',
         'currency',
         'pricing_note',
+        'testing',  # 前端“测试连通性”按钮的 loading 状态，非 LLM 参数
     ]
     
     for cfg in config_list:

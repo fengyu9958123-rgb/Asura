@@ -31,15 +31,15 @@ def safe_get_task_status(status_value):
 
 class SQLiteTaskManager:
     """基于SQLite的任务管理器"""
+
+    # 进程内共享缓存：避免 Flask 与后台 LangGraph 使用不同实例时读到过期任务数据
+    _task_cache: Dict[str, Any] = {}
+    _cache_timeout = 300  # 5分钟缓存超时
     
     def __init__(self, logger=None):
         """初始化任务管理器"""
         # 初始化数据库
         db_manager.initialize()
-        
-        # 简单内存缓存
-        self._cache = {}
-        self._cache_timeout = 300  # 5分钟缓存超时
         
         # 设置日志记录器
         if logger is None:
@@ -791,25 +791,26 @@ class SQLiteTaskManager:
     
     def _get_from_cache(self, task_id):
         """从缓存获取任务"""
-        if task_id in self._cache:
-            cached_data, timestamp = self._cache[task_id]
+        cache = type(self)._task_cache
+        if task_id in cache:
+            cached_data, timestamp = cache[task_id]
             if (datetime.now() - timestamp).seconds < self._cache_timeout:
                 return cached_data
-            else:
-                del self._cache[task_id]
+            del cache[task_id]
         return None
     
     def _set_cache(self, task_id, task_data):
         """设置缓存"""
-        self._cache[task_id] = (task_data, datetime.now())
+        cache = type(self)._task_cache
+        cache[task_id] = (task_data, datetime.now())
         
         # 简单的缓存清理
-        if len(self._cache) > 100:
-            oldest_key = min(self._cache.keys(), 
-                           key=lambda k: self._cache[k][1])
-            del self._cache[oldest_key]
+        if len(cache) > 100:
+            oldest_key = min(cache.keys(), key=lambda k: cache[k][1])
+            del cache[oldest_key]
     
     def _clear_cache(self, task_id):
         """清除指定任务的缓存"""
-        if task_id in self._cache:
-            del self._cache[task_id]
+        cache = type(self)._task_cache
+        if task_id in cache:
+            del cache[task_id]
