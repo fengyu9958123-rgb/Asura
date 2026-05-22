@@ -9,15 +9,7 @@ Spec2Case 是面向 QA、测试开发、产品和研发团队的生产级 AI 测
 推荐使用 Docker Compose 和快速启动脚本部署。脚本支持 Ubuntu 20.04/22.04/24.04 等主流 Ubuntu 系统和 macOS。
 
 ```bash
-git clone https://github.com/blackhaiyu-sudo/spec2case.git
-cd spec2case
-bash scripts/quick-start.sh
-```
-
-国内网络也可以使用 Gitee 地址：
-
-```bash
-git clone https://gitee.com/blackhai/spec2case.git
+git clone https://github.com/fengyu9958123-rgb/Asura.git
 cd spec2case
 bash scripts/quick-start.sh
 ```
@@ -107,7 +99,7 @@ SHOW_AI_COLLABORATION=True
 步骤：
 
 ```bash
-git clone https://github.com/blackhaiyu-sudo/spec2case.git
+git clone https://github.com/fengyu9958123-rgb/Asura.git
 cd spec2case
 python3 -m venv .venv
 source .venv/bin/activate
