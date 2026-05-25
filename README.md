@@ -78,9 +78,14 @@ python3 -m venv .venv
 source .venv/bin/activate
 # 安装项目依赖 根据 requirements.txt 文件中列出的包名和版本，一次性安装项目所需的所有第三方库。
 pip install -r requirements.txt
+# 执行模型配置库
 cp config/OAI_CONFIG_LIST.example config/OAI_CONFIG_LIST
+# 初始化数据库
 python database/init_db.py init
+# 执行项目启动脚本
 ./start.sh
+# 访问地址浏览器打开
+http://localhost:5002
 ```
 
 ## 文档
