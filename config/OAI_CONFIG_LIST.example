@@ -35,5 +35,17 @@
         "output_price_per_million": 16.0,
         "currency": "CNY",
         "comment": "推荐用于图片、标注、箭头备注和文件名语义提取"
+    },
+    {
+        "name": "会话模型",
+        "model_type": "chat",
+        "model": "deepseek-v4-pro",
+        "api_key": "YOUR_API_KEY_HERE",
+        "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+        "input_price_per_million": 12.0,
+        "cached_input_price_per_million": 1.0,
+        "output_price_per_million": 24.0,
+        "currency": "CNY",
+        "comment": "推荐用于会话模块的多轮自由对话，可与用例生成模型分开选型"
     }
 ]

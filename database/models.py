@@ -139,6 +139,54 @@ class TaskMessage(Base):
         Index('idx_message_sender', 'sender'),
     )
 
+class ChatSession(Base):
+    """自由会话模块 - 会话列表"""
+    __tablename__ = 'chat_sessions'
+
+    id = Column(String(36), primary_key=True)
+    title = Column(String(255), nullable=False, default='新对话')
+    model_name = Column(String(255))
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    __table_args__ = (
+        Index('idx_chat_session_updated', 'updated_at'),
+    )
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'model_name': self.model_name,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+            'updated_at': self.updated_at.isoformat() if self.updated_at else None,
+        }
+
+
+class ChatMessage(Base):
+    """自由会话模块 - 消息记录"""
+    __tablename__ = 'chat_messages'
+
+    id = Column(String(36), primary_key=True)
+    session_id = Column(String(36), nullable=False)
+    role = Column(String(20), nullable=False)  # user, assistant, system
+    content = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        Index('idx_chat_message_session_time', 'session_id', 'created_at'),
+    )
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'session_id': self.session_id,
+            'role': self.role,
+            'content': self.content,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
+        }
+
+
 class RequirementModule(Base):
     """需求模块表 - 图片需求收集"""
     __tablename__ = 'requirement_modules'

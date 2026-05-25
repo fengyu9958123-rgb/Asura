@@ -206,12 +206,19 @@ new Vue({
             return [
                 { type: 'split', label: '需求拆分模型' },
                 { type: 'requirement', label: '需求/测试用例模型' },
-                { type: 'vision', label: '图片分析模型' }
+                { type: 'vision', label: '图片分析模型' },
+                { type: 'chat', label: '会话模型' }
             ];
         },
 
         modelStageGuides() {
             return [
+                {
+                    type: 'chat',
+                    label: '智能会话',
+                    level: '推荐 DeepSeek V4 Pro',
+                    description: '用于「会话」模块的多轮自由对话，可与用例生成模型分开选型以控制成本。'
+                },
                 {
                     type: 'vision',
                     label: '视觉分析',
@@ -303,7 +310,7 @@ new Vue({
         },
 
         addModelConfig() {
-            const preferredOrder = ['split', 'requirement', 'vision'];
+            const preferredOrder = ['split', 'requirement', 'vision', 'chat'];
             const existingTypes = new Set((this.modelSettings.models || []).map(item => item.model_type));
             const missingType = preferredOrder.find(type => !existingTypes.has(type));
             const type = this.modelTypeOptions.find(item => item.type === missingType)
@@ -335,6 +342,17 @@ new Vue({
         getModelTypeLabel(modelType) {
             const type = this.modelTypeOptions.find(item => item.type === modelType);
             return type ? type.label : (modelType || '未分类模型');
+        },
+
+        getModelTagType(modelType) {
+            const map = {
+                split: 'danger',
+                vision: 'success',
+                chat: 'warning',
+                requirement: 'info',
+                testcase: 'info'
+            };
+            return map[modelType] || 'info';
         },
 
         saveModelSettings() {

@@ -25,9 +25,13 @@ MODEL_TYPE_META = {
         "label": "图片分析模型",
         "description": "推荐 Doubao Seed 2.0 Pro，用于图片、标注、箭头备注和文件名语义提取。",
     },
+    "chat": {
+        "label": "会话模型",
+        "description": "推荐 DeepSeek V4 Pro 或同等级对话模型，用于「会话」模块的多轮自由对话。",
+    },
 }
 
-DEFAULT_MODEL_TYPES = ["split", "requirement", "vision"]
+DEFAULT_MODEL_TYPES = ["split", "requirement", "vision", "chat"]
 MODEL_TYPE_ALIASES = {
     "text": "requirement",
     "testcase": "requirement",
@@ -205,8 +209,8 @@ class ModelConfigService:
             config = dict(raw_config)
             config["model_type"] = model_type
             config["_source_index"] = index
-            if model_type == "requirement":
-                config["name"] = MODEL_TYPE_META["requirement"]["label"]
+            if model_type in ("requirement", "chat"):
+                config["name"] = MODEL_TYPE_META[model_type]["label"]
 
             existing = by_type.get(model_type)
             if not existing:

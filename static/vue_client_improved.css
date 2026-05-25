@@ -1037,6 +1037,16 @@ body {
     background: var(--ac-danger) !important;
 }
 
+.model-stage-guide-chat,
+.model-config-card-chat {
+    background: linear-gradient(135deg, var(--ac-bg-elevated) 0%, var(--ac-accent-soft) 100%) !important;
+    border-color: #7dd3fc !important;
+}
+
+.model-stage-guide-chat::before {
+    background: var(--ac-accent) !important;
+}
+
 .model-config-card {
     border: 1px solid var(--ac-border);
 }

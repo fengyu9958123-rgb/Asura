@@ -20,6 +20,7 @@ def get_models_by_type(config_list, model_type=None):
             - "testcase": 返回测试用例专用模型
             - "split": 返回需求拆分/PRD Knowledge 模型
             - "vision": 返回Vision模型（用于图片分析）
+            - "chat": 返回会话模块专用模型
     
     Returns:
         list: 筛选后的配置列表（已清理内部字段）
@@ -47,6 +48,8 @@ def get_models_by_type(config_list, model_type=None):
         filtered_configs = _get_split_models(config_list)
     elif model_type == "vision":
         filtered_configs = _get_vision_models(config_list)
+    elif model_type == "chat":
+        filtered_configs = _get_chat_models(config_list)
     else:
         logger.warning(f"未知的模型类型: {model_type}，返回所有配置")
         filtered_configs = config_list
@@ -177,6 +180,21 @@ def _get_testcase_models(config_list):
     return _get_requirement_models(config_list)
 
 
+def _get_chat_models(config_list):
+    """获取会话模块专用模型配置。"""
+    chat_config = []
+    for cfg in config_list:
+        if not _is_enabled(cfg):
+            continue
+        if cfg.get("model_type") == "chat":
+            chat_config.append(cfg)
+    if chat_config:
+        logger.info(f"✅ 使用会话模型: {chat_config[0].get('model')}")
+        return chat_config
+    logger.warning("⚠️  未找到会话模型配置（model_type: chat）")
+    return []
+
+
 def _get_split_models(config_list):
     """获取需求拆分/PRD Knowledge 专用模型配置。"""
     split_config = []
@@ -271,6 +289,8 @@ def get_selected_model_config(config_list, model_type=None):
         configs = _get_split_models(config_list)
     elif model_type == "vision":
         configs = _get_vision_models(config_list)
+    elif model_type == "chat":
+        configs = _get_chat_models(config_list)
     else:
         configs = [cfg for cfg in config_list if _is_enabled(cfg)]
     return dict(configs[0]) if configs else {}

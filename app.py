@@ -29,6 +29,7 @@ from routes.requirement_modules import register_requirement_module_routes
 from routes.tasks_unified import register_tasks_unified_routes
 from routes.image_pipeline import image_pipeline_bp
 from routes.settings import register_settings_routes
+from routes.chat_sessions import register_chat_session_routes
 from utils.response import success_response, error_response
 
 LOG_DIR = os.environ.get('LOG_DIR', 'logs')
@@ -111,6 +112,8 @@ def create_app(config_obj=None):
     register_confirmation_routes(app, generation_service, task_manager)
     register_task_routes(app, task_manager, generation_service)
     register_settings_routes(app)
+    register_chat_session_routes(app)
+    logger.info("会话模块路由注册完成")
 
     # 注册测试用例蓝图
     app.register_blueprint(testcases_bp)
