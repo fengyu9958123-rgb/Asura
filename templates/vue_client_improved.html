@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" href="/static/libs/element-ui.css">
     <link rel="stylesheet" href="/static/aicase-theme.css">
-    <link rel="stylesheet" href="/static/vue_client_improved.css">
+    <link rel="stylesheet" href="/static/vue_client_improved.css?v=1.2">
     <link rel="stylesheet" href="/static/modern-element-theme.css">
     <link rel="stylesheet" href="/static/requirement_module.css">
     <link rel="stylesheet" href="/static/text_prd_manager.css">
@@ -44,6 +44,8 @@
             margin: 0;
             min-height: 100vh;
             box-shadow: none;
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
         }
 
@@ -2213,7 +2215,7 @@
                 <chat-session-module></chat-session-module>
             </div>
 
-            <el-container v-show="mainTab === 'testcase'">
+            <el-container v-show="mainTab === 'testcase'" class="app-workspace">
                 <el-aside width="220px" class="sidebar-container">
                     <div style="height: 100%; display: flex; flex-direction: column;">
                         <!-- 主要功能菜单 -->
@@ -2236,7 +2238,7 @@
                     </div>
                 </el-aside>
 
-                <el-main style="background: var(--ac-bg-subtle); padding: 24px;">
+                <el-main class="app-main">
                     <!-- 统一任务管理 (Phase 3) -->
                     <div v-if="activeTab === 'unifiedTaskList'">
                         <task-manager-component
@@ -2263,10 +2265,10 @@
                             </div>
                         </div>
 
-                        <div style="display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px;">
+                        <div class="model-stage-guides-scroll">
+                            <div class="model-stage-guides-grid">
                             <div v-for="guide in modelStageGuides" :key="guide.type"
-                                 :class="'model-stage-guide model-stage-guide-' + guide.type"
-                                 style="border:1px solid var(--ac-border); border-radius:8px; padding:14px 16px; min-height:96px; box-shadow:none;">
+                                 :class="'model-stage-guide model-stage-guide-' + guide.type">
                                 <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:8px;">
                                     <div>
                                         <div style="font-size:15px; font-weight:700; color:var(--ac-text);">{%raw%}{{ guide.label }}{%endraw%}</div>
@@ -2277,19 +2279,20 @@
                                 </div>
                                 <p style="margin:0; color:var(--ac-text-secondary); font-size:13px; line-height:1.55;">{%raw%}{{ guide.description }}{%endraw%}</p>
                             </div>
+                            </div>
                         </div>
 
-                        <el-card shadow="never" style="border-radius: 8px; border:1px solid var(--ac-border);">
+                        <el-card shadow="never" class="model-settings-card">
                             <div slot="header" style="display:flex; justify-content:space-between; align-items:center;">
                                 <span style="font-weight: 600;">模型配置</span>
                                 <el-button size="mini" icon="el-icon-plus" @click="addModelConfig">新增模型</el-button>
                             </div>
-                            <div v-loading="modelSettingsLoading">
+                            <div v-loading="modelSettingsLoading" class="model-settings-card-body">
                                 <el-empty v-if="!modelSettings.models || modelSettings.models.length === 0" description="暂无模型配置">
                                     <el-button type="primary" icon="el-icon-plus" @click="addModelConfig">新增模型</el-button>
                                 </el-empty>
 
-                                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap:14px;">
+                                <div class="model-config-grid">
                                     <div v-for="(model, index) in modelSettings.models" :key="model.id || index"
                                          :class="'model-config-card model-config-card-' + (model.model_type || 'requirement')"
                                          style="border-radius:8px; padding:16px;">

@@ -28,6 +28,7 @@ html, body, #app {
     display: flex;
     flex-direction: column;
     position: relative;
+    overflow: hidden;
 }
 
 /* 顶部导航栏优化 - 移除蓝色背景 */
@@ -1051,9 +1052,112 @@ body {
     border: 1px solid var(--ac-border);
 }
 
-.model-settings-page .el-card {
+.model-settings-page .el-card,
+.model-settings-card {
     background: var(--ac-bg-elevated) !important;
     border-color: var(--ac-border) !important;
+    border-radius: 8px !important;
+    border: 1px solid var(--ac-border) !important;
+}
+
+/* 主工作区：小屏可纵向滚动，避免配置项被裁切 */
+.main-container > .app-workspace.el-container {
+    flex: 1 1 auto;
+    min-height: 0;
+    height: calc(100vh - 106px);
+    overflow: hidden;
+}
+
+.main-container .app-main.el-main {
+    background: var(--ac-bg-subtle);
+    padding: 24px;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+.model-settings-page {
+    min-height: min-content;
+    padding-bottom: 32px;
+}
+
+.model-stage-guides-scroll {
+    margin-bottom: 18px;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+}
+
+.model-stage-guides-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    min-width: 0;
+}
+
+.model-stage-guide {
+    border: 1px solid var(--ac-border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    min-height: 96px;
+    box-shadow: none;
+    min-width: 240px;
+}
+
+.model-settings-card .el-card__body {
+    padding: 0 !important;
+}
+
+.model-settings-card-body {
+    max-height: none;
+    overflow: visible;
+    padding: 16px 20px 20px;
+}
+
+.model-config-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
+    align-content: start;
+}
+
+@media (max-width: 1280px) {
+    .model-stage-guides-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .model-stage-guide {
+        min-width: 0;
+    }
+}
+
+@media (max-width: 900px) {
+    .model-stage-guides-grid {
+        grid-template-columns: minmax(260px, 1fr);
+    }
+
+    .model-stage-guides-scroll {
+        overflow-x: auto;
+    }
+
+    .model-stage-guides-grid {
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(260px, 280px);
+        grid-template-columns: none;
+        width: max-content;
+        max-width: none;
+    }
+
+    .model-config-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .main-container > .app-workspace.el-container {
+        height: calc(100vh - 106px);
+    }
 }
 
 /* 响应式调整 */
