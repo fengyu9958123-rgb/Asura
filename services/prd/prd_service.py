@@ -7,7 +7,7 @@ from datetime import datetime
 from typing import List, Dict, Optional
 import logging
 
-from database.models import PRD, DatabaseManager
+from database.models import PRD, Task, TaskLog, TaskMessage, DatabaseManager
 
 logger = logging.getLogger(__name__)
 
@@ -212,6 +212,24 @@ class PRDService:
         finally:
             session.close()
     
+    def _delete_tasks_for_prd(self, session, prd: PRD) -> int:
+        """删除 PRD 关联的全部运行任务（消息、日志、Task 记录）。"""
+        task_ids = {task.id for task in session.query(Task).filter_by(prd_id=prd.id).all()}
+        if prd.generated_task_id:
+            task_ids.add(prd.generated_task_id)
+
+        deleted_count = 0
+        for task_id in task_ids:
+            task = session.query(Task).filter_by(id=task_id).first()
+            if not task:
+                continue
+            session.query(TaskMessage).filter(TaskMessage.task_id == task_id).delete()
+            session.query(TaskLog).filter(TaskLog.task_id == task_id).delete()
+            session.delete(task)
+            deleted_count += 1
+            logger.info("已级联删除关联任务: %s (%s)", task_id, task.name)
+        return deleted_count
+
     def delete_prd(self, prd_id: str) -> bool:
         """
         删除PRD
@@ -230,6 +248,9 @@ class PRDService:
             if not prd:
                 logger.warning(f"PRD不存在: {prd_id}")
                 return False
+
+            # 先删除关联 Task，避免任务列表里残留同名条目需删两次
+            self._delete_tasks_for_prd(session, prd)
             
             # 删除文件
             if prd.file_path and os.path.exists(prd.file_path):
