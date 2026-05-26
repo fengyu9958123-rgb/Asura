@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" href="/static/libs/element-ui.css">
     <link rel="stylesheet" href="/static/aicase-theme.css">
-    <link rel="stylesheet" href="/static/vue_client_improved.css?v=1.2">
+    <link rel="stylesheet" href="/static/vue_client_improved.css?v=1.3">
     <link rel="stylesheet" href="/static/modern-element-theme.css">
     <link rel="stylesheet" href="/static/requirement_module.css">
     <link rel="stylesheet" href="/static/text_prd_manager.css">
@@ -2294,21 +2294,20 @@
 
                                 <div class="model-config-grid">
                                     <div v-for="(model, index) in modelSettings.models" :key="model.id || index"
-                                         :class="'model-config-card model-config-card-' + (model.model_type || 'requirement')"
-                                         style="border-radius:8px; padding:16px;">
-                                        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--ac-border);">
-                                            <div style="display:flex; align-items:center; gap:10px; min-width:0;">
+                                         :class="'model-config-card model-config-card-' + (model.model_type || 'requirement')">
+                                        <div class="model-config-card-header">
+                                            <div class="model-config-card-title">
                                                 <el-tag size="small" :type="getModelTagType(model.model_type)" effect="plain">
                                                     {%raw%}{{ getModelTypeLabel(model.model_type) }}{%endraw%}
                                                 </el-tag>
-                                                <el-tag :type="model.enabled ? 'success' : 'info'" size="mini">
-                                                    {%raw%}{{ model.enabled ? '启用' : '停用' }}{%endraw%}
-                                                </el-tag>
                                             </div>
-                                            <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
-                                                <el-switch v-model="model.enabled"></el-switch>
+                                            <div class="model-config-card-actions">
+                                                <div class="model-config-enable" :class="{ 'is-disabled': !model.enabled }">
+                                                    <span class="model-config-enable-label">{%raw%}{{ model.enabled ? '启用' : '停用' }}{%endraw%}</span>
+                                                    <el-switch v-model="model.enabled"></el-switch>
+                                                </div>
                                                 <el-button size="mini" icon="el-icon-connection" @click="testModelConfig(model)" :loading="model.testing">测试</el-button>
-                                                <el-button size="mini" type="text" style="color:var(--ac-danger);" @click="removeModelConfig(index)">删除</el-button>
+                                                <el-button size="mini" type="text" class="model-config-delete-btn" @click="removeModelConfig(index)">删除</el-button>
                                             </div>
                                         </div>
 

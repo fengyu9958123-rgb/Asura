@@ -1050,6 +1050,86 @@ body {
 
 .model-config-card {
     border: 1px solid var(--ac-border);
+    border-radius: 8px;
+    padding: 16px;
+    min-width: 0;
+}
+
+.model-config-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--ac-border);
+    flex-wrap: wrap;
+}
+
+.model-config-card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.model-config-card-title .el-tag {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.model-config-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    flex-wrap: nowrap;
+}
+
+.model-config-enable {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    padding: 2px 10px 2px 8px;
+    border-radius: 999px;
+    background: var(--ac-success-soft);
+    border: 1px solid #a7f3d0;
+}
+
+.model-config-enable.is-disabled {
+    background: var(--ac-bg-subtle);
+    border-color: var(--ac-border);
+}
+
+.model-config-enable-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ac-success);
+    line-height: 1;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.model-config-enable.is-disabled .model-config-enable-label {
+    color: var(--ac-text-muted);
+}
+
+.model-config-enable .el-switch {
+    flex-shrink: 0;
+    vertical-align: middle;
+    line-height: 1;
+}
+
+.model-config-enable .el-switch__core {
+    vertical-align: middle;
+}
+
+.model-config-delete-btn {
+    color: var(--ac-danger) !important;
 }
 
 .model-settings-page .el-card,
