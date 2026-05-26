@@ -23,7 +23,7 @@ MODEL_TYPE_META = {
     },
     "vision": {
         "label": "图片分析模型",
-        "description": "推荐 Doubao Seed 2.0 Pro，用于图片、标注、箭头备注和文件名语义提取。",
+        "description": "推荐 qwen-vl-max 或 qwen3-vl-plus，必须选用支持图片输入的视觉/多模态模型。",
     },
     "chat": {
         "label": "会话模型",

@@ -27,14 +27,14 @@
     {
         "name": "图片分析模型",
         "model_type": "vision",
-        "model": "doubao-seed-2-0-pro-260215",
+        "model": "qwen3.6-plus",
         "api_key": "YOUR_API_KEY_HERE",
-        "base_url": "https://ark.cn-beijing.volces.com/api/v3",
+        "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
         "input_price_per_million": 3.2,
         "cached_input_price_per_million": 0.64,
         "output_price_per_million": 16.0,
         "currency": "CNY",
-        "comment": "推荐用于图片、标注、箭头备注和文件名语义提取"
+        "comment": "必须选用支持图片输入的视觉模型，如 qwen-vl-max、qwen3-vl-plus"
     },
     {
         "name": "会话模型",

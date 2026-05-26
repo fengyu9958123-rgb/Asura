@@ -24,6 +24,11 @@ from services.generation.prd_document_cleaner import align_playback_speeds_to_so
 from services.generation.llm_response_cleaner import strip_model_reasoning
 from services.generation.llm_usage import record_current_agent_call
 from services.generation.structured_testcase_pipeline import StructuredTestcasePipeline
+from services.generation.vision_llm_client import (
+    build_multimodal_user_content,
+    call_vision_chat,
+    validate_vision_model_config,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -308,25 +313,28 @@ def analyze_module_images(image_analyst, module_info, output_dir, notes_mgr=None
 最后进行模块级整合分析，形成完整的交互逻辑描述。
 """
 
-        # 构建多图片内容
-        content = [{"type": "text", "text": prompt}]
+        # 构建多图片内容（OpenAI 兼容格式 + 正确 MIME）
+        image_paths = [img_info["path"] for img_info in module_info["images"]]
+        content = build_multimodal_user_content(prompt, image_paths)
 
-        for img_info in module_info['images']:
-            logger.info(f"正在加载图片: {img_info['filename']}")
-            image_base64 = image_to_base64(img_info['path'])
-            content.append({
-                "type": "image_url",
-                "image_url": {
-                    "url": f"data:image/jpeg;base64,{image_base64}"
-                }
-            })
+        vision_config = getattr(image_analyst, "billing_config", None) or {}
+        validate_vision_model_config(vision_config)
 
-        # 调用ImageAnalyst
-        logger.info(f"调用ImageAnalyst进行批量分析...")
-        messages = [{"role": "user", "content": content}]
+        system_message = getattr(image_analyst, "system_message", "") or ""
+        messages = []
+        if system_message.strip():
+            messages.append({"role": "system", "content": system_message.strip()})
+        messages.append({"role": "user", "content": content})
 
+        logger.info("调用视觉模型进行批量分析: %s", vision_config.get("model"))
         before_usage = StructuredTestcasePipeline._agent_usage_snapshot(image_analyst)
-        image_analysis = strip_model_reasoning(image_analyst.generate_reply(messages=messages))
+        llm_config = getattr(image_analyst, "llm_config", {}) or {}
+        temperature = llm_config.get("temperature", 0.3) if isinstance(llm_config, dict) else 0.3
+        image_analysis = call_vision_chat(
+            config=vision_config,
+            messages=messages,
+            temperature=temperature,
+        )
         usage = StructuredTestcasePipeline._agent_usage_delta(image_analyst, before_usage)
         record_current_agent_call(
             agent=image_analyst,
