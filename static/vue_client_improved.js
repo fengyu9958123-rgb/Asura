@@ -222,8 +222,8 @@ new Vue({
                 {
                     type: 'vision',
                     label: '视觉分析',
-                    level: '推荐 qwen-vl-max',
-                    description: '必须选用支持图片输入的视觉/多模态模型，纯文本模型（如 qwen3.7-max）无法分析图片。'
+                    level: '推荐 qwen3.6-plus',
+                    description: '必须选用支持图片输入的视觉/多模态模型（推荐 qwen3.6-plus），纯文本模型（如 qwen3.7-max）无法分析图片。'
                 },
                 {
                     type: 'requirement',

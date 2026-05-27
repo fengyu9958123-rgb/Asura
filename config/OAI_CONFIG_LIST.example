@@ -34,7 +34,7 @@
         "cached_input_price_per_million": 0.64,
         "output_price_per_million": 16.0,
         "currency": "CNY",
-        "comment": "必须选用支持图片输入的视觉模型，如 qwen-vl-max、qwen3-vl-plus"
+        "comment": "必须选用支持图片输入的视觉模型，如 qwen3.6-plus、qwen3-vl-plus"
     },
     {
         "name": "会话模型",

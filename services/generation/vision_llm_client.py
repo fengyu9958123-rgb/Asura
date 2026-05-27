@@ -61,7 +61,7 @@ def validate_vision_model_config(config: Dict[str, Any]) -> None:
             raise ValueError(
                 f"模型「{model}」不支持图片输入。"
                 "请在「模型配置 → 图片分析模型」中改用视觉模型，"
-                "例如 qwen-vl-max、qwen3-vl-plus 或 qwen3.5-plus。"
+                "例如 qwen3.6-plus、qwen3-vl-plus 或 qwen3.5-plus。"
             )
 
     if not any(re.search(pattern, lowered) for pattern in VISION_MODEL_HINTS):
@@ -122,7 +122,7 @@ def call_vision_chat(
         if "Unexpected item type in content" in detail or "InvalidParameter" in detail:
             raise RuntimeError(
                 f"图片分析模型「{model}」不支持当前多模态输入。"
-                "请改用视觉模型，例如 qwen-vl-max 或 qwen3-vl-plus。"
+                "请改用视觉模型，例如 qwen3.6-plus 或 qwen3-vl-plus。"
                 f" 原始错误: {detail[:300]}"
             )
         raise RuntimeError(f"图片分析请求失败 HTTP {response.status_code}: {detail}")
