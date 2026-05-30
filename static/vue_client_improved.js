@@ -137,6 +137,20 @@ function normalizeTaskStatus(status) {
     return String(status).toLowerCase().replace(/^taskstatus\./, '');
 }
 
+const TESTCASE_MULTILINE_FIELDS = ['前置条件', '测试步骤', '预期结果'];
+
+function normalizeTestcaseText(value) {
+    if (value === null || value === undefined) return '';
+    return String(value)
+        .replace(/&lt;br\s*\/?&gt;/gi, '\n')
+        .replace(/<br\s*\/?>/gi, '\n');
+}
+
+function encodeTestcaseTextForStorage(value) {
+    if (value === null || value === undefined) return '';
+    return String(value).replace(/\r\n/g, '\n').replace(/\n/g, '<br>');
+}
+
 // Vue应用
 new Vue({
     el: '#app',
@@ -169,6 +183,30 @@ new Vue({
         confirmationItems: [],
         confirmationResponses: {},
         taskResults: [],
+        editableTaskResults: [],
+        testcaseEditMode: false,
+        testcaseEditDirty: false,
+        testcaseSaving: false,
+        testcaseCellEditVisible: false,
+        testcaseCellEdit: {
+            rowIndex: -1,
+            colKey: '',
+            colLabel: '',
+            colType: 'text',
+            options: [],
+            value: ''
+        },
+        testcaseColumnDefs: [
+            { key: '功能模块', label: '功能模块', minWidth: 120, type: 'text' },
+            { key: '测试场景分类', label: '测试场景分类', minWidth: 120, type: 'text' },
+            { key: '用例编号', label: '用例编号', minWidth: 110, type: 'text' },
+            { key: '用例名称', label: '用例名称', minWidth: 160, type: 'text' },
+            { key: '前置条件', label: '前置条件', minWidth: 140, type: 'textarea' },
+            { key: '测试步骤', label: '测试步骤', minWidth: 180, type: 'textarea' },
+            { key: '预期结果', label: '预期结果', minWidth: 180, type: 'textarea' },
+            { key: '优先级', label: '优先级', minWidth: 90, type: 'select', options: ['P0', 'P1', 'P2', 'P3'] },
+            { key: '用例类型', label: '用例类型', minWidth: 100, type: 'text' }
+        ],
         lastPolledTime: 0,
         pollingInterval: null,
         messagePollingTimer: null,
@@ -238,6 +276,32 @@ new Vue({
                     description: '用于 PRD 分块、LU 拆分和链路识别，是质量要求最高的阶段。'
                 }
             ];
+        },
+
+        displayTaskResults() {
+            return (this.taskResults || []).map((row, index) => this.normalizeTestCaseRow(row, index));
+        },
+
+        testcaseCellEditDialogWidth() {
+            const content = this.testcaseCellEdit.value || '';
+            const colType = this.testcaseCellEdit.colType || 'text';
+            const lines = content.split('\n');
+            const maxLineLen = Math.max(...lines.map((line) => line.length), 8);
+            const viewportMax = Math.floor((typeof window !== 'undefined' ? window.innerWidth : 1200) * 0.92);
+            if (colType === 'textarea') {
+                return Math.min(Math.max(maxLineLen * 9 + 96, 480), Math.min(viewportMax, 920));
+            }
+            if (colType === 'select') {
+                return Math.min(Math.max(maxLineLen * 12 + 120, 360), 480);
+            }
+            return Math.min(Math.max(maxLineLen * 12 + 120, 400), Math.min(viewportMax, 720));
+        },
+
+        testcaseCellEditAutosize() {
+            const content = this.testcaseCellEdit.value || '';
+            const lineCount = content.split('\n').length;
+            const minRows = Math.min(Math.max(lineCount + 1, 3), 24);
+            return { minRows, maxRows: 30 };
         }
     },
     created() {
@@ -627,6 +691,239 @@ new Vue({
             return sanitized;
         },
 
+        normalizeTestCaseRow(testCase, index) {
+            const row = testCase && typeof testCase === 'object' ? testCase : {};
+            const normalized = {
+                '功能模块': row['功能模块'] || row.module || row.id || '',
+                '测试场景分类': row['测试场景分类'] || row.submodule || row.scenario || '',
+                '用例编号': row['用例编号'] || row.case_number || row.scenario || `TC${String((index || 0) + 1).padStart(3, '0')}`,
+                '用例名称': row['用例名称'] || row.case_name || row.title || '',
+                '前置条件': row['前置条件'] || row.precondition || row.preconditions || '',
+                '测试步骤': row['测试步骤'] || row.test_steps || row.steps || '',
+                '预期结果': row['预期结果'] || row.expected_result || row.expected || '',
+                '优先级': row['优先级'] || row.priority || 'P1',
+                '用例类型': row['用例类型'] || row.test_type || row.testType || row.type || '功能测试'
+            };
+            TESTCASE_MULTILINE_FIELDS.forEach((key) => {
+                normalized[key] = normalizeTestcaseText(normalized[key]);
+            });
+            return normalized;
+        },
+
+        serializeTestCaseRowForSave(row, index) {
+            const normalized = this.normalizeTestCaseRow(row, index);
+            const payload = { ...normalized };
+            TESTCASE_MULTILINE_FIELDS.forEach((key) => {
+                payload[key] = encodeTestcaseTextForStorage(payload[key]);
+            });
+            return payload;
+        },
+
+        syncEditableTaskResults(results) {
+            const normalized = this.normalizeTaskResults(results);
+            this.taskResults = normalized;
+            this.editableTaskResults = normalized.map((row, index) => this.normalizeTestCaseRow(row, index));
+            this.testcaseEditDirty = false;
+            this.testcaseEditMode = false;
+            this.closeTestcaseCellEdit();
+        },
+
+        formatTestcaseCell(value) {
+            if (value === null || value === undefined || value === '') return '—';
+            return normalizeTestcaseText(value);
+        },
+
+        getTestcaseColumnDef(colKey) {
+            return this.testcaseColumnDefs.find((col) => col.key === colKey) || { key: colKey, label: colKey, minWidth: 120, type: 'text' };
+        },
+
+        getTestcaseViewColumnWidth(col) {
+            const rows = this.displayTaskResults || [];
+            let maxVisualLen = (col.label || '').length * 14;
+            rows.forEach((row) => {
+                const text = this.formatTestcaseCell(row[col.key]);
+                if (text === '—') return;
+                String(text).split('\n').forEach((line) => {
+                    let visualLen = 0;
+                    for (const ch of line) {
+                        visualLen += ch.charCodeAt(0) > 255 ? 14 : 8;
+                    }
+                    maxVisualLen = Math.max(maxVisualLen, visualLen);
+                });
+            });
+            const isLongText = col.type === 'textarea';
+            const minWidth = col.minWidth || 120;
+            const maxWidth = isLongText ? 420 : 280;
+            return Math.min(Math.max(maxVisualLen + 36, minWidth), maxWidth);
+        },
+
+        openTestcaseCellEdit(rowIndex, colKey) {
+            if (this.testcaseEditMode) return;
+            const col = this.getTestcaseColumnDef(colKey);
+            const row = this.displayTaskResults[rowIndex];
+            if (!row) return;
+            const rawValue = row[colKey];
+            this.testcaseCellEdit = {
+                rowIndex,
+                colKey,
+                colLabel: col.label,
+                colType: col.type || 'text',
+                options: col.options || [],
+                value: rawValue === '—' || rawValue === null || rawValue === undefined ? '' : String(rawValue)
+            };
+            this.testcaseCellEditVisible = true;
+            this.$nextTick(() => {
+                this.focusTestcaseCellEditor();
+            });
+        },
+
+        closeTestcaseCellEdit() {
+            this.testcaseCellEditVisible = false;
+            this.testcaseCellEdit = {
+                rowIndex: -1,
+                colKey: '',
+                colLabel: '',
+                colType: 'text',
+                options: [],
+                value: ''
+            };
+        },
+
+        focusTestcaseCellEditor() {
+            const dialog = this.$refs.testcaseCellEditDialog;
+            if (!dialog || !dialog.$el) return;
+            const input = dialog.$el.querySelector('.testcase-cell-edit-input textarea, .testcase-cell-edit-input input');
+            if (input) {
+                input.focus();
+                if (typeof input.setSelectionRange === 'function') {
+                    const len = input.value ? input.value.length : 0;
+                    input.setSelectionRange(len, len);
+                }
+            }
+        },
+
+        onTestcaseCellEditOpened() {
+            this.$nextTick(() => {
+                this.focusTestcaseCellEditor();
+            });
+        },
+
+        saveTestcaseCellEdit() {
+            const { rowIndex, colKey, value } = this.testcaseCellEdit;
+            if (rowIndex < 0 || !colKey) return;
+
+            const rows = this.editableTaskResults.map((row, index) => this.normalizeTestCaseRow(row, index));
+            if (!rows[rowIndex]) {
+                this.$message.error('找不到要保存的用例行');
+                return;
+            }
+            rows[rowIndex][colKey] = value;
+            const payload = rows.map((row, index) => this.serializeTestCaseRowForSave(row, index));
+
+            this.persistTestCasePayload(payload, '单元格已保存')
+                .then(() => {
+                    this.closeTestcaseCellEdit();
+                })
+                .catch((error) => {
+                    const msg = (error && error.message) || '保存失败';
+                    this.$message.error(msg);
+                });
+        },
+
+        persistTestCasePayload(payload, successMessage) {
+            if (!this.selectedTask) {
+                return Promise.reject(new Error('未选择任务'));
+            }
+            const taskId = this.getResultFileTaskId(this.selectedTask);
+            if (!taskId) {
+                return Promise.reject(new Error('无法确定任务 ID，保存失败'));
+            }
+
+            this.testcaseSaving = true;
+            return axios.put(`${apiBaseUrl}/tasks/${taskId}/results`, { results: payload })
+                .then((response) => {
+                    if (response.data && response.data.success) {
+                        const saved = (response.data.data && response.data.data.results) || payload;
+                        this.syncEditableTaskResults(saved);
+                        if (this.selectedTask) {
+                            this.selectedTask.testcases = saved;
+                            this.selectedTask.test_cases = saved;
+                        }
+                        if (successMessage) {
+                            this.$message.success(response.data.message || successMessage);
+                        }
+                        return saved;
+                    }
+                    const errMsg = (response.data && response.data.error) || '保存失败';
+                    return Promise.reject(new Error(errMsg));
+                })
+                .catch((error) => {
+                    console.error('保存测试用例失败:', error);
+                    const msg = (error.response && error.response.data && error.response.data.error)
+                        || error.message
+                        || '保存失败';
+                    return Promise.reject(new Error(msg));
+                })
+                .finally(() => {
+                    this.testcaseSaving = false;
+                });
+        },
+
+        enterTestcaseEditMode() {
+            this.resetTestCaseEdits();
+            this.testcaseEditMode = true;
+        },
+
+        cancelTestcaseEditMode() {
+            const exitEditMode = () => {
+                this.resetTestCaseEdits();
+                this.testcaseEditMode = false;
+            };
+            if (this.testcaseEditDirty) {
+                this.$confirm('有未保存的修改，确定放弃吗？', '提示', {
+                    confirmButtonText: '放弃',
+                    cancelButtonText: '继续编辑',
+                    type: 'warning'
+                }).then(exitEditMode).catch(() => {});
+            } else {
+                exitEditMode();
+            }
+        },
+
+        markTestcaseDirty() {
+            this.testcaseEditDirty = true;
+        },
+
+        addTestCaseRow() {
+            const nextIndex = this.editableTaskResults.length + 1;
+            this.editableTaskResults.push(this.normalizeTestCaseRow({}, nextIndex - 1));
+            this.markTestcaseDirty();
+        },
+
+        removeTestCaseRow(index) {
+            this.$confirm('确定删除该测试用例行吗？', '提示', {
+                confirmButtonText: '删除',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.editableTaskResults.splice(index, 1);
+                this.markTestcaseDirty();
+            }).catch(() => {});
+        },
+
+        resetTestCaseEdits() {
+            this.editableTaskResults = this.taskResults.map((row, index) => this.normalizeTestCaseRow(row, index));
+            this.testcaseEditDirty = false;
+        },
+
+        saveTestCaseResults() {
+            if (!this.selectedTask) return;
+            const payload = this.editableTaskResults.map((row, index) => this.serializeTestCaseRowForSave(row, index));
+            this.persistTestCasePayload(payload, '测试用例已保存').catch((error) => {
+                this.$message.error(error.message || '保存失败');
+            });
+        },
+
         normalizeTaskResults(results) {
             if (!results) return [];
             if (Array.isArray(results)) return results.map(item => this.sanitizeTestCaseForDisplay(item));
@@ -849,7 +1146,7 @@ new Vue({
                             this.finalPrdPreview = null;
                         }
 
-                        this.taskResults = this.getTaskCasesFromDetail(this.selectedTask);
+                        this.syncEditableTaskResults(this.getTaskCasesFromDetail(this.selectedTask));
                         
                         console.log("查看任务详情:", response.data);
                         
@@ -1747,18 +2044,20 @@ new Vue({
                     if (response.data && response.data.success) {
                         const responsePayload = response.data.data || response.data;
                         const remoteResults = this.normalizeTaskResults(responsePayload.results);
-                        this.taskResults = remoteResults.length > 0
-                            ? remoteResults
-                            : this.getTaskCasesFromDetail(this.selectedTask);
+                        this.syncEditableTaskResults(
+                            remoteResults.length > 0
+                                ? remoteResults
+                                : this.getTaskCasesFromDetail(this.selectedTask)
+                        );
                     } else {
                         console.error('获取任务结果失败:', response.data);
-                        this.taskResults = this.getTaskCasesFromDetail(this.selectedTask);
+                        this.syncEditableTaskResults(this.getTaskCasesFromDetail(this.selectedTask));
                     }
                 })
                 .catch(error => {
                     console.error('获取任务结果异常:', error);
                     if (this.isSelectedTask(taskId)) {
-                        this.taskResults = this.getTaskCasesFromDetail(this.selectedTask);
+                        this.syncEditableTaskResults(this.getTaskCasesFromDetail(this.selectedTask));
                     }
                 });
         },
