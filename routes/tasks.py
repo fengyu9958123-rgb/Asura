@@ -975,6 +975,62 @@ def register_task_routes(app, task_manager, generation_service=None):
             logger.error(f"获取任务结果失败: {str(e)}")
             return error_response(f"获取任务结果失败: {str(e)}")
 
+    @app.route('/api/tasks/<task_id>/results', methods=['PUT'])
+    def update_task_results(task_id):
+        """保存编辑后的测试用例结果（文本 PRD / 图片任务）。"""
+        import json
+        from datetime import datetime
+        from database.models import RequirementModule, Task, db_manager
+
+        try:
+            payload = request.get_json(silent=True) or {}
+            results = payload.get('results')
+            if results is None:
+                results = payload.get('testcases')
+            if not isinstance(results, list):
+                return error_response('results 必须是数组', 400)
+
+            identity = resolve_task_identity(task_id)
+
+            if identity.is_image:
+                if not identity.module_id:
+                    return error_response('任务不存在', 404)
+                session = db_manager.get_session()
+                try:
+                    module = session.query(RequirementModule).filter_by(id=identity.module_id).first()
+                    if not module:
+                        return error_response('任务不存在', 404)
+
+                    module.test_cases_json = json.dumps(results, ensure_ascii=False, indent=2)
+                    module.updated_at = datetime.utcnow()
+
+                    runtime_task_id = identity.module_task_id or identity.task_id
+                    if runtime_task_id:
+                        task = session.query(Task).filter_by(id=runtime_task_id).first()
+                        if task:
+                            task.testcases = results
+                            task.updated_at = datetime.utcnow()
+
+                    session.commit()
+                    logger.info("图片任务测试用例已保存: module=%s count=%s", identity.module_id, len(results))
+                    return success_response({'results': results}, '测试用例已保存')
+                except Exception:
+                    session.rollback()
+                    raise
+                finally:
+                    session.close()
+
+            effective_task_id = identity.task_id or task_id
+            updated = task_manager.update_task(effective_task_id, testcases=results)
+            if not updated:
+                return error_response('保存失败，任务不存在', 404)
+
+            logger.info("文本任务测试用例已保存: task=%s count=%s", effective_task_id, len(results))
+            return success_response({'results': results}, '测试用例已保存')
+        except Exception as e:
+            logger.error(f"保存任务结果失败: {str(e)}")
+            return error_response(f"保存任务结果失败: {str(e)}", 500)
+
     @app.route('/api/tasks/<task_id>/final_prd', methods=['GET'])
     def get_task_final_prd(task_id):
         """获取任务最终PRD"""

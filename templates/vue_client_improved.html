@@ -1804,11 +1804,149 @@
 
         .table-container {
             margin-top: 20px;
-            margin-bottom: 60px; /* 进一步增加底部空间到60px */
+            margin-bottom: 60px;
             border-radius: 8px;
-            overflow: visible;
+            overflow: auto;
             border: 1px solid #e2e8f0;
             width: 100%;
+        }
+
+        .testcase-table-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .testcase-table-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .testcase-count-badge {
+            background: linear-gradient(45deg, var(--ac-primary-light), var(--ac-primary));
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .testcase-edit-table .el-table th {
+            background: var(--ac-bg-subtle) !important;
+            color: var(--ac-text);
+            font-weight: 600;
+        }
+
+        .testcase-edit-table .el-textarea__inner,
+        .testcase-edit-table .el-input__inner {
+            border-radius: 6px !important;
+        }
+
+        .testcase-view-table .el-table th {
+            background: var(--ac-bg-subtle) !important;
+            color: var(--ac-text);
+            font-weight: 600;
+        }
+
+        .testcase-view-table .el-table .cell {
+            white-space: normal;
+            word-break: break-word;
+            line-height: 1.5;
+            overflow: visible;
+        }
+
+        .testcase-view-table .el-table td {
+            vertical-align: top;
+            height: auto !important;
+        }
+
+        .testcase-view-table .el-table__body tr {
+            height: auto !important;
+        }
+
+        .testcase-cell-clickable {
+            display: block;
+            width: 100%;
+            min-height: 28px;
+            padding: 4px 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.15s ease, box-shadow 0.15s ease;
+            position: relative;
+        }
+
+        .testcase-cell-clickable:hover {
+            background: rgba(79, 70, 229, 0.08);
+            box-shadow: inset 0 0 0 1px rgba(79, 70, 229, 0.18);
+        }
+
+        .testcase-cell-clickable .testcase-cell-edit-hint {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            font-size: 12px;
+            color: var(--ac-primary);
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+
+        .testcase-cell-clickable:hover .testcase-cell-edit-hint {
+            opacity: 1;
+        }
+
+        .testcase-cell-text {
+            display: block;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.5;
+            color: var(--ac-text);
+            padding-right: 18px;
+        }
+
+        .testcase-cell-edit-dialog .el-dialog {
+            max-width: 92vw;
+        }
+
+        .testcase-cell-edit-dialog .el-dialog__body {
+            padding-top: 12px;
+            padding-bottom: 8px;
+        }
+
+        .testcase-cell-edit-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--ac-text-secondary);
+        }
+
+        .testcase-cell-edit-meta strong {
+            color: var(--ac-text);
+            font-weight: 600;
+        }
+
+        .testcase-cell-edit-input .el-textarea__inner,
+        .testcase-cell-edit-input .el-input__inner {
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.6;
+            font-size: 14px;
+            border-radius: 8px !important;
+        }
+
+        .testcase-cell-edit-input .el-textarea__inner {
+            min-height: 96px;
+            resize: vertical;
+        }
+
+        .testcase-delete-btn {
+            color: var(--ac-danger) !important;
         }
 
         /* 确保表格内容能够完整显示 */
@@ -2937,17 +3075,115 @@
                                     </div>
                                     </div>
                                     <div class="results-section">
-                                        <div v-if="taskResults && taskResults.length > 0" class="results-content">
+                                        <div v-if="displayTaskResults.length > 0 || testcaseEditMode || (selectedTask && selectedTask.status === 'completed')" class="results-content">
                                             <div class="results-table">
-                                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
-                                                    <h4 style="margin: 0;">📋 测试用例预览</h4>
-                                                    <span v-if="taskResults && taskResults.length > 0"
-                                                          style="background: linear-gradient(45deg, var(--ac-primary-light), var(--ac-primary)); color: white; padding: 4px 12px; border-radius: 15px; font-size: 12px; font-weight: bold;">
-                                                        共 {%raw%}{{ taskResults.length }}{%endraw%} 条用例
-                                                    </span>
+                                                <div class="testcase-table-toolbar">
+                                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                                        <h4 style="margin: 0;">📋 测试用例明细</h4>
+                                                        <span v-if="(testcaseEditMode ? editableTaskResults : displayTaskResults).length > 0" class="testcase-count-badge">
+                                                            共 {%raw%}{{ (testcaseEditMode ? editableTaskResults : displayTaskResults).length }}{%endraw%} 条
+                                                        </span>
+                                                        <el-tag v-if="testcaseEditMode && testcaseEditDirty" size="mini" type="warning" effect="plain">未保存</el-tag>
+                                                    </div>
+                                                    <div class="testcase-table-actions">
+                                                        <template v-if="!testcaseEditMode">
+                                                            <el-button size="mini" type="primary" icon="el-icon-edit" @click="enterTestcaseEditMode">编辑</el-button>
+                                                        </template>
+                                                        <template v-else>
+                                                            <el-button size="mini" icon="el-icon-plus" @click="addTestCaseRow">新增行</el-button>
+                                                            <el-button size="mini" icon="el-icon-refresh-left" @click="resetTestCaseEdits" :disabled="!testcaseEditDirty">重置</el-button>
+                                                            <el-button size="mini" type="primary" icon="el-icon-check" @click="saveTestCaseResults" :loading="testcaseSaving" :disabled="!testcaseEditDirty">保存</el-button>
+                                                            <el-button size="mini" @click="cancelTestcaseEditMode">取消</el-button>
+                                                        </template>
+                                                    </div>
                                                 </div>
-                                                <div class="table-container">
-                                                    <div v-if="taskResults && taskResults.length > 0" v-html="renderTestCasesAsHtmlTable(taskResults)"></div>
+                                                <div v-if="!testcaseEditMode && displayTaskResults.length > 0" class="table-container testcase-view-table">
+                                                    <el-table
+                                                        :data="displayTaskResults"
+                                                        border
+                                                        stripe
+                                                        size="small"
+                                                        max-height="560"
+                                                        style="width: 100%;">
+                                                        <el-table-column type="index" label="#" width="48" align="center"></el-table-column>
+                                                        <el-table-column
+                                                            v-for="col in testcaseColumnDefs"
+                                                            :key="col.key"
+                                                            :prop="col.key"
+                                                            :label="col.label"
+                                                            :min-width="getTestcaseViewColumnWidth(col)">
+                                                            <template slot-scope="scope">
+                                                                <div
+                                                                    class="testcase-cell-clickable"
+                                                                    role="button"
+                                                                    tabindex="0"
+                                                                    :title="'点击编辑「' + col.label + '」'"
+                                                                    @click="openTestcaseCellEdit(scope.$index, col.key)"
+                                                                    @keydown.enter.prevent="openTestcaseCellEdit(scope.$index, col.key)"
+                                                                    @keydown.space.prevent="openTestcaseCellEdit(scope.$index, col.key)">
+                                                                    <i class="el-icon-edit testcase-cell-edit-hint"></i>
+                                                                    <span class="testcase-cell-text">{%raw%}{{ formatTestcaseCell(scope.row[col.key]) }}{%endraw%}</span>
+                                                                </div>
+                                                            </template>
+                                                        </el-table-column>
+                                                    </el-table>
+                                                </div>
+                                                <div v-else-if="testcaseEditMode" class="table-container testcase-edit-table">
+                                                    <el-table
+                                                        :data="editableTaskResults"
+                                                        border
+                                                        stripe
+                                                        size="small"
+                                                        max-height="560"
+                                                        style="width: 100%;">
+                                                        <el-table-column type="index" label="#" width="48" align="center"></el-table-column>
+                                                        <el-table-column
+                                                            v-for="col in testcaseColumnDefs"
+                                                            :key="col.key"
+                                                            :prop="col.key"
+                                                            :label="col.label"
+                                                            :min-width="col.minWidth">
+                                                            <template slot-scope="scope">
+                                                                <el-input
+                                                                    v-if="col.type === 'text'"
+                                                                    v-model="scope.row[col.key]"
+                                                                    size="mini"
+                                                                    @input="markTestcaseDirty">
+                                                                </el-input>
+                                                                <el-input
+                                                                    v-else-if="col.type === 'textarea'"
+                                                                    type="textarea"
+                                                                    :rows="3"
+                                                                    v-model="scope.row[col.key]"
+                                                                    size="mini"
+                                                                    @input="markTestcaseDirty">
+                                                                </el-input>
+                                                                <el-select
+                                                                    v-else-if="col.type === 'select'"
+                                                                    v-model="scope.row[col.key]"
+                                                                    size="mini"
+                                                                    style="width: 100%;"
+                                                                    @change="markTestcaseDirty">
+                                                                    <el-option
+                                                                        v-for="opt in col.options"
+                                                                        :key="opt"
+                                                                        :label="opt"
+                                                                        :value="opt">
+                                                                    </el-option>
+                                                                </el-select>
+                                                            </template>
+                                                        </el-table-column>
+                                                        <el-table-column label="操作" width="72" fixed="right" align="center">
+                                                            <template slot-scope="scope">
+                                                                <el-button type="text" size="mini" class="testcase-delete-btn" @click="removeTestCaseRow(scope.$index)">删除</el-button>
+                                                            </template>
+                                                        </el-table-column>
+                                                    </el-table>
+                                                </div>
+                                                <div v-else class="empty-state">
+                                                    <i class="el-icon-document"></i>
+                                                    <p>暂无测试用例数据</p>
+                                                    <small>点击「编辑」手动添加测试用例</small>
                                                 </div>
                                                 <el-collapse v-if="selectedTask && selectedTask.test_analysis" style="margin-top: 20px;">
                                                     <el-collapse-item title="生成摘要" name="generation-summary">
@@ -2957,11 +3193,6 @@
                                                     </el-collapse-item>
                                                 </el-collapse>
                                             </div>
-                                        </div>
-                                        <div v-else-if="selectedTask && selectedTask.status === 'completed'" class="empty-state">
-                                            <i class="el-icon-document"></i>
-                                            <p>暂无测试用例数据</p>
-                                            <small>任务已完成，但未读取到可展示的用例结果</small>
                                         </div>
                                         <div v-else class="empty-state">
                                             <i class="el-icon-document"></i>
@@ -3068,6 +3299,58 @@
                 </div>
             </el-drawer>
 
+            <el-dialog
+                ref="testcaseCellEditDialog"
+                :title="'编辑 · ' + testcaseCellEdit.colLabel"
+                :visible.sync="testcaseCellEditVisible"
+                :width="testcaseCellEditDialogWidth + 'px'"
+                custom-class="testcase-cell-edit-dialog"
+                append-to-body
+                :close-on-click-modal="false"
+                @opened="onTestcaseCellEditOpened"
+                @close="closeTestcaseCellEdit">
+                <div class="testcase-cell-edit-meta">
+                    <span>行号：<strong>{%raw%}{{ testcaseCellEdit.rowIndex + 1 }}{%endraw%}</strong></span>
+                    <span v-if="displayTaskResults[testcaseCellEdit.rowIndex]">
+                        用例编号：<strong>{%raw%}{{ displayTaskResults[testcaseCellEdit.rowIndex]['用例编号'] || '—' }}{%endraw%}</strong>
+                    </span>
+                    <span v-if="displayTaskResults[testcaseCellEdit.rowIndex]">
+                        用例名称：<strong>{%raw%}{{ displayTaskResults[testcaseCellEdit.rowIndex]['用例名称'] || '—' }}{%endraw%}</strong>
+                    </span>
+                </div>
+                <el-input
+                    v-if="testcaseCellEdit.colType === 'textarea'"
+                    class="testcase-cell-edit-input"
+                    type="textarea"
+                    v-model="testcaseCellEdit.value"
+                    :autosize="testcaseCellEditAutosize"
+                    placeholder="请输入内容，支持多行自动换行">
+                </el-input>
+                <el-select
+                    v-else-if="testcaseCellEdit.colType === 'select'"
+                    class="testcase-cell-edit-input"
+                    v-model="testcaseCellEdit.value"
+                    style="width: 100%;"
+                    placeholder="请选择">
+                    <el-option
+                        v-for="opt in testcaseCellEdit.options"
+                        :key="opt"
+                        :label="opt"
+                        :value="opt">
+                    </el-option>
+                </el-select>
+                <el-input
+                    v-else
+                    class="testcase-cell-edit-input"
+                    v-model="testcaseCellEdit.value"
+                    placeholder="请输入内容">
+                </el-input>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="closeTestcaseCellEdit">取消</el-button>
+                    <el-button type="primary" :loading="testcaseSaving" @click="saveTestcaseCellEdit">保存</el-button>
+                </span>
+            </el-dialog>
+
         </div>
     </div>
 
@@ -3110,7 +3393,7 @@
     <script src="/static/task_manager.js?v=1.1"></script>
     <script src="/static/dashboard.js?v=1.0"></script>
     <script src="/static/chat_session.js?v=1.0"></script>
-    <script src="/static/vue_client_improved.js?v=1.1"></script>
+    <script src="/static/vue_client_improved.js?v=1.3"></script>
 </body>
 
 </html>
