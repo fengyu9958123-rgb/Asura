@@ -15,25 +15,8 @@ from services.prd.prd_service import PRDService
 logger = logging.getLogger(__name__)
 files_bp = Blueprint('files', __name__)
 
-HIDDEN_TEST_CASE_COLUMNS = {
-    "关联需求", "原始用例编号", "测试包ID", "测试包类型", "测试ID",
-}
+from services.utils.testcase_export import build_fresh_export_from_db
 
-
-def _public_test_cases(testcases):
-    if not isinstance(testcases, list):
-        return testcases
-    public_cases = []
-    for case in testcases:
-        if not isinstance(case, dict):
-            public_cases.append(case)
-            continue
-        public_cases.append({
-            key: value
-            for key, value in case.items()
-            if key not in HIDDEN_TEST_CASE_COLUMNS
-        })
-    return public_cases
 
 def register_files_routes(app, file_service, generation_service=None):
     """注册文件相关路由
@@ -136,7 +119,21 @@ def register_files_routes(app, file_service, generation_service=None):
                 logger.warning(f"不支持的文件类型: {file_type}")
                 return error_response('不支持的文件类型', 400)
             
-            # 获取文件信息
+            # Excel / JSON 始终基于数据库最新测试用例重新生成，避免返回旧文件
+            if file_type in ['excel', 'json']:
+                file_info = build_fresh_export_from_db(file_service, canonical_task_id, file_type, identity)
+                if file_info:
+                    file_path = file_info.get('path')
+                    filename = file_info.get('name') or os.path.basename(file_path)
+                    logger.info("按需生成最新导出文件: task=%s type=%s path=%s", canonical_task_id, file_type, file_path)
+                    return send_file(
+                        file_path,
+                        as_attachment=True,
+                        download_name=filename,
+                        mimetype='application/octet-stream'
+                    )
+
+            # 获取文件信息（html 等静态产物仍走历史路径）
             file_info = file_service.get_task_result_file(canonical_task_id, file_type)
             if not file_info:
                 file_info = _generate_missing_result_file(canonical_task_id, file_type, identity)
@@ -187,6 +184,10 @@ def register_files_routes(app, file_service, generation_service=None):
         if file_type not in ['excel', 'json']:
             return None
 
+        file_info = build_fresh_export_from_db(file_service, task_id, file_type, identity)
+        if file_info:
+            return file_info
+
         db_manager = DatabaseManager()
         db_manager.initialize()
         session = db_manager.get_session()
@@ -209,25 +210,8 @@ def register_files_routes(app, file_service, generation_service=None):
             if not testcases:
                 return None
 
-            public_testcases = _public_test_cases(testcases)
-            if file_type == 'excel':
-                file_path = file_service.save_test_cases_to_excel(public_testcases, prd_name, task_id)
-            else:
-                output_dir = os.path.join(file_service.raw_folder, 'json')
-                os.makedirs(output_dir, exist_ok=True)
-                file_path = os.path.join(output_dir, f"testcases_{prd_name}_{task_id}.json")
-                with open(file_path, 'w', encoding='utf-8') as f:
-                    json.dump(public_testcases, f, ensure_ascii=False, indent=2)
-
-            if not file_path or not os.path.exists(file_path):
-                return None
-            filename = os.path.basename(file_path)
-            return {
-                'path': file_path,
-                'name': filename,
-                'size': os.path.getsize(file_path),
-                'type': file_type,
-            }
+            from services.utils.testcase_export import build_export_file_info
+            return build_export_file_info(file_service, testcases, prd_name, task_id, file_type)
         finally:
             session.close()
             

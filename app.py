@@ -110,7 +110,7 @@ def create_app(config_obj=None):
     register_generation_routes(app, generation_service, prd_service)
     register_files_routes(app, file_service, generation_service)
     register_confirmation_routes(app, generation_service, task_manager)
-    register_task_routes(app, task_manager, generation_service)
+    register_task_routes(app, task_manager, generation_service, file_service)
     register_settings_routes(app)
     register_chat_session_routes(app)
     logger.info("会话模块路由注册完成")

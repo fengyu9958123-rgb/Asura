@@ -13,7 +13,7 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 tasks_bp = Blueprint('tasks', __name__)
 
-def register_task_routes(app, task_manager, generation_service=None):
+def register_task_routes(app, task_manager, generation_service=None, file_service=None):
     """注册任务相关路由"""
 
     def _resolve_text_task_id(task_id):
@@ -447,19 +447,20 @@ def register_task_routes(app, task_manager, generation_service=None):
                     task['task_type'] = 'text_prd'
                     text_langgraph_results = _load_text_langgraph_test_results(task)
                     if text_langgraph_results:
-                        testcases = (
+                        file_testcases = (
                             text_langgraph_results.get('testcases_list')
                             or text_langgraph_results.get('testcases')
                             or text_langgraph_results.get('test_cases')
                             or text_langgraph_results.get('results')
                             or []
                         )
-                        if isinstance(testcases, str):
+                        if isinstance(file_testcases, str):
                             try:
-                                testcases = json.loads(testcases)
+                                file_testcases = json.loads(file_testcases)
                             except Exception:
-                                testcases = []
-                        task['testcases'] = testcases if isinstance(testcases, list) else []
+                                file_testcases = []
+                        if not task.get('testcases'):
+                            task['testcases'] = file_testcases if isinstance(file_testcases, list) else []
                         if not task.get('test_analysis'):
                             task['test_analysis'] = text_langgraph_results.get('test_analysis', '')
                         result_files = task.get('result_files') or {}
@@ -981,6 +982,7 @@ def register_task_routes(app, task_manager, generation_service=None):
         import json
         from datetime import datetime
         from database.models import RequirementModule, Task, db_manager
+        from services.utils.testcase_export import sync_testcase_export_artifacts
 
         try:
             payload = request.get_json(silent=True) or {}
@@ -1013,6 +1015,17 @@ def register_task_routes(app, task_manager, generation_service=None):
 
                     session.commit()
                     logger.info("图片任务测试用例已保存: module=%s count=%s", identity.module_id, len(results))
+                    if file_service:
+                        try:
+                            sync_testcase_export_artifacts(
+                                file_service,
+                                task_manager,
+                                task_id,
+                                results,
+                                identity=identity,
+                            )
+                        except Exception as export_error:
+                            logger.warning("图片任务 Excel 同步失败: %s", export_error)
                     return success_response({'results': results}, '测试用例已保存')
                 except Exception:
                     session.rollback()
@@ -1024,6 +1037,18 @@ def register_task_routes(app, task_manager, generation_service=None):
             updated = task_manager.update_task(effective_task_id, testcases=results)
             if not updated:
                 return error_response('保存失败，任务不存在', 404)
+
+            if file_service:
+                try:
+                    sync_testcase_export_artifacts(
+                        file_service,
+                        task_manager,
+                        effective_task_id,
+                        results,
+                        identity=identity,
+                    )
+                except Exception as export_error:
+                    logger.warning("文本任务 Excel 同步失败: %s", export_error)
 
             logger.info("文本任务测试用例已保存: task=%s count=%s", effective_task_id, len(results))
             return success_response({'results': results}, '测试用例已保存')
