@@ -7,6 +7,7 @@
 
 export FLASK_ENV="${FLASK_ENV:-development}"
 export SHOW_AI_COLLABORATION="${SHOW_AI_COLLABORATION:-True}"
+export PYTHONIOENCODING="${PYTHONIOENCODING:-utf-8}"
 echo "🔧 AI协作模块已启用"
 
 # 设置 OpenMP 环境变量 (macOS)
