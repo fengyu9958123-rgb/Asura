@@ -5,8 +5,33 @@ HTTP-only模式，轮询获取状态和消息
 """
 
 import os
+import sys
 import logging
 from datetime import datetime
+
+
+def _configure_utf8_stdio():
+    """Ensure stdout/stderr use UTF-8 (GBK consoles cannot encode e.g. U+26A0)."""
+    for stream in (sys.stdout, sys.stderr):
+        if stream is None:
+            continue
+        try:
+            if hasattr(stream, 'reconfigure'):
+                stream.reconfigure(encoding='utf-8', errors='replace')
+            elif hasattr(stream, 'buffer'):
+                import io
+                wrapper = io.TextIOWrapper(
+                    stream.buffer, encoding='utf-8', errors='replace', line_buffering=True
+                )
+                if stream is sys.stdout:
+                    sys.stdout = wrapper
+                else:
+                    sys.stderr = wrapper
+        except Exception:
+            pass
+
+
+_configure_utf8_stdio()
 from flask import Flask, request, jsonify, render_template
 
 from config import Config
@@ -42,7 +67,7 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler(),
-        logging.FileHandler(APP_LOG_FILE)
+        logging.FileHandler(APP_LOG_FILE, encoding='utf-8'),
     ]
 )
 
