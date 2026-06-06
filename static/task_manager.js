@@ -398,20 +398,26 @@ Vue.component('task-manager-component', {
                     cancelButtonText: '取消',
                     type: 'warning'
                 });
-                
-                // 取消任务需要调用generation service的API
-                const response = await axios.post(`/api/generation/${task.task_id}/cancel`);
+
+                const taskRef = task.task_id || task.source_id;
+                if (!taskRef) {
+                    this.$message.error('无法取消：任务尚未启动');
+                    return;
+                }
+
+                const response = await axios.post(`/api/generation/${taskRef}/cancel`);
                 
                 if (response.data.success) {
                     this.$message.success('任务已取消');
                     this.fetchTasks();
                 } else {
-                    this.$message.error('取消任务失败: ' + response.data.message);
+                    this.$message.error('取消任务失败: ' + (response.data.error || response.data.message || '未知错误'));
                 }
             } catch (error) {
                 if (error !== 'cancel') {
                     console.error('取消任务失败:', error);
-                    this.$message.error('取消任务失败');
+                    const msg = error.response?.data?.error || error.response?.data?.message || '取消任务失败';
+                    this.$message.error(msg);
                 }
             }
         },
