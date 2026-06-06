@@ -79,6 +79,23 @@ def register_generation_routes(app, generation_service, prd_service):
             logger.error(f"获取任务文件失败: {str(e)}")
             return error_response(f"获取任务文件失败: {str(e)}")
 
+    @app.route('/api/generation/<task_id>/cancel', methods=['POST'])
+    def cancel_generation_task(task_id):
+        """取消运行中的生成任务（文本 PRD / 图片需求）。"""
+        try:
+            if not task_id or task_id in {'null', 'undefined'}:
+                return error_response('缺少有效任务 ID', 400)
+
+            cancelled = generation_service.cancel_task(task_id)
+            if not cancelled:
+                return error_response('任务不存在或当前状态不可取消', 400)
+
+            logger.info("任务已取消: task_id=%s", task_id)
+            return success_response({'task_id': task_id, 'status': 'cancelled'}, '任务已取消')
+        except Exception as e:
+            logger.error("取消任务失败: %s", e)
+            return error_response(f"取消任务失败: {str(e)}")
+
     @app.route('/api/generation/tasks/<task_id>/export', methods=['POST'])
     def export_task_file(task_id):
         """导出任务文件"""

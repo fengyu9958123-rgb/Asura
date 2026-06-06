@@ -90,6 +90,18 @@ Vue.component('task-card', {
                     >
                         查看进度
                     </el-button>
+
+                    <!-- 运行中：取消任务 -->
+                    <el-button
+                        v-if="task.can_cancel"
+                        size="small"
+                        type="danger"
+                        plain
+                        icon="el-icon-close"
+                        @click="$emit('cancel', task)"
+                    >
+                        取消任务
+                    </el-button>
                     
                     <!-- 等待确认：立即确认 -->
                     <el-button 
@@ -154,6 +166,15 @@ Vue.component('task-card', {
                             icon="el-icon-refresh-right"
                         >
                             重新运行
+                        </el-dropdown-item>
+
+                        <!-- 取消任务 -->
+                        <el-dropdown-item
+                            v-if="task.can_cancel"
+                            command="cancel"
+                            icon="el-icon-close"
+                        >
+                            取消任务
                         </el-dropdown-item>
                         
                         <!-- 删除 -->
@@ -252,6 +273,9 @@ Vue.component('task-card', {
                     break;
                 case 'retry':
                     this.$emit('retry', this.task);
+                    break;
+                case 'cancel':
+                    this.$emit('cancel', this.task);
                     break;
                 case 'delete':
                     this.$emit('delete', this.task);
