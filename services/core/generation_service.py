@@ -113,41 +113,60 @@ class SimplifiedGenerationService:
             return None
     
     def cancel_task(self, task_id):
-        """取消任务"""
+        """取消任务（文本 PRD / 图片需求）。"""
+        from utils.task_identity import resolve_task_identity
+        from database.models import RequirementModule, db_manager
+
         try:
-            task = self.task_manager.get_task(task_id)
-            if not task:
-                logger.error(f"取消任务失败: 任务 {task_id} 不存在")
+            identity = resolve_task_identity(task_id)
+            if identity.kind == 'unknown':
+                logger.error("取消任务失败: 无法识别任务 %s", task_id)
                 return False
-            
-            # 检查任务状态是否可取消
-            current_status = task.get('status')
-            if current_status in ['completed', 'cancelled', 'failed']:
-                logger.warning(f"任务已经处于最终状态，无法取消: {current_status}")
+
+            runtime_task_id = identity.task_id or identity.module_task_id
+            task = self.task_manager.get_task(runtime_task_id) if runtime_task_id else None
+
+            if task:
+                current_status = str(task.get('status', '')).lower()
+                if current_status in {'completed', 'cancelled', 'failed'}:
+                    logger.warning("任务已经处于最终状态，无法取消: %s", current_status)
+                    return False
+
+                self.task_manager.update_task_status(
+                    runtime_task_id,
+                    'cancelled',
+                    task.get('completion_percentage', 0),
+                    '任务已取消',
+                )
+                self.task_manager.add_log(runtime_task_id, 'WARNING', '任务已取消')
+                self.notification_service.notify_task_cancelled(runtime_task_id)
+            elif not identity.is_image:
+                logger.error("取消任务失败: 任务 %s 不存在", task_id)
                 return False
-            
-            # 更新任务状态
-            self.task_manager.update_task_status(
-                task_id, 
-                'cancelled', 
-                task.get('completion_percentage', 0),
-                '任务已取消'
-            )
-            
-            # 记录日志
-            self.task_manager.add_log(
-                task_id,
-                'WARNING',
-                '任务已取消'
-            )
-            
-            # 发送通知
-            self.notification_service.notify_task_cancelled(task_id)
-        
+
+            if identity.is_image and identity.module_id:
+                session = db_manager.get_session()
+                try:
+                    module = session.query(RequirementModule).filter_by(id=identity.module_id).first()
+                    if module and module.status in {'processing', 'waiting_confirmation'}:
+                        module.status = 'draft'
+                        module.updated_at = datetime.utcnow()
+                        session.commit()
+                        logger.info("图片需求模块已取消并恢复草稿: %s", identity.module_id)
+                    elif module and module.status not in {'completed', 'failed', 'draft'}:
+                        module.status = 'draft'
+                        module.updated_at = datetime.utcnow()
+                        session.commit()
+                except Exception:
+                    session.rollback()
+                    raise
+                finally:
+                    session.close()
+
             return True
-            
+
         except Exception as e:
-            logger.error(f"取消任务异常: {e}")
+            logger.error("取消任务异常: %s", e)
             return False
     
     def start_task(self, task_id, mode="普通模式"):
