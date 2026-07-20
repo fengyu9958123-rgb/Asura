@@ -429,8 +429,8 @@ class TaskUnifiedService:
                 'status_group': 'waiting',
                 'can_edit': False,
                 'can_start': False,
-                'can_delete': False,
-                'can_cancel': False
+                'can_delete': True,   # 允许放弃/清理卡住的任务
+                'can_cancel': True    # 允许取消，避免「更多」菜单为空
             }
 
         # processing + (running/analyzing/...) - 运行中
@@ -536,8 +536,8 @@ class TaskUnifiedService:
                 'status_group': 'waiting',
                 'can_edit': False,
                 'can_start': False,
-                'can_delete': False,
-                'can_cancel': False
+                'can_delete': True,
+                'can_cancel': True
             }
         
         # ========== 检查PRD状态 ==========
