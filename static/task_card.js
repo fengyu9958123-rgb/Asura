@@ -132,6 +132,23 @@ Vue.component('task-card', {
                         更多
                     </el-button>
                     <el-dropdown-menu slot="dropdown">
+                        <!-- 查看详情（始终可用） -->
+                        <el-dropdown-item 
+                            command="view"
+                            icon="el-icon-view"
+                        >
+                            查看详情
+                        </el-dropdown-item>
+
+                        <!-- 等待确认：去确认 -->
+                        <el-dropdown-item 
+                            v-if="task.status_group === 'waiting'"
+                            command="confirm"
+                            icon="el-icon-warning"
+                        >
+                            去确认
+                        </el-dropdown-item>
+                        
                         <!-- 编辑 -->
                         <el-dropdown-item 
                             v-if="task.can_edit"
@@ -262,6 +279,12 @@ Vue.component('task-card', {
          */
         handleCommand(command) {
             switch (command) {
+                case 'view':
+                    this.$emit('view', this.task);
+                    break;
+                case 'confirm':
+                    this.$emit('confirm', this.task);
+                    break;
                 case 'edit':
                     this.$emit('edit', this.task);
                     break;
